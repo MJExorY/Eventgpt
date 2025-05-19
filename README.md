@@ -1,10 +1,20 @@
 # Eventsteuerung
 
+This project simulates people moving on an event area. It reacts to events (like bad weather, fights, or evacuation). The people change their behavior when something happens.
+
+## Technology Stack
+
+- **Language**: Java
+- **Data**: JSON files
+- **Tests**: JUnit 5
+- **Version Control**: Git (GitLab)
+- **Project Tool**: Redmine
+
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+git clone https://gitlab.fbe-adswen.rwu.de/team3/eventsteuerung
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+
 
 ## Add your files
 
