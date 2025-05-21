@@ -8,5 +8,28 @@
     <artifactId>eventsteuerung</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <!-- MASON-Simulation Framework (lokal eingebunden) -->
+        <dependency>
+            <groupId>mason</groupId>
+            <artifactId>mason</artifactId>
+            <version>20.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mason.jar</systemPath>
+        </dependency>
+    </dependencies>
 
+    <build>
+        <plugins>
+            <!-- Ermöglicht: mvn exec:java -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>org.simulation.Event</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
