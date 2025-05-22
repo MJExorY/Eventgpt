@@ -7,6 +7,7 @@ import sim.display.Display2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
 
 import javax.swing.*;
+import java.util.Random;
 
 public class EventUI extends GUIState {
     public Display2D display;
@@ -18,9 +19,16 @@ public class EventUI extends GUIState {
     }
 
     public static void main(String[] args) {
-        EventUI gui = new EventUI(new Event(System.currentTimeMillis()));
+
+        //Main-Methode für die Agents
+        Random rand = new Random();
+        int agentCount = rand.nextInt(1000) + 1; // Zahl zwischen 1 und 500
+        Event sim = new Event(System.currentTimeMillis(), agentCount); // einmalige Erstellung!
+
+        EventUI gui = new EventUI(sim); // selbe Instanz übergeben!
         Console console = new Console(gui);
         console.setVisible(true);
+
     }
 
     public void start() {
@@ -45,6 +53,15 @@ public class EventUI extends GUIState {
         display.reset();
         display.setBackdrop(java.awt.Color.white);
         display.repaint();
+
+        //10 Personen, in der Farbe rot
+        gridPortrayal.setPortrayalForClass(Person.class,
+                new sim.portrayal.simple.OvalPortrayal2D(java.awt.Color.RED));
+
+        //Agenten visuell darstellen
+        gridPortrayal.setPortrayalForClass(Agent.class,
+                new sim.portrayal.simple.OvalPortrayal2D(java.awt.Color.BLACK));
+
     }
 
 
@@ -66,4 +83,6 @@ public class EventUI extends GUIState {
         frame = null;
         display = null;
     }
+
+
 }
