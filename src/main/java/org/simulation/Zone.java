@@ -15,7 +15,7 @@ public abstract class Zone {
         this.x = x;
         this.y = y;
         this.capacity = capacity;
-        this.String = label;
+        this.label = label;
     }
 
     // Getter-Methoden
