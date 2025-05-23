@@ -22,7 +22,7 @@ public class EventUI extends GUIState {
 
         //Main-Methode für die Agents
         Random rand = new Random();
-        int agentCount = rand.nextInt(1000) + 1; // Zahl zwischen 1 und 500
+        int agentCount = rand.nextInt(1000) + 1; // Zahl zwischen 1 und 1000
         Event sim = new Event(System.currentTimeMillis(), agentCount); // einmalige Erstellung!
 
         EventUI gui = new EventUI(sim); // selbe Instanz übergeben!
