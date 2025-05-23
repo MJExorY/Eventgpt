@@ -7,6 +7,7 @@ import sim.display.Display2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 public class EventUI extends GUIState {
@@ -75,7 +76,49 @@ public class EventUI extends GUIState {
         frame.setVisible(true);
 
         display.attach(gridPortrayal, "Event Grid");
+
+        // Legende erstellen
+        JPanel legendPanel = new JPanel();
+        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
+        legendPanel.setOpaque(false);
+
+        // Rollen
+        JLabel roleTitle = new JLabel("Role:");
+        roleTitle.setFont(new Font("Dialog", Font.BOLD, 13));
+        legendPanel.add(roleTitle);
+        legendPanel.add(createLegendEntry(Color.BLACK, "● Visitor"));
+        legendPanel.add(createLegendEntry(Color.RED, "● Agent"));
+
+        // Zustände
+        JLabel stateTitle = new JLabel("State:");
+        stateTitle.setFont(new Font("Dialog", Font.BOLD, 13));
+        legendPanel.add(Box.createVerticalStrut(5));
+        legendPanel.add(stateTitle);
+        legendPanel.add(createLegendEntry(Color.BLUE, "■ Wandering"));
+        legendPanel.add(createLegendEntry(Color.GREEN, "■ Seeking"));
+
+        // Legende ins Fenster (unten) einfügen
+        frame.getContentPane().add(legendPanel, BorderLayout.SOUTH);
+
     }
+
+    private JPanel createLegendEntry(Color color, String label) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        panel.setOpaque(false);
+
+        JLabel symbolLabel = new JLabel(label.substring(0, 1));
+        symbolLabel.setForeground(color);
+        symbolLabel.setFont(new Font("Dialog", Font.PLAIN, 13));
+
+        JLabel textLabel = new JLabel(label.substring(2));
+        textLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+
+        panel.add(symbolLabel);
+        panel.add(textLabel);
+        return panel;
+    }
+
 
     public void quit() {
         super.quit();
@@ -83,6 +126,9 @@ public class EventUI extends GUIState {
         frame = null;
         display = null;
     }
-
-
 }
+
+
+
+
+
