@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="- initial readme update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/States/IStates.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,10 +17,16 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitLabMergeRequestFiltersHistory">{
@@ -50,10 +57,13 @@
   "keyToString": {
     "Application.Event.executor": "Run",
     "Application.EventUI.executor": "Run",
+    "Maven.eventsteuerung [clean].executor": "Run",
+    "Maven.eventsteuerung [compile].executor": "Run",
+    "Maven.eventsteuerung [install].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "US132.T138.StatePattern",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -95,6 +105,7 @@
       <workItem from="1747768573099" duration="521000" />
       <workItem from="1747848702227" duration="5172000" />
       <workItem from="1747854581899" duration="865000" />
+      <workItem from="1747994115080" duration="929000" />
     </task>
     <task id="LOCAL-00001" summary="wiki documentation versioned">
       <option name="closed" value="true" />
@@ -131,7 +142,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="US132.T138.StatePattern" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
