@@ -22,3 +22,24 @@ src/
 ├── lib/
 │   └── mason.jar                  # lokal eingebundene MASON-Bibliothek
 └── pom.xml                        # Maven-Konfiguration
+```
+
+## Entwicklungsstand Sprint 1
+
+### Funktionen
+
+- Simulation von Agenten auf einem Grid (MASON-basiert)
+- Agenten bewegen sich zufällig über angrenzende Felder (Random-Walk)
+- Positionierung und Anzahl von Agenten werden beim Start dynamisch gesetzt
+
+### GUI (MASON Display2D)
+
+- Darstellung der Agenten im Grid mit Display2D
+- Farblich unterscheidbare Agenten (z. B. Schwarz = beweglich, Rot = statisch)
+
+### Architektur & Vorbereitung
+
+- Maven-Projekt mit MASON erfolgreich eingerichtet
+- Agent-Klasse übernimmt derzeit das Steppable-Verhalten für Besucher
+- Person-Klasse als Vorbereitung für Zustandslogik erstellt
+- Vorbereitung des State Patterns gestartet (z. B. Wandering/Seeking State)
