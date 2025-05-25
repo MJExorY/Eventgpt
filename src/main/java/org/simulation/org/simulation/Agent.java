@@ -8,7 +8,7 @@ public class Agent implements Steppable {
 
     @Override
     public void step(SimState state) {
-        Event sim = (Event) state;
+        org.simulation.Event sim = (Event) state;
 
         // Aktuelle Position abfragen
         Int2D pos = sim.grid.getObjectLocation(this);
