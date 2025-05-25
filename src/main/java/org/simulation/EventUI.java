@@ -1,10 +1,10 @@
 package org.simulation;
 
-import sim.engine.SimState;
-import sim.display.Console;
-import sim.display.GUIState;
-import sim.display.Display2D;
+import sim.display.*;
+import sim.portrayal.DrawInfo2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
+import sim.portrayal.simple.*;
+import sim.engine.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,16 +20,12 @@ public class EventUI extends GUIState {
     }
 
     public static void main(String[] args) {
-
-        //Main-Methode für die Agents
         Random rand = new Random();
-        int agentCount = rand.nextInt(1000) + 1; // Zahl zwischen 1 und 1000
-        Event sim = new Event(System.currentTimeMillis(), agentCount); // einmalige Erstellung!
-
-        EventUI gui = new EventUI(sim); // selbe Instanz übergeben!
+        int agentCount = rand.nextInt(1000) + 1;
+        Event sim = new Event(System.currentTimeMillis(), agentCount);
+        EventUI gui = new EventUI(sim);
         Console console = new Console(gui);
         console.setVisible(true);
-
     }
 
     public void start() {
@@ -47,24 +43,54 @@ public class EventUI extends GUIState {
 
         gridPortrayal.setField(sim.grid);
 
-        // Darstellung für Agent hinzufügen:
-        gridPortrayal.setPortrayalForClass(Agent.class,
-                new sim.portrayal.simple.OvalPortrayal2D(java.awt.Color.BLACK));
+        // Agenten einfärben über getColor()
+        gridPortrayal.setPortrayalForClass(Agent.class, new OvalPortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+                Agent agent = (Agent) object;
+                graphics.setColor(agent.getColor());
+                graphics.fillOval((int) (info.draw.x - info.draw.width / 2),
+                        (int) (info.draw.y - info.draw.height / 2),
+                        (int) (info.draw.width),
+                        (int) (info.draw.height));
+            }
+        });
+
+        // Personen (Sanitäter) in rot
+        gridPortrayal.setPortrayalForClass(Person.class,
+                new OvalPortrayal2D(Color.RED));
+
+        // Zonen
+        gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+                Zone zone = (Zone) object;
+                Color color;
+
+                switch (zone.getType()) {
+                    case FOOD -> color = Color.GREEN;
+                    case ACT_MAIN -> color = Color.BLUE;
+                    case ACT_SIDE -> color = Color.CYAN;
+                    case EXIT -> color = Color.DARK_GRAY;
+                    default -> color = Color.GRAY;
+                }
+
+                graphics.setColor(color);
+
+                double scale = 1.8;
+                double width = info.draw.width * scale;
+                double height = info.draw.height * scale;
+                double x = info.draw.x - width / 2;
+                double y = info.draw.y - height / 2;
+
+                graphics.fillRect((int) x, (int) y, (int) width, (int) height);
+            }
+        });
 
         display.reset();
-        display.setBackdrop(java.awt.Color.white);
+        display.setBackdrop(Color.WHITE);
         display.repaint();
-
-        //10 Personen, in der Farbe rot
-        gridPortrayal.setPortrayalForClass(Person.class,
-                new sim.portrayal.simple.OvalPortrayal2D(java.awt.Color.RED));
-
-        //Agenten visuell darstellen
-        gridPortrayal.setPortrayalForClass(Agent.class,
-                new sim.portrayal.simple.OvalPortrayal2D(java.awt.Color.BLACK));
-
     }
-
 
     public void init(sim.display.Controller c) {
         super.init(c);
@@ -77,29 +103,37 @@ public class EventUI extends GUIState {
 
         display.attach(gridPortrayal, "Event Grid");
 
-        // Legende erstellen
+        // Legende
         JPanel legendPanel = new JPanel();
         legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
         legendPanel.setOpaque(false);
 
-        // Rollen
-        JLabel roleTitle = new JLabel("Role:");
+        JLabel roleTitle = new JLabel("Roles:");
         roleTitle.setFont(new Font("Dialog", Font.BOLD, 13));
         legendPanel.add(roleTitle);
-        legendPanel.add(createLegendEntry(Color.BLACK, "● Visitor"));
-        legendPanel.add(createLegendEntry(Color.RED, "● Agent"));
+        legendPanel.add(createLegendEntry(Color.YELLOW, "● Visitor (Roaming)"));
+        legendPanel.add(createLegendEntry(Color.RED, "● Person"));
 
-        // Zustände
-        JLabel stateTitle = new JLabel("State:");
+        JLabel stateTitle = new JLabel("States:");
         stateTitle.setFont(new Font("Dialog", Font.BOLD, 13));
         legendPanel.add(Box.createVerticalStrut(5));
         legendPanel.add(stateTitle);
-        legendPanel.add(createLegendEntry(Color.BLUE, "■ Wandering"));
-        legendPanel.add(createLegendEntry(Color.GREEN, "■ Seeking"));
+        legendPanel.add(createLegendEntry(Color.GREEN, "● Eating"));
+        legendPanel.add(createLegendEntry(Color.MAGENTA, "● Seeking"));
+        legendPanel.add(createLegendEntry(Color.BLUE, "● Watching Act"));
+        legendPanel.add(createLegendEntry(Color.ORANGE, "● Panic Run"));
+        legendPanel.add(createLegendEntry(Color.ORANGE, "● In Queue"));
 
-        // Legende ins Fenster (unten) einfügen
+        JLabel zoneTitle = new JLabel("Zones:");
+        zoneTitle.setFont(new Font("Dialog", Font.BOLD, 13));
+        legendPanel.add(Box.createVerticalStrut(5));
+        legendPanel.add(zoneTitle);
+        legendPanel.add(createLegendEntry(Color.GREEN, "■ FoodZone"));
+        legendPanel.add(createLegendEntry(Color.BLUE, "■ Main Stage"));
+        legendPanel.add(createLegendEntry(Color.CYAN, "■ Side Stage"));
+        legendPanel.add(createLegendEntry(Color.PINK, "■ Exit"));
+
         frame.getContentPane().add(legendPanel, BorderLayout.SOUTH);
-
     }
 
     private JPanel createLegendEntry(Color color, String label) {
@@ -119,7 +153,6 @@ public class EventUI extends GUIState {
         return panel;
     }
 
-
     public void quit() {
         super.quit();
         if (frame != null) frame.dispose();
@@ -127,8 +160,3 @@ public class EventUI extends GUIState {
         display = null;
     }
 }
-
-
-
-
-
