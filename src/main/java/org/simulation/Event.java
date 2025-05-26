@@ -11,7 +11,8 @@ public class Event extends SimState {
     public SparseGrid2D grid;
 
     private int agentCount;
-    private final List<Zone> zones = new ArrayList<>();
+    public final List<Zone> zones = new ArrayList<>();
+    public final List<Agent> agents = new ArrayList<>();
 
     public Event(long seed) {
         super(seed);
@@ -38,11 +39,14 @@ public class Event extends SimState {
     @Override
     public void start() {
         super.start();
+
         grid = new SparseGrid2D(100, 100);
 
         Agent agent = new Agent();
         grid.setObjectLocation(agent, 50, 50); // In die Mitte setzen
         schedule.scheduleRepeating(agent);
+
+
 
         // Zonen hinzufügen
         Zone foodZone = new Zone(Zone.ZoneType.FOOD, new Int2D(10, 10), 5);
