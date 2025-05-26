@@ -134,7 +134,7 @@ public class Agent implements Steppable {
 
     @Override
     public void step(SimState state) {
-        Event sim = (Event) state;
+        org.simulation.Event sim = (Event) state;
 
         // 1. Zustandslogik ausführen
         if (currentState != null) {
