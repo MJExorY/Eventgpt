@@ -83,7 +83,7 @@ public class EventTest {
             // Optional: Überprüfe explizit mit getObjectLocation(Object)
             Object objInGrid = grid.getObjectLocation(zone);
             assertNotNull(objInGrid, "Das Objekt der Zone " + type + " sollte im Grid vorhanden sein");
-            assertEquals(zone, objInGrid, "Das Objekt im Grid stimmt nicht mit der Zone überein");
+            assertEquals(zone.getPosition(), objInGrid, "Das Objekt im Grid stimmt nicht mit der Zone überein");
         }
     }
 
