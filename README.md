@@ -11,35 +11,52 @@ Ziel des Projekts ist es, realistische Besucherdynamiken wie Bewegung, Zonenwahl
 ## Projektstruktur
 
 ```plaintext
-src/
-├── main/
-│   └── java/
-│       └── org.simulation/
-│           ├── Event.java          # Hauptsimulation (SimState)
-│           ├── EventUI.java       # GUI-Controller (GUIState)
-│           ├── Agent.java         # Agent (z. B. Festivalbesucher)
-│           └── ...
-├── lib/
-│   └── mason.jar                  # lokal eingebundene MASON-Bibliothek
-└── pom.xml                        # Maven-Konfiguration
+eventsteuerung/                         
+├── lib/                                      # Externe Bibliotheken (z. B. mason.jar)
+├── src/                                      # Quellcodebasis
+│   ├── main/                                 # Hauptprogrammcode
+│   │   └── java/                             # Java-Paketstruktur
+│   │       ├── org.simulation/               # Zentrale Komponenten der Simulation
+│   │       │   ├── Agent.java                # Besucher-Logik & Verhalten
+│   │       │   ├── Event.java                # Simulationseinheit mit Grid und Scheduler
+│   │       │   ├── EventUI.java              # GUI-Ansicht mit MASON Display2D
+│   │       │   ├── FoodZone.java             # Zone für Nahrungsbedürfnisse
+│   │       │   ├── MainActZone.java          # Hauptunterhaltungszone
+│   │       │   ├── Person.java               # Erweiterte Rollen (z. B. Security)
+│   │       │   ├── SideActZone.java          # Nebenunterhaltungszone
+│   │       │   ├── WCZone.java               # Sanitärzone
+│   │       │   └── Zone.java                 # Oberklasse aller Zonentypen
+│   │       └── States/                       # Zustände (State Pattern) für Agenten
+│   │           ├── EmergencyState.java       # Verhalten für Nothelfer
+│   │           ├── HungryThirstyState.java   # Zustand bei Hunger oder Durst
+│   │           ├── IStates.java              # Interface für Zustandslogik
+│   │           ├── PanicRunState.java        # Panik-Fluchtverhalten
+│   │           ├── QueueingState.java        # Warteschlangenverhalten
+│   │           ├── RoamingState.java         # Ziellose Bewegung
+│   │           ├── SeekingZoneState.java     # Auf dem Weg zur Zielzone
+│   │           └── WatchingActState.java     # Beobachtung eines Programms
+│   └── test/                                 # JUnit-Tests
+└── pom.xml                                   # Maven-Konfiguration
 ```
 
 ## Entwicklungsstand Sprint 1
 
 ### Funktionen
 
-- Simulation von Agenten auf einem Grid (MASON-basiert)
-- Agenten bewegen sich zufällig über angrenzende Felder (Random-Walk)
-- Positionierung und Anzahl von Agenten werden beim Start dynamisch gesetzt
+- Agenten bewegen sich zufällig auf dem Grid (Random-Walk)
+- Zonenarten erstellt und im Grid positioniert (z. B. FoodZone, ActZone, WCZone)
+- Agenten können Zielzonen ansteuern (zielgerichtetes Verhalten)
+- State Pattern für Agentenlogik eingeführt:
+  - z. B. `RoamingState`, `HungryThirstyState`, `QueueingState`, `PanicRunState`
 
 ### GUI (MASON Display2D)
 
-- Darstellung der Agenten im Grid mit Display2D
-- Farblich unterscheidbare Agenten (z. B. Schwarz = beweglich, Rot = statisch)
+- Darstellung der Agenten und Zonen im Grid mit Display2D
+- Farblich unterscheidbare Agenten
 
-### Architektur & Vorbereitung
+### Architektur & Struktur
 
 - Maven-Projekt mit MASON erfolgreich eingerichtet
-- Agent-Klasse übernimmt derzeit das Steppable-Verhalten für Besucher
-- Person-Klasse als Vorbereitung für Zustandslogik erstellt
-- Vorbereitung des State Patterns gestartet (z. B. Wandering/Seeking State)
+- Modularisierung in:
+  - `Agent`, `Zone`, `Event`, `Person`
+  - Paketstruktur für States und Services
