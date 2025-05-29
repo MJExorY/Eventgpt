@@ -27,31 +27,34 @@ public class SeekingZoneState implements IStates {
             return new RoamingState();
         }
 
-        // Ziel-Zone auslesen und vorab speichern
-        Zone targetZone = event.getZoneByPosition(targetPos);
-        agent.setCurrentZone(targetZone); // vorab setzen
-
         // Ziel erreicht?
         if (currentPos.equals(targetPos)) {
+            Zone targetZone = event.getZoneByPosition(targetPos);
             agent.setSeeking(false);
             agent.setTargetPosition(null);
 
-            if (targetZone != null && !targetZone.isFull()) {
-                targetZone.enter(agent); // jetzt wirklich betreten
-                agent.setCurrentZone(targetZone);
-                agent.setLastVisitedZone(targetZone.getType());
+            if (targetZone != null) {
+                boolean entered = agent.tryEnterZone(targetZone); // zentrale Prüfung
 
-                if (targetZone.getType() == Zone.ZoneType.FOOD) {
-                    agent.setWatching(true); // jetzt in Zone → Farbe darf gesetzt werden
-                    return new WatchingActState(); // essen
-                } else if (targetZone.getType().name().startsWith("ACT")) {
-                    agent.setWatching(true); // Bühne erreicht → jetzt blau werden
-                    return new WatchingActState(); // Bühne genießen
-                } else if (targetZone.getType() == Zone.ZoneType.EXIT) {
-                    return new RoamingState(); // verlassen
+                if (entered) {
+                    return switch (targetZone.getType()) {
+                        case FOOD -> {
+                            agent.setWatching(true); // jetzt in Zone → Farbe darf gesetzt werden
+                            yield new WatchingActState(); // jetzt in Zone → Farbe darf gesetzt werden
+                        }
+                        case ACT_MAIN -> {
+                            agent.setWatching(true); // Bühne erreicht → jetzt blau werden
+                            yield new WatchingActState(); // Bühne erreicht → jetzt blau werden
+                        }
+                        case ACT_SIDE -> {
+                            agent.setWatching(true); // Bühne erreicht → jetzt blau werden
+                            yield new WatchingActState(); // Bühne erreicht → jetzt blau werden
+                        }
+                        case EXIT -> new RoamingState(); // verlassen
+                    };
+                } else {
+                    return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT)); // falls .tryEnterZone false zurückgibt
                 }
-            } else {
-                return new QueueingState(); // kein Platz
             }
 
             return new RoamingState(); // Fallback

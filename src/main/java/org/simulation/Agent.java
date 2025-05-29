@@ -5,7 +5,7 @@ import States.RoamingState;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.util.Int2D;
-
+import States.QueueingState;
 import java.awt.*;
 
 public class Agent implements Steppable {
@@ -158,5 +158,31 @@ public class Agent implements Steppable {
                 + " | State: " + currentState.getClass().getSimpleName()
                 + " | target: " + targetPosition);
     }
+
+    public boolean tryEnterZone(Zone targetZone) {
+        if (!targetZone.isFull()) {
+            // Agent verlässt alte Zone
+            if (currentZone != null) {
+                currentZone.leave(this);
+            }
+
+            // Agent betritt neue Zone
+            targetZone.enter(this);
+            setCurrentZone(targetZone);
+            setLastVisitedZone(targetZone.getType());
+            clearTarget();
+
+
+            setInQueue(false);
+
+            return true;
+        }
+
+            return false;
+        //}
+    }
+
+
+
 }
 
