@@ -39,7 +39,7 @@ public class RoamingState implements IStates {
 
         if (event.random.nextDouble() < 0.005) {
             agent.setInQueue(true);
-            return new QueueingState();
+            return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT));
         }
 
         // Neue Zone aufsuchen → nicht dieselbe wie zuletzt
