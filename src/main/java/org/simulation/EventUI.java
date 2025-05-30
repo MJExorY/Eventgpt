@@ -2,6 +2,7 @@ package org.simulation;
 
 import sim.display.*;
 import sim.portrayal.DrawInfo2D;
+import sim.portrayal.SimplePortrayal2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.*;
 import sim.engine.*;
@@ -43,7 +44,7 @@ public class EventUI extends GUIState {
 
         gridPortrayal.setField(sim.grid);
 
-        // Agenten einfärben über getColor()
+        // Agent color via getColor()
         gridPortrayal.setPortrayalForClass(Agent.class, new OvalPortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
@@ -56,11 +57,11 @@ public class EventUI extends GUIState {
             }
         });
 
-        // Personen (Sanitäter) in rot
+        // Persons (e.g. medics) in red
         gridPortrayal.setPortrayalForClass(Person.class,
                 new OvalPortrayal2D(Color.RED));
 
-        // Zonen
+        // Zones
         gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
@@ -87,10 +88,39 @@ public class EventUI extends GUIState {
             }
         });
 
+        // Disturbances with emojis
+        gridPortrayal.setPortrayalForClass(FireDisturbance.class, new SimplePortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D g, DrawInfo2D info) {
+                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int)(info.draw.width * 1.5)));
+                g.drawString("🔥", (float)(info.draw.x - info.draw.width / 2),
+                        (float)(info.draw.y + info.draw.height / 3));
+            }
+        });
+
+        gridPortrayal.setPortrayalForClass(FightDisturbance.class, new SimplePortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D g, DrawInfo2D info) {
+                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int)(info.draw.width * 1.5)));
+                g.drawString("🥊", (float)(info.draw.x - info.draw.width / 2),
+                        (float)(info.draw.y + info.draw.height / 3));
+            }
+        });
+
+        gridPortrayal.setPortrayalForClass(StormDisturbance.class, new SimplePortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D g, DrawInfo2D info) {
+                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int)(info.draw.width * 1.5)));
+                g.drawString("🌩️", (float)(info.draw.x - info.draw.width / 2),
+                        (float)(info.draw.y + info.draw.height / 3));
+            }
+        });
+
         display.reset();
         display.setBackdrop(Color.WHITE);
         display.repaint();
     }
+
 
     public void init(sim.display.Controller c) {
         super.init(c);
@@ -102,6 +132,39 @@ public class EventUI extends GUIState {
         frame.setVisible(true);
 
         display.attach(gridPortrayal, "Event Grid");
+
+        // Reference to the simulation
+        Event event = (Event) state;
+
+        // Panel for buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+
+        // Fire Button
+        JButton fireButton = new JButton("🔥 Fire");
+        fireButton.addActionListener(e -> {
+            event.spawn(FireDisturbance.createRandom(event));
+        });
+
+        // Fight Button
+        JButton fightButton = new JButton("🥊 Fight");
+        fightButton.addActionListener(e -> {
+            event.spawn(FightDisturbance.createRandom(event));
+        });
+
+        // Storm Button
+        JButton stormButton = new JButton("🌩️ Storm");
+        stormButton.addActionListener(e -> {
+            event.spawn(StormDisturbance.createRandom(event));
+        });
+
+        // Add buttons to panel
+        buttonPanel.add(fireButton);
+        buttonPanel.add(fightButton);
+        buttonPanel.add(stormButton);
+
+        // Add panel to top of window
+        frame.getContentPane().add(buttonPanel, BorderLayout.NORTH);
+
 
         // Legende
         JPanel legendPanel = new JPanel();

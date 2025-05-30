@@ -112,5 +112,13 @@ public class Event extends SimState {
                 .orElse(null);
     }
 
+    public void spawn(Disturbance disturbance) {
+        if (disturbance.getPosition() != null) {
+            grid.setObjectLocation(disturbance, disturbance.getPosition().x, disturbance.getPosition().y);
+        }
+        schedule.scheduleRepeating(disturbance);
+    }
+
+
 
 }
