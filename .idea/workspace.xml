@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="feature: added test for Statemanagement">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eventsteuerung.iml" afterDir="false" />
+    <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="GUI mit entsprechenden Icons designed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/EventUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/EventUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/Zone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/Zone.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +160,7 @@
       <workItem from="1748286231461" duration="733000" />
       <workItem from="1748420475334" duration="206000" />
       <workItem from="1748429287124" duration="1877000" />
-      <workItem from="1748687453839" duration="10118000" />
+      <workItem from="1748687453839" duration="10753000" />
     </task>
     <task id="LOCAL-00001" summary="wiki documentation versioned">
       <option name="closed" value="true" />
@@ -190,7 +186,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747853489986</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="GUI mit entsprechenden Icons designed">
+      <option name="closed" value="true" />
+      <created>1748697723627</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748697723627</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -223,7 +227,8 @@
     <MESSAGE value="wiki documentation versioned" />
     <MESSAGE value="- removed example class&#10;- initialized maven&#10;- added MASON simulation libary&#10;- created example &quot;Agent&quot; class&#10;- initialized GUI Grid&#10;- tested one &quot;Agent&quot; on the Grid&#10;- made &quot;Agent&quot; move randomly" />
     <MESSAGE value="- initial readme update" />
-    <option name="LAST_COMMIT_MESSAGE" value="- initial readme update" />
+    <MESSAGE value="GUI mit entsprechenden Icons designed" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI mit entsprechenden Icons designed" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
