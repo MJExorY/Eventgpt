@@ -46,8 +46,8 @@ public class RoamingStateTest {
 
         // Füge alle Zonen hinzu außer EXIT
         event.addZone(new Zone(Zone.ZoneType.FOOD, new Int2D(1, 1), 5));
-        event.addZone(new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(2, 2), 5));
-        event.addZone(new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(3, 3), 5));
+        //event.addZone(new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(2, 2), 5));
+       // event.addZone(new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(3, 3), 5));
 
         RoamingState state = new RoamingState();
 

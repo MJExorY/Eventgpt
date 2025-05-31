@@ -42,27 +42,16 @@ public class RoamingState implements IStates {
             return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT));
         }
 
-        // Neue Zone aufsuchen → nicht dieselbe wie zuletzt
-        List<Zone.ZoneType> allOptions = List.of(
-                Zone.ZoneType.FOOD,
-                Zone.ZoneType.ACT_MAIN,
-                Zone.ZoneType.ACT_SIDE,
-                Zone.ZoneType.EXIT
-        );
-
-        // Letzte besuchte Zone ausschließen
-        List<Zone.ZoneType> filtered = allOptions.stream()
-                .filter(z -> z != agent.getLastVisitedZone())
+        List<Zone> filteredZones = event.zones.stream()
+                .filter(z -> z.getType() != agent.getLastVisitedZone())
                 .toList();
 
-        if (!filtered.isEmpty()) {
-            Zone.ZoneType next = filtered.get(event.random.nextInt(filtered.size()));
-            Zone targetZone = event.getZoneByType(next);
-            if (targetZone != null) {
-                agent.setTargetPosition(targetZone.getPosition());
-                return new SeekingZoneState();
-            }
+        if (!filteredZones.isEmpty()) {
+            Zone nextZone = filteredZones.get(event.random.nextInt(filteredZones.size()));
+            agent.setTargetPosition(nextZone.getPosition());
+            return new SeekingZoneState();
         }
+
 
         return this;
     }

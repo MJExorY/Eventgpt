@@ -49,12 +49,14 @@ public class Event extends SimState {
 
 
         // Zonen hinzufügen
-        Zone foodZone = new Zone(Zone.ZoneType.FOOD, new Int2D(10, 10), 5);
-        Zone actMain = new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(50, 20), 20);
-        Zone actSide = new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(30, 70), 15);
-        Zone exitZone = new Zone(Zone.ZoneType.EXIT, new Int2D(50, 99), Integer.MAX_VALUE);
+        Zone foodZone = new Zone(Zone.ZoneType.FOOD, new Int2D(5, 15), 5);          // Links oben
+        Zone wcZone = new Zone(Zone.ZoneType.WC, new Int2D(90, 25), 10);             // Rechts oben
+        Zone actMain = new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(50, 45), 20);     // Zentrum
+        Zone actSide = new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(15, 85), 15);     // Links unten
+        Zone exitZone = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE); // Unten Mitte
 
-        zones.addAll(List.of(foodZone, actMain, actSide, exitZone));
+        zones.addAll(List.of(foodZone, wcZone, actMain, actSide, exitZone));
+
 
         // Alle Zonen im Grid sichtbar machen
         for (Zone z : zones) {

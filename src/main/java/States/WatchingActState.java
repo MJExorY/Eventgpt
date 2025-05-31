@@ -38,7 +38,7 @@ public class WatchingActState implements IStates {
 
             agent.setWatching(false);
 
-            List<Zone.ZoneType> allOptions = List.of(Zone.ZoneType.FOOD, Zone.ZoneType.ACT_MAIN,
+            List<Zone.ZoneType> allOptions = List.of(Zone.ZoneType.FOOD, Zone.ZoneType.WC, Zone.ZoneType.ACT_MAIN,
                     Zone.ZoneType.ACT_SIDE, Zone.ZoneType.EXIT);
             List<Zone.ZoneType> filtered = allOptions.stream()
                     .filter(z -> z != currentType)  // Nicht zur gleichen Zone zurück

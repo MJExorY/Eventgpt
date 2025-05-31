@@ -9,7 +9,7 @@ public class Zone {
 
 
     public enum ZoneType {
-        FOOD, ACT_MAIN, ACT_SIDE, EXIT
+        FOOD, WC,  ACT_MAIN, ACT_SIDE, EXIT
     }
 
     public final ZoneType type;

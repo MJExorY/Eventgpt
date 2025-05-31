@@ -99,6 +99,7 @@ public class EventUI extends GUIState {
             final Image mainActIcon;
             final Image exitIcon;
             final Image sideActIcon;
+            final Image wcIcon;
 
             {
                 // FOOD-Zone Icon (60x60)
@@ -110,7 +111,15 @@ public class EventUI extends GUIState {
                     System.err.println("❌ Bild nicht gefunden: /imbiss-stand.png");
                     foodIcon = null;
                 }
-
+                // WC-Zone Icon (60x60)
+                URL wcURL = getClass().getResource("/wc.png");
+                System.out.println("WC Icon URL: " + wcURL);
+                if (wcURL != null) {
+                    wcIcon = new ImageIcon(wcURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("❌ Bild nicht gefunden: /wc.png");
+                    wcIcon = null;
+                }
                 // ACT_MAIN-Zone Icon (80x80)
                 URL mainActURL = getClass().getResource("/MainAct.png");
                 System.out.println("MainAct Icon URL: " + mainActURL);
@@ -160,7 +169,10 @@ public class EventUI extends GUIState {
                     graphics.drawImage(exitIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.ACT_SIDE && sideActIcon != null) {
                     graphics.drawImage(sideActIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
-                } else {
+                } else if (zone.getType() == Zone.ZoneType.WC && wcIcon != null) {
+                    graphics.drawImage(wcIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                    }
+                else {
                     // Fallback: Farbe falls Icon fehlt
                     graphics.setColor(Color.GRAY);
                     graphics.fillRect((int) x, (int) y, (int) width, (int) height);
@@ -206,7 +218,7 @@ public class EventUI extends GUIState {
     public void init(sim.display.Controller c) {
         super.init(c);
 
-        display = new Display2D(600, 600, this);
+        display = new Display2D(650, 650, this);
         display.setClipping(false);
         frame = display.createFrame();
         c.registerFrame(frame);
@@ -266,24 +278,19 @@ public class EventUI extends GUIState {
         legendPanel.add(createLegendEntry(Color.GREEN, "● Eating"));
         legendPanel.add(createLegendEntry(Color.MAGENTA, "● Seeking"));
         legendPanel.add(createLegendEntry(Color.BLUE, "● Watching Act"));
-        legendPanel.add(createLegendEntry(Color.ORANGE, "● Panic Run"));
+        legendPanel.add(createLegendEntry(Color.RED, "● Panic Run"));
         legendPanel.add(createLegendEntry(Color.ORANGE, "● In Queue"));
+        legendPanel.add(createLegendEntry(Color.pink, "● Using WC"));
 
         JLabel zoneTitle = new JLabel("Zones:");
         zoneTitle.setFont(new Font("Dialog", Font.BOLD, 13));
         legendPanel.add(Box.createVerticalStrut(5));
         legendPanel.add(zoneTitle);
-       //legendPanel.add(createLegendEntry(Color.GREEN, "■ FoodZone"));
-        //legendPanel.add(createLegendEntry(new ImageIcon(getClass().getResource("/imbiss-stand.png")), "Food Zone"));
         legendPanel.add(createLegendEntry(scaledIcon("/imbiss-stand.png", 10, 10), "Food Zone"));
         legendPanel.add(createLegendEntry(scaledIcon("/MainAct.png", 10, 10), "Main Stage"));
         legendPanel.add(createLegendEntry(scaledIcon("/SideAct.png", 10, 10), "Side Stage"));
         legendPanel.add(createLegendEntry(scaledIcon("/barrier.png", 10, 10), "Exit"));
-
-
-       // legendPanel.add(createLegendEntry(Color.BLUE, "■ Main Stage"));
-       // legendPanel.add(createLegendEntry(Color.CYAN, "■ Side Stage"));
-        // legendPanel.add(createLegendEntry(Color.PINK, "■ Exit"));
+        legendPanel.add(createLegendEntry(scaledIcon("/wc.png", 10, 10), "WC"));
 
         frame.getContentPane().add(legendPanel, BorderLayout.SOUTH);
     }

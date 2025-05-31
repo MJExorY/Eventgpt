@@ -124,6 +124,8 @@ public class Agent implements Steppable {
                     return Color.CYAN;
                 case EXIT:
                     return Color.GRAY;
+                case WC:
+                    return Color.pink;
             }
         }
         if (isInQueue) return Color.ORANGE;

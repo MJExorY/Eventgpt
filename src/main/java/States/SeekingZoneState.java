@@ -42,6 +42,10 @@ public class SeekingZoneState implements IStates {
                             agent.setWatching(true); // jetzt in Zone → Farbe darf gesetzt werden
                             yield new WatchingActState(); // jetzt in Zone → Farbe darf gesetzt werden
                         }
+                        case WC -> {
+                            agent.setWatching(true);
+                            yield new WCState();
+                        }
                         case ACT_MAIN -> {
                             agent.setWatching(true); // Bühne erreicht → jetzt blau werden
                             yield new WatchingActState(); // Bühne erreicht → jetzt blau werden
@@ -51,6 +55,7 @@ public class SeekingZoneState implements IStates {
                             yield new WatchingActState(); // Bühne erreicht → jetzt blau werden
                         }
                         case EXIT -> new RoamingState(); // verlassen
+
                     };
                 } else {
                     return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT)); // falls .tryEnterZone false zurückgibt
