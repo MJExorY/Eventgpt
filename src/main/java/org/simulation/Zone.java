@@ -6,11 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Zone {
+
+
     public enum ZoneType {
         FOOD, ACT_MAIN, ACT_SIDE, EXIT
     }
 
-    private final ZoneType type;
+    public final ZoneType type;
     private final Int2D position;
     private final int capacity;
 

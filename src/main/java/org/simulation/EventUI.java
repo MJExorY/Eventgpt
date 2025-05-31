@@ -9,12 +9,16 @@ import sim.engine.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.Random;
+
+
 
 public class EventUI extends GUIState {
     public Display2D display;
     public JFrame frame;
     public SparseGridPortrayal2D gridPortrayal = new SparseGridPortrayal2D();
+
 
     public EventUI(SimState state) {
         super(state);
@@ -62,7 +66,7 @@ public class EventUI extends GUIState {
                 new OvalPortrayal2D(Color.RED));
 
         // Zones
-        gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
+     /**   gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
                 Zone zone = (Zone) object;
@@ -87,6 +91,83 @@ public class EventUI extends GUIState {
                 graphics.fillRect((int) x, (int) y, (int) width, (int) height);
             }
         });
+        */
+
+        gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
+
+            final Image foodIcon;
+            final Image mainActIcon;
+            final Image exitIcon;
+            final Image sideActIcon;
+
+            {
+                // FOOD-Zone Icon (60x60)
+                URL foodURL = getClass().getResource("/imbiss-stand.png");
+                System.out.println("Food Icon URL: " + foodURL);
+                if (foodURL != null) {
+                    foodIcon = new ImageIcon(foodURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("❌ Bild nicht gefunden: /imbiss-stand.png");
+                    foodIcon = null;
+                }
+
+                // ACT_MAIN-Zone Icon (80x80)
+                URL mainActURL = getClass().getResource("/MainAct.png");
+                System.out.println("MainAct Icon URL: " + mainActURL);
+                if (mainActURL != null) {
+                    mainActIcon = new ImageIcon(mainActURL).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("❌ Bild nicht gefunden: /MainAct.png");
+                    mainActIcon = null;
+                }
+
+                // EXIT-Zone Icon (60x60)
+                URL exitURL = getClass().getResource("/barrier.png");
+                System.out.println("Exit Icon URL: " + exitURL);
+                if (exitURL != null) {
+                    exitIcon = new ImageIcon(exitURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("❌ Bild nicht gefunden: /barrier.png");
+                    exitIcon = null;
+                }
+
+                // ACT_SIDE-Zone Icon (60x60)
+                URL sideActURL = getClass().getResource("/SideAct.png");
+                System.out.println("SideAct Icon URL: " + sideActURL);
+                if (sideActURL != null) {
+                    sideActIcon = new ImageIcon(sideActURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("❌ Bild nicht gefunden: /SideAct.png");
+                    sideActIcon = null;
+                }
+            }
+
+            @Override
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+                Zone zone = (Zone) object;
+
+                double scale = 3.0;
+                double width = info.draw.width * scale;
+                double height = info.draw.height * scale;
+                double x = info.draw.x - width / 2;
+                double y = info.draw.y - height / 2;
+
+                if (zone.getType() == Zone.ZoneType.FOOD && foodIcon != null) {
+                    graphics.drawImage(foodIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                } else if (zone.getType() == Zone.ZoneType.ACT_MAIN && mainActIcon != null) {
+                    graphics.drawImage(mainActIcon, (int)(x - 40), (int)(y - 40), 80, 80, null);
+                } else if (zone.getType() == Zone.ZoneType.EXIT && exitIcon != null) {
+                    graphics.drawImage(exitIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                } else if (zone.getType() == Zone.ZoneType.ACT_SIDE && sideActIcon != null) {
+                    graphics.drawImage(sideActIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                } else {
+                    // Fallback: Farbe falls Icon fehlt
+                    graphics.setColor(Color.GRAY);
+                    graphics.fillRect((int) x, (int) y, (int) width, (int) height);
+                }
+            }
+        });
+
 
         // Disturbances with emojis
         gridPortrayal.setPortrayalForClass(FireDisturbance.class, new SimplePortrayal2D() {
@@ -117,7 +198,7 @@ public class EventUI extends GUIState {
         });
 
         display.reset();
-        display.setBackdrop(Color.WHITE);
+        display.setBackdrop(new Color(0xE1CAB2));
         display.repaint();
     }
 
@@ -132,6 +213,7 @@ public class EventUI extends GUIState {
         frame.setVisible(true);
 
         display.attach(gridPortrayal, "Event Grid");
+
 
         // Reference to the simulation
         Event event = (Event) state;
@@ -191,10 +273,17 @@ public class EventUI extends GUIState {
         zoneTitle.setFont(new Font("Dialog", Font.BOLD, 13));
         legendPanel.add(Box.createVerticalStrut(5));
         legendPanel.add(zoneTitle);
-        legendPanel.add(createLegendEntry(Color.GREEN, "■ FoodZone"));
-        legendPanel.add(createLegendEntry(Color.BLUE, "■ Main Stage"));
-        legendPanel.add(createLegendEntry(Color.CYAN, "■ Side Stage"));
-        legendPanel.add(createLegendEntry(Color.PINK, "■ Exit"));
+       //legendPanel.add(createLegendEntry(Color.GREEN, "■ FoodZone"));
+        //legendPanel.add(createLegendEntry(new ImageIcon(getClass().getResource("/imbiss-stand.png")), "Food Zone"));
+        legendPanel.add(createLegendEntry(scaledIcon("/imbiss-stand.png", 10, 10), "Food Zone"));
+        legendPanel.add(createLegendEntry(scaledIcon("/MainAct.png", 10, 10), "Main Stage"));
+        legendPanel.add(createLegendEntry(scaledIcon("/SideAct.png", 10, 10), "Side Stage"));
+        legendPanel.add(createLegendEntry(scaledIcon("/barrier.png", 10, 10), "Exit"));
+
+
+       // legendPanel.add(createLegendEntry(Color.BLUE, "■ Main Stage"));
+       // legendPanel.add(createLegendEntry(Color.CYAN, "■ Side Stage"));
+        // legendPanel.add(createLegendEntry(Color.PINK, "■ Exit"));
 
         frame.getContentPane().add(legendPanel, BorderLayout.SOUTH);
     }
@@ -215,6 +304,30 @@ public class EventUI extends GUIState {
         panel.add(textLabel);
         return panel;
     }
+
+    private JPanel createLegendEntry(ImageIcon icon, String label) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        panel.setOpaque(false);
+
+        JLabel iconLabel = new JLabel(icon);
+        JLabel textLabel = new JLabel(label);
+        textLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+
+        panel.add(iconLabel);
+        panel.add(textLabel);
+        return panel;
+    }
+    private ImageIcon scaledIcon(String path, int width, int height) {
+        URL url = getClass().getResource(path);
+        if (url != null) {
+            Image img = new ImageIcon(url).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } else {
+            System.err.println("❌ Icon nicht gefunden: " + path);
+            return new ImageIcon(); // leeres Icon als Fallback
+        }
+    }
+
 
     public void quit() {
         super.quit();
