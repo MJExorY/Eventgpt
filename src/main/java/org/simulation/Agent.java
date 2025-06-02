@@ -4,6 +4,7 @@ import States.IStates;
 import States.RoamingState;
 import sim.engine.SimState;
 import sim.engine.Steppable;
+import sim.engine.Stoppable;
 import sim.util.Int2D;
 import States.QueueingState;
 import java.awt.*;
@@ -19,6 +20,15 @@ public class Agent implements Steppable {
     private Zone currentZone = null;
     private Zone.ZoneType lastVisitedZone = null;
 
+    private Event event;
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+    private Stoppable stopper;
+
+    public void setStopper(Stoppable stopper) {
+        this.stopper = stopper; }
 
     public Zone getCurrentZone() {
         return currentZone;
@@ -156,6 +166,25 @@ public class Agent implements Steppable {
             int newY = Math.max(0, Math.min(sim.grid.getHeight() - 1, pos.y + dy));
             sim.grid.setObjectLocation(this, new Int2D(newX, newY));
         }
+
+        // Prüfen, ob der Agent in einer Exit Zone ist
+        Zone currentZone = sim.getZoneByPosition(pos);
+        if (currentZone != null && currentZone.getType() == Zone.ZoneType.EXIT) {
+            // Agent entfernen
+            System.out.println("Agent hat die Exit Zone erreicht und wird entfernt: " + pos);
+
+            if (stopper != null) {
+                stopper.stop();
+            }
+
+            sim.grid.remove(this);
+            sim.agents.remove(this);
+
+            return;
+        }
+
+
+
         System.out.println("Agent @ " + sim.grid.getObjectLocation(this)
                 + " | State: " + currentState.getClass().getSimpleName()
                 + " | target: " + targetPosition);

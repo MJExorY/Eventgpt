@@ -1,6 +1,7 @@
 package org.simulation;
 
 import sim.engine.SimState;
+import sim.engine.Stoppable;
 import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
 
@@ -24,7 +25,7 @@ public class Event extends SimState {
     }
 
     public static void main(String[] args) {
-        Event sim = new Event(System.currentTimeMillis());
+        Event sim = new Event(System.currentTimeMillis(),15);
         sim.start();
 
         for (int i = 0; i < 10; i++) {
@@ -43,9 +44,11 @@ public class Event extends SimState {
         grid = new SparseGrid2D(100, 100);
 
         Agent agent = new Agent();
-        grid.setObjectLocation(agent, 50, 50); // In die Mitte setzen
-        schedule.scheduleRepeating(agent);
-
+        agent.setEvent(this);
+        agents.add(agent);
+        grid.setObjectLocation(agent, 50, 50);
+        Stoppable stopper = schedule.scheduleRepeating(agent);
+        agent.setStopper(stopper);
 
 
         // Zonen hinzufügen
@@ -66,6 +69,8 @@ public class Event extends SimState {
 
         for (int i = 0; i < agentCount; i++) {
             Agent agentRandom = new Agent();
+            agentRandom.setEvent(this);    // Event Referenz setzen
+            agents.add(agentRandom);       // Agent in Liste hinzufügen
 
             int x, y;
             Int2D pos;
@@ -76,7 +81,7 @@ public class Event extends SimState {
             } while (getZoneByPosition(pos) != null);
 
             grid.setObjectLocation(agentRandom, x, y);
-            schedule.scheduleRepeating(agentRandom);
+            agentRandom.setStopper(schedule.scheduleRepeating(agentRandom));
         }
 
         //könnten bspw. Sanitäter sein
