@@ -25,7 +25,7 @@ public class Event extends SimState {
     }
 
     public static void main(String[] args) {
-        Event sim = new Event(System.currentTimeMillis(),15);
+        Event sim = new Event(System.currentTimeMillis(), 15);
         sim.start();
 
         for (int i = 0; i < 10; i++) {
@@ -126,6 +126,16 @@ public class Event extends SimState {
         schedule.scheduleRepeating(disturbance);
     }
 
+    public Zone getNearestAvailableExit(Int2D fromPosition) {
+        return zones.stream()
+                .filter(z -> z.getType() == Zone.ZoneType.EXIT && !z.isFull())
+                .min((z1, z2) -> {
+                    int d1 = Math.abs(z1.getPosition().x - fromPosition.x) + Math.abs(z1.getPosition().y - fromPosition.y);
+                    int d2 = Math.abs(z2.getPosition().x - fromPosition.x) + Math.abs(z2.getPosition().y - fromPosition.y);
+                    return Integer.compare(d1, d2);
+                })
+                .orElse(null);
+    }
 
 
 }

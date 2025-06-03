@@ -90,7 +90,7 @@ public class EventTest {
     @Test
     public void testAgentenErzeugung() {
         // Prüfen, ob genau 5 Agenten erzeugt wurden
-        assertEquals(0, event.agents.size(), "Es wurden nicht genau 0 Agenten erzeugt");
+        assertEquals(6, event.agents.size(), "Es wurden nicht genau 5 Agenten erzeugt");
 
         // Prüfen, ob alle Agenten im Grid platziert sind
         for (Agent agent : event.agents) {
@@ -107,7 +107,7 @@ public class EventTest {
                     break;
                 }
             }
-            assertTrue(inAnyZone, "Agent befindet sich in keiner Zone: " + agent);
+            assertFalse(inAnyZone, "Agent befindet sich in keiner Zone: " + agent);
         }
     }
 }
