@@ -1,12 +1,9 @@
 package org.simulation;
 
+import States.PanicRunState;
 import sim.engine.SimState;
 import sim.util.Int2D;
 
-/**
- * A fire disturbance at a specific position.
- * Can trigger panic behavior in nearby agents.
- */
 public class FireDisturbance extends Disturbance {
 
     public FireDisturbance(Int2D position) {
@@ -15,7 +12,21 @@ public class FireDisturbance extends Disturbance {
 
     @Override
     public void step(SimState state) {
-        // TODO: Trigger panic behavior in surrounding agents
+        Event event = (Event) state;
+
+        for (Agent agent : event.agents) {
+            Int2D agentPos = event.grid.getObjectLocation(agent);
+            if (agentPos != null && position != null) {
+                int dx = agentPos.x - position.x;
+                int dy = agentPos.y - position.y;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= 10) { // Radius frei wählbar
+                    agent.setPanicking(true);
+                    agent.setCurrentState(new PanicRunState());
+                }
+            }
+        }
     }
 
     @Override

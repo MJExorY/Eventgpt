@@ -2,24 +2,32 @@ package States;
 
 import org.simulation.Agent;
 import org.simulation.Event;
+import org.simulation.Zone;
 import sim.util.Int2D;
 
 public class PanicRunState implements IStates {
-
-    private final Int2D exitTarget = new Int2D(0, 0); // Beispiel: Fluchtziel ist links oben
-    private boolean initialized = false;
+    private Int2D exitTarget = null;
 
     @Override
     public IStates act(Agent agent, Event event) {
-        if (!initialized) {
-            agent.resetFlags();             // andere Zustände beenden
-            agent.setPanicking(true);       // Fluchtmodus aktiv
-            initialized = true;
+        // Initialisierung (nur einmal)
+        if (exitTarget == null) {
+            agent.resetFlags();
+            agent.setPanicking(true);
+
+            Int2D currentPos = event.grid.getObjectLocation(agent);
+            Zone nearestExit = event.getNearestAvailableExit(currentPos);
+            if (nearestExit == null) {
+                System.out.println("⚠ Kein verfügbarer Exit gefunden.");
+                return new RoamingState(); // Kein Exit → zurück zu Roaming
+            }
+
+            exitTarget = nearestExit.getPosition();
+            agent.setTargetPosition(exitTarget);
         }
 
+        // Bewegung in Richtung Exit
         Int2D currentPos = event.grid.getObjectLocation(agent);
-
-        // Richtung berechnen (immer 1 Schritt)
         int dx = Integer.compare(exitTarget.x, currentPos.x);
         int dy = Integer.compare(exitTarget.y, currentPos.y);
 
@@ -29,14 +37,14 @@ public class PanicRunState implements IStates {
 
         event.grid.setObjectLocation(agent, newPos);
 
-        System.out.println("Agent flieht panisch nach: " + newPos);
-
-        // Exit erreicht?
+        // ✅ Exit erreicht?
         if (newPos.equals(exitTarget)) {
-            agent.setPanicking(false); // Flucht beendet
-            return new RoamingState();
+            agent.setPanicking(false);               // Panik beenden
+            agent.clearTarget();                     // Ziel löschen
+            return new RoamingState();               // Zustand wechseln
         }
 
-        return this;
+        return this; // noch nicht angekommen → weiter im Panik-Zustand
     }
+
 }

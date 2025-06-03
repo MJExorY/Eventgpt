@@ -6,7 +6,7 @@ import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
 import sim.util.Int2D;
-import States.QueueingState;
+
 import java.awt.*;
 
 public class Agent implements Steppable {
@@ -25,10 +25,12 @@ public class Agent implements Steppable {
     public void setEvent(Event event) {
         this.event = event;
     }
+
     private Stoppable stopper;
 
     public void setStopper(Stoppable stopper) {
-        this.stopper = stopper; }
+        this.stopper = stopper;
+    }
 
     public Zone getCurrentZone() {
         return currentZone;
@@ -184,7 +186,6 @@ public class Agent implements Steppable {
         }
 
 
-
         System.out.println("Agent @ " + sim.grid.getObjectLocation(this)
                 + " | State: " + currentState.getClass().getSimpleName()
                 + " | target: " + targetPosition);
@@ -202,17 +203,12 @@ public class Agent implements Steppable {
             setCurrentZone(targetZone);
             setLastVisitedZone(targetZone.getType());
             clearTarget();
-
-
             setInQueue(false);
 
             return true;
         }
-
-            return false;
-        //}
+        return false;
     }
-
 
 
 }
