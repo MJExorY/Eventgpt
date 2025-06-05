@@ -22,7 +22,7 @@ public class RoamingState implements IStates {
         event.grid.setObjectLocation(agent, new Int2D(newX, newY));
 
         // Zustandswechsel (zuerst prüfen!)
-        if (event.random.nextDouble() < 0.005) {
+      /*  if (event.random.nextDouble() < 0.005) {
             agent.setHungry(true);
             return new HungryThirstyState();
         }
@@ -41,7 +41,7 @@ public class RoamingState implements IStates {
             agent.setInQueue(true);
             return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT));
         }
-
+*/
         List<Zone> filteredZones = event.zones.stream()
                 .filter(z -> z.getType() != agent.getLastVisitedZone())
                 .toList();

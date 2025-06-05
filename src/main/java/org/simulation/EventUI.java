@@ -13,7 +13,6 @@ import java.net.URL;
 import java.util.Random;
 
 
-
 public class EventUI extends GUIState {
     public Display2D display;
     public JFrame frame;
@@ -48,6 +47,9 @@ public class EventUI extends GUIState {
 
         gridPortrayal.setField(sim.grid);
 
+        // Erst alle Portrayals löschen
+        gridPortrayal.setPortrayalForAll(null);
+
         // Agent color via getColor()
         gridPortrayal.setPortrayalForClass(Agent.class, new OvalPortrayal2D() {
             @Override
@@ -61,38 +63,28 @@ public class EventUI extends GUIState {
             }
         });
 
-        // Persons (e.g. medics) in red
-        gridPortrayal.setPortrayalForClass(Person.class,
-                new OvalPortrayal2D(Color.RED));
-
-        // Zones
-     /**   gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
+        // Person portrayal als QUADRATE mit verschiedenen Farben je nach Typ
+        gridPortrayal.setPortrayalForClass(Person.class, new SimplePortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                Zone zone = (Zone) object;
-                Color color;
+                Person person = (Person) object;
+                graphics.setColor(person.getColor());
 
-                switch (zone.getType()) {
-                    case FOOD -> color = Color.GREEN;
-                    case ACT_MAIN -> color = Color.BLUE;
-                    case ACT_SIDE -> color = Color.CYAN;
-                    case EXIT -> color = Color.DARK_GRAY;
-                    default -> color = Color.GRAY;
-                }
+                // Quadrat zeichnen
+                int size = (int) Math.min(info.draw.width, info.draw.height);
+                int x = (int) (info.draw.x - size / 2);
+                int y = (int) (info.draw.y - size / 2);
 
-                graphics.setColor(color);
+                graphics.fillRect(x, y, size, size);
 
-                double scale = 1.8;
-                double width = info.draw.width * scale;
-                double height = info.draw.height * scale;
-                double x = info.draw.x - width / 2;
-                double y = info.draw.y - height / 2;
-
-                graphics.fillRect((int) x, (int) y, (int) width, (int) height);
+                // Schwarzer Rand für bessere Sichtbarkeit
+                graphics.setColor(Color.BLACK);
+                graphics.drawRect(x, y, size, size);
             }
         });
-        */
 
+
+        //Zones mit Icon
         gridPortrayal.setPortrayalForClass(Zone.class, new RectanglePortrayal2D() {
 
             final Image foodIcon;
@@ -162,17 +154,16 @@ public class EventUI extends GUIState {
                 double y = info.draw.y - height / 2;
 
                 if (zone.getType() == Zone.ZoneType.FOOD && foodIcon != null) {
-                    graphics.drawImage(foodIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                    graphics.drawImage(foodIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.ACT_MAIN && mainActIcon != null) {
-                    graphics.drawImage(mainActIcon, (int)(x - 40), (int)(y - 40), 80, 80, null);
+                    graphics.drawImage(mainActIcon, (int) (x - 40), (int) (y - 40), 80, 80, null);
                 } else if (zone.getType() == Zone.ZoneType.EXIT && exitIcon != null) {
-                    graphics.drawImage(exitIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                    graphics.drawImage(exitIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.ACT_SIDE && sideActIcon != null) {
-                    graphics.drawImage(sideActIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
+                    graphics.drawImage(sideActIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.WC && wcIcon != null) {
-                    graphics.drawImage(wcIcon, (int)(x - 30), (int)(y - 30), 60, 60, null);
-                    }
-                else {
+                    graphics.drawImage(wcIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
+                } else {
                     // Fallback: Farbe falls Icon fehlt
                     graphics.setColor(Color.GRAY);
                     graphics.fillRect((int) x, (int) y, (int) width, (int) height);
@@ -185,27 +176,27 @@ public class EventUI extends GUIState {
         gridPortrayal.setPortrayalForClass(FireDisturbance.class, new SimplePortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D g, DrawInfo2D info) {
-                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int)(info.draw.width * 1.5)));
-                g.drawString("🔥", (float)(info.draw.x - info.draw.width / 2),
-                        (float)(info.draw.y + info.draw.height / 3));
+                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int) (info.draw.width * 2.5)));
+                g.drawString("🔥", (float) (info.draw.x - info.draw.width / 2),
+                        (float) (info.draw.y + info.draw.height / 3));
             }
         });
 
         gridPortrayal.setPortrayalForClass(FightDisturbance.class, new SimplePortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D g, DrawInfo2D info) {
-                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int)(info.draw.width * 1.5)));
-                g.drawString("🥊", (float)(info.draw.x - info.draw.width / 2),
-                        (float)(info.draw.y + info.draw.height / 3));
+                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int) (info.draw.width * 2.5)));
+                g.drawString("🥊", (float) (info.draw.x - info.draw.width / 2),
+                        (float) (info.draw.y + info.draw.height / 3));
             }
         });
 
         gridPortrayal.setPortrayalForClass(StormDisturbance.class, new SimplePortrayal2D() {
             @Override
             public void draw(Object object, Graphics2D g, DrawInfo2D info) {
-                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int)(info.draw.width * 1.5)));
-                g.drawString("🌩️", (float)(info.draw.x - info.draw.width / 2),
-                        (float)(info.draw.y + info.draw.height / 3));
+                g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, (int) (info.draw.width * 4)));
+                g.drawString("🌩️", (float) (info.draw.x - info.draw.width / 2),
+                        (float) (info.draw.y + info.draw.height / 3));
             }
         });
 
@@ -261,69 +252,111 @@ public class EventUI extends GUIState {
 
 
         // Legende
-        JPanel legendPanel = new JPanel();
-        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
-        legendPanel.setOpaque(false);
+        JPanel legendPanel = new JPanel(new GridBagLayout());
+        legendPanel.setOpaque(true);
+        legendPanel.setBackground(new Color(0, 0, 0, 160));
+        legendPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 1),
+                BorderFactory.createEmptyBorder(12, 16, 12, 16)
+        ));
 
-        JLabel roleTitle = new JLabel("Roles:");
-        roleTitle.setFont(new Font("Dialog", Font.BOLD, 13));
-        legendPanel.add(roleTitle);
-        legendPanel.add(createLegendEntry(Color.YELLOW, "● Visitor (Roaming)"));
-        legendPanel.add(createLegendEntry(Color.RED, "● Person"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(2, 0, 2, 120);
 
-        JLabel stateTitle = new JLabel("States:");
-        stateTitle.setFont(new Font("Dialog", Font.BOLD, 13));
-        legendPanel.add(Box.createVerticalStrut(5));
-        legendPanel.add(stateTitle);
-        legendPanel.add(createLegendEntry(Color.GREEN, "● Eating"));
-        legendPanel.add(createLegendEntry(Color.MAGENTA, "● Seeking"));
-        legendPanel.add(createLegendEntry(Color.BLUE, "● Watching Act"));
-        legendPanel.add(createLegendEntry(Color.RED, "● Panic Run"));
-        legendPanel.add(createLegendEntry(Color.ORANGE, "● In Queue"));
-        legendPanel.add(createLegendEntry(Color.pink, "● Using WC"));
+        //SPalte Rollen
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        legendPanel.add(createSectionTitle("Roles"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.YELLOW, "Visitor"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("■", Color.WHITE, "Medic"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("■", Color.LIGHT_GRAY, "Security"), gbc);
 
-        JLabel zoneTitle = new JLabel("Zones:");
-        zoneTitle.setFont(new Font("Dialog", Font.BOLD, 13));
-        legendPanel.add(Box.createVerticalStrut(5));
-        legendPanel.add(zoneTitle);
-        legendPanel.add(createLegendEntry(scaledIcon("/imbiss-stand.png", 10, 10), "Food Zone"));
-        legendPanel.add(createLegendEntry(scaledIcon("/MainAct.png", 10, 10), "Main Stage"));
-        legendPanel.add(createLegendEntry(scaledIcon("/SideAct.png", 10, 10), "Side Stage"));
-        legendPanel.add(createLegendEntry(scaledIcon("/barrier.png", 10, 10), "Exit"));
-        legendPanel.add(createLegendEntry(scaledIcon("/wc.png", 10, 10), "WC"));
+        // Spalte 2: Zustände
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        legendPanel.add(createSectionTitle("States"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.GREEN, "Eating"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.MAGENTA, "Seeking"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.BLUE, "Watching"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.RED, "Panic"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.ORANGE, "Queue"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("●", Color.PINK, "Using WC"), gbc);
 
-        frame.getContentPane().add(legendPanel, BorderLayout.SOUTH);
+
+        // Spalte 3: Zonen
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        legendPanel.add(createSectionTitle("Zones"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/imbiss-stand.png", 30, 30), "Food"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/MainAct.png", 30, 30), "Main Stage"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/SideAct.png", 30, 30), "Side Stage"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/wc.png", 30, 30), "WC"), gbc);
+
+        // Wrapper Panel für Positionierung links unten
+        JPanel legendWrapper = new JPanel(new BorderLayout());
+        legendWrapper.setOpaque(false);
+        legendWrapper.add(legendPanel, BorderLayout.WEST);
+
+        frame.getContentPane().add(legendWrapper, BorderLayout.SOUTH);
     }
 
-    private JPanel createLegendEntry(Color color, String label) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
+    private JLabel createSectionTitle(String title) {
+        JLabel label = new JLabel(title);
+        label.setFont(new Font("Dialog", Font.BOLD, 14));
+        label.setForeground(Color.WHITE);
+        return label;
+    }
+
+    private JPanel createCompactLegendEntry(String symbol, Color color, String text) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         panel.setOpaque(false);
 
-        JLabel symbolLabel = new JLabel(label.substring(0, 1));
-        symbolLabel.setForeground(color);
+        JLabel symbolLabel = new JLabel(symbol);
+        if (color != null) {
+            symbolLabel.setForeground(color);
+        }
         symbolLabel.setFont(new Font("Dialog", Font.PLAIN, 13));
 
-        JLabel textLabel = new JLabel(label.substring(2));
-        textLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+        JLabel textLabel = new JLabel(text);
+        textLabel.setFont(new Font("Dialog", Font.PLAIN, 13));
+        textLabel.setForeground(Color.WHITE);
 
         panel.add(symbolLabel);
         panel.add(textLabel);
         return panel;
     }
 
-    private JPanel createLegendEntry(ImageIcon icon, String label) {
+    private JPanel createIconLegendEntry(ImageIcon icon, String text) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         panel.setOpaque(false);
 
         JLabel iconLabel = new JLabel(icon);
-        JLabel textLabel = new JLabel(label);
-        textLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
+        JLabel textLabel = new JLabel(text);
+        textLabel.setFont(new Font("Dialog", Font.PLAIN, 13));
+        textLabel.setForeground(Color.WHITE);
 
         panel.add(iconLabel);
         panel.add(textLabel);
         return panel;
+
     }
+
     private ImageIcon scaledIcon(String path, int width, int height) {
         URL url = getClass().getResource(path);
         if (url != null) {

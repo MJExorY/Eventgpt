@@ -4,11 +4,20 @@ import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.util.Int2D;
 
-class Person implements Steppable {
-    private Int2D position;
+import java.awt.Color;
 
-    public Person(Int2D position) {
+class Person implements Steppable {
+
+    public enum PersonType {
+        MEDIC, SECURITY
+    }
+
+    private Int2D position;
+    private final PersonType type;
+
+    public Person(Int2D position, PersonType type) {
         this.position = position;
+        this.type = type;
     }
 
     public Int2D getPosition() {
@@ -19,6 +28,16 @@ class Person implements Steppable {
         this.position = position;
     }
 
+    public PersonType getType() {
+        return type;
+    }
+
+    public Color getColor() {
+        return switch (type) {
+            case MEDIC -> Color.WHITE;
+            case SECURITY -> Color.DARK_GRAY;
+        };
+    }
 
     @Override
     public void step(SimState simState) {

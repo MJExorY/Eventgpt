@@ -1,6 +1,7 @@
 package org.simulation;
 
 import sim.engine.SimState;
+import sim.util.Int2D;
 
 /**
  * A storm disturbance that affects the entire simulation area.
@@ -25,8 +26,9 @@ public class StormDisturbance extends Disturbance {
     public static StormDisturbance createRandom(Event sim) {
         StormDisturbance storm = new StormDisturbance();
 
-        // Optional: place it at top-left just for visual reference
-        sim.grid.setObjectLocation(storm, 0, 0);
+        int x = sim.random.nextInt(sim.grid.getWidth());
+        int y = sim.random.nextInt(sim.grid.getHeight());
+        sim.grid.setObjectLocation(storm, new Int2D(x, y));
 
         return storm;
     }
