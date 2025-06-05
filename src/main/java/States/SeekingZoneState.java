@@ -55,7 +55,7 @@ public class SeekingZoneState implements IStates {
                             yield new WatchingActState(); // Bühne erreicht → jetzt blau werden
                         }
                         case EXIT -> new RoamingState(); // verlassen
-
+                        case EMERGENCY_EXIT -> new RoamingState();
                     };
                 } else {
                     return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT)); // falls .tryEnterZone false zurückgibt
