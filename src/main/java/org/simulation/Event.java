@@ -84,8 +84,8 @@ public class Event extends SimState {
             agentRandom.setStopper(schedule.scheduleRepeating(agentRandom));
         }
 
-        //könnten bspw. Sanitäter sein
-        for (int i = 0; i < 10; i++) {
+        // Sanitäter hinzufügen (5 Personen)
+        for (int i = 0; i < 5; i++) {
             int x, y;
             Int2D pos;
             do {
@@ -94,14 +94,28 @@ public class Event extends SimState {
                 pos = new Int2D(x, y);
             } while (getZoneByPosition(pos) != null); // keine Zone überschreiben
 
-            Person person = new Person(pos);
-            grid.setObjectLocation(person, x, y);
-            schedule.scheduleRepeating(person);
+            Person medic = new Person(pos, Person.PersonType.MEDIC);
+            grid.setObjectLocation(medic, x, y);
+            schedule.scheduleRepeating(medic);
         }
 
+        // Security hinzufügen (5 Personen)
+        for (int i = 0; i < 5; i++) {
+            int x, y;
+            Int2D pos;
+            do {
+                x = random.nextInt(grid.getWidth());
+                y = random.nextInt(grid.getHeight());
+                pos = new Int2D(x, y);
+            } while (getZoneByPosition(pos) != null);
+
+            Person security = new Person(pos, Person.PersonType.SECURITY);
+            grid.setObjectLocation(security, x, y);
+            schedule.scheduleRepeating(security);
+        }
 
         System.out.println(agentCount + " Agenten wurden erzeugt.");
-        System.out.println("10 Personen wurden zusätzlich zur Simulation hinzugefügt.");
+        System.out.println("5 Sanitäter und 5 Security-Personen wurden zur Simulation hinzugefügt.");
     }
 
     // Getter-Methode, um eine Zone nach Typ zu finden
