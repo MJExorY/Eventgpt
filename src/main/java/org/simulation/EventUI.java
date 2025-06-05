@@ -90,6 +90,7 @@ public class EventUI extends GUIState {
             final Image foodIcon;
             final Image mainActIcon;
             final Image exitIcon;
+            final Image emergencyExitIcon;
             final Image sideActIcon;
             final Image wcIcon;
 
@@ -131,6 +132,15 @@ public class EventUI extends GUIState {
                     System.err.println("❌ Bild nicht gefunden: /barrier.png");
                     exitIcon = null;
                 }
+                //Emergency Exit Icon
+                URL emergencyExitURL = getClass().getResource("/emergency-exit.png");
+                System.out.println("Emergency Exit Icon URL: " + emergencyExitURL);
+                if (emergencyExitURL != null) {
+                    emergencyExitIcon = new ImageIcon(emergencyExitURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("❌ Bild nicht gefunden: /emergency-exit.png");
+                    emergencyExitIcon = null;
+                }
 
                 // ACT_SIDE-Zone Icon (60x60)
                 URL sideActURL = getClass().getResource("/SideAct.png");
@@ -159,6 +169,8 @@ public class EventUI extends GUIState {
                     graphics.drawImage(mainActIcon, (int) (x - 40), (int) (y - 40), 80, 80, null);
                 } else if (zone.getType() == Zone.ZoneType.EXIT && exitIcon != null) {
                     graphics.drawImage(exitIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
+                } else if (zone.getType() == Zone.ZoneType.EMERGENCY_EXIT && emergencyExitIcon != null) {
+                    graphics.drawImage(emergencyExitIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.ACT_SIDE && sideActIcon != null) {
                     graphics.drawImage(sideActIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.WC && wcIcon != null) {
@@ -305,6 +317,8 @@ public class EventUI extends GUIState {
         legendPanel.add(createIconLegendEntry(scaledIcon("/SideAct.png", 30, 30), "Side Stage"), gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 20, 20), "Emergency"), gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/wc.png", 30, 30), "WC"), gbc);
 

@@ -56,9 +56,18 @@ public class Event extends SimState {
         Zone wcZone = new Zone(Zone.ZoneType.WC, new Int2D(90, 25), 10);             // Rechts oben
         Zone actMain = new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(50, 45), 20);     // Zentrum
         Zone actSide = new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(15, 85), 15);     // Links unten
-        Zone exitZone = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE); // Unten Mitte
 
-        zones.addAll(List.of(foodZone, wcZone, actMain, actSide, exitZone));
+        Zone normalExit = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE); // Unten Mitte
+
+        Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5), Integer.MAX_VALUE);    // Norden
+        Zone emergencySouth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(30, 95), Integer.MAX_VALUE);   // Süden (links vom normalen Exit)
+        Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);    // Osten
+        Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), Integer.MAX_VALUE);     // Westen
+        Zone emergencyNorthEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(85, 15), Integer.MAX_VALUE); // Nordosten
+        Zone emergencySouthWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(15, 85), Integer.MAX_VALUE); // Südwesten
+
+        zones.addAll(List.of(foodZone, wcZone, actMain, actSide, normalExit,
+                emergencyNorth, emergencySouth, emergencyEast, emergencyWest, emergencyNorthEast, emergencySouthWest));
 
 
         // Alle Zonen im Grid sichtbar machen
@@ -116,6 +125,7 @@ public class Event extends SimState {
 
         System.out.println(agentCount + " Agenten wurden erzeugt.");
         System.out.println("5 Sanitäter und 5 Security-Personen wurden zur Simulation hinzugefügt.");
+        System.out.println("6 Notausgänge wurden gleichmäßig über das Gelände verteilt.");
     }
 
     // Getter-Methode, um eine Zone nach Typ zu finden
@@ -142,7 +152,7 @@ public class Event extends SimState {
 
     public Zone getNearestAvailableExit(Int2D fromPosition) {
         return zones.stream()
-                .filter(z -> z.getType() == Zone.ZoneType.EXIT && !z.isFull())
+                .filter(z -> (z.getType() == Zone.ZoneType.EXIT || z.getType() == Zone.ZoneType.EMERGENCY_EXIT) && !z.isFull())
                 .min((z1, z2) -> {
                     int d1 = Math.abs(z1.getPosition().x - fromPosition.x) + Math.abs(z1.getPosition().y - fromPosition.y);
                     int d2 = Math.abs(z2.getPosition().x - fromPosition.x) + Math.abs(z2.getPosition().y - fromPosition.y);
