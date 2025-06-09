@@ -7,8 +7,11 @@ import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.*;
 import sim.engine.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 
@@ -213,7 +216,7 @@ public class EventUI extends GUIState {
         });
 
         display.reset();
-        display.setBackdrop(new Color(0xE1CAB2));
+        //  display.setBackdrop(new Color(0xE1CAB2));
         display.repaint();
     }
 
@@ -221,8 +224,29 @@ public class EventUI extends GUIState {
     public void init(sim.display.Controller c) {
         super.init(c);
 
+
+        //Hintergrund map setzen-
+
         display = new Display2D(650, 650, this);
         display.setClipping(false);
+
+// Hintergrundbild als TexturePaint setzen
+        URL backgroundURL = getClass().getResource("/Hintergrundbild.png");
+        if (backgroundURL != null) {
+            try {
+                BufferedImage bgImage = ImageIO.read(backgroundURL);
+                Rectangle anchor = new Rectangle(0, 0, bgImage.getWidth(), bgImage.getHeight());
+                TexturePaint texturePaint = new TexturePaint(bgImage, anchor);
+                display.setBackdrop(texturePaint);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("❌ Hintergrundbild nicht gefunden: /Hintergrundbild.png");
+        }
+        //---
+
+
         frame = display.createFrame();
         c.registerFrame(frame);
         frame.setVisible(true);
