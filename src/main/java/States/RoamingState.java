@@ -36,6 +36,11 @@ public class RoamingState implements IStates {
             return new WatchingMainActState();
         }
 
+        if (event.random.nextDouble() < 0.011) {
+            agent.setWatchingSide(true);
+            return new WatchingSideActState();
+        }
+
         /* if (event.random.nextDouble() < 0.003) {
             agent.setPanicking(true);
             return new PanicRunState();
