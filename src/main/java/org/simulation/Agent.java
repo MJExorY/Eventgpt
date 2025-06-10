@@ -15,6 +15,7 @@ public class Agent implements Steppable {
     private boolean isRoaming = false;
     private boolean isHungry = false;
     private boolean isWatchingMain = false;
+    private boolean isWatchingSide = false;
     private boolean isInQueue = false;
     private boolean isPanicking = false;
     private boolean isSeeking = false;
@@ -45,6 +46,7 @@ public class Agent implements Steppable {
 
     public void resetFlags() { // Setzt Zustand zurück - wichtig für State wechsel
         isWatchingMain = false;
+        isWatchingSide = false;
         isInQueue = false;
         isPanicking = false;
         isSeeking = false;
@@ -85,6 +87,14 @@ public class Agent implements Steppable {
 
     public void setWatchingMain(boolean watchingMain) {
         this.isWatchingMain = watchingMain;
+    }
+
+    public boolean isWatchingSide() {
+        return isWatchingSide;
+    }
+
+    public void setWatchingSide(boolean watchingSide) {
+        this.isWatchingSide = watchingSide;
     }
 
     public boolean isInQueue() {
@@ -148,6 +158,7 @@ public class Agent implements Steppable {
         if (isPanicking) return Color.RED;
         if (isHungry) return Color.GREEN;
         if (isWatchingMain) return Color.BLUE;
+        if (isWatchingSide) return Color.CYAN;
         if (isInQueue) return Color.ORANGE;
         if (isSeeking) return Color.MAGENTA;
         if (isWC) return Color.PINK;
