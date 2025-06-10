@@ -14,7 +14,7 @@ public class HungryThirstyState implements IStates {
             Zone foodZone = event.getZoneByType(Zone.ZoneType.FOOD);
             if (foodZone != null) {
                 agent.setTargetPosition(foodZone.getPosition());
-                return new SeekingZoneState();
+                // return new SeekingZoneState();
             }
         }
 

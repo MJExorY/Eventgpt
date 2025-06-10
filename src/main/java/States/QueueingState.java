@@ -9,16 +9,15 @@ import java.util.Optional;
 import java.util.Random;
 
 public class QueueingState implements IStates {
-    protected int waitingTime ; // 5–15 Schritte
+    protected int waitingTime; // 5–15 Schritte
     private final Zone originalExitZone;
     private boolean initialized = false;
 
-    public QueueingState(Agent agent, Zone exitZone){
+    public QueueingState(Agent agent, Zone exitZone) {
         this.originalExitZone = exitZone;
         this.waitingTime = 5 + (int) (Math.random() * 10);
 
     }
-
 
 
     @Override
@@ -58,7 +57,7 @@ public class QueueingState implements IStates {
             if (alternative.isPresent()) {
                 Zone altZone = alternative.get();
                 agent.setTargetPosition(altZone.getPosition());
-                return new SeekingZoneState();
+                // return new SeekingZoneState();
             } else {
                 // Keine Exit-Zone verfügbar → neue Wartezeit
                 this.waitingTime = 3 + new Random().nextInt(5);

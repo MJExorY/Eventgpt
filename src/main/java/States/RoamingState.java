@@ -21,23 +21,29 @@ public class RoamingState implements IStates {
         int newY = Math.max(0, Math.min(event.grid.getHeight() - 1, pos.y + dy));
         event.grid.setObjectLocation(agent, new Int2D(newX, newY));
 
+
         // Zustandswechsel (zuerst prüfen!)
-      /*  if (event.random.nextDouble() < 0.005) {
+        if (event.random.nextDouble() < 0.005) {
             agent.setHungry(true);
             return new HungryThirstyState();
         }
 
-        if (event.random.nextDouble() < 0.01) {
+        if (event.random.nextDouble() < 0.003) {
+            agent.setWC(true);
+            return new WCState();
+        }
+
+        /* if (event.random.nextDouble() < 0.01) {
             agent.setWatching(true);
             return new WatchingActState();
-        }
+        } */
 
-        if (event.random.nextDouble() < 0.003) {
+        /* if (event.random.nextDouble() < 0.003) {
             agent.setPanicking(true);
             return new PanicRunState();
-        }
+        } */
 
-        if (event.random.nextDouble() < 0.005) {
+        /* if (event.random.nextDouble() < 0.005) {
             agent.setInQueue(true);
             return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT));
         }
@@ -49,7 +55,7 @@ public class RoamingState implements IStates {
         if (!filteredZones.isEmpty()) {
             Zone nextZone = filteredZones.get(event.random.nextInt(filteredZones.size()));
             agent.setTargetPosition(nextZone.getPosition());
-            return new SeekingZoneState();
+            // return new SeekingZoneState();
         }
 
 

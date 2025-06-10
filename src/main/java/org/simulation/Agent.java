@@ -17,6 +17,7 @@ public class Agent implements Steppable {
     private boolean isInQueue = false;
     private boolean isPanicking = false;
     private boolean isSeeking = false;
+    private boolean isWC = false;
     private Zone currentZone = null;
     private Zone.ZoneType lastVisitedZone = null;
 
@@ -53,6 +54,14 @@ public class Agent implements Steppable {
     // Getter & Setter
     public boolean isHungry() {
         return isHungry;
+    }
+
+    public boolean isWC() {
+        return isWC;
+    }
+
+    public void setWC(boolean WC) {
+        isWC = WC;
     }
 
     public void setHungry(boolean hungry) {

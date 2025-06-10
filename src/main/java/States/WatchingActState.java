@@ -48,7 +48,7 @@ public class WatchingActState implements IStates {
                 Zone next = event.getZoneByType(nextType);
                 if (next != null) {
                     agent.setTargetPosition(next.getPosition());
-                    return new SeekingZoneState();
+                    // return new SeekingZoneState();
                 }
             }
             return new RoamingState(); // zurück ins Schlendern

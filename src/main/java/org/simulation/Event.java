@@ -1,6 +1,7 @@
 package org.simulation;
 
 import sim.engine.SimState;
+import sim.engine.Steppable;
 import sim.engine.Stoppable;
 import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
@@ -76,22 +77,25 @@ public class Event extends SimState {
         }
 
 
+        Int2D eingang = new Int2D(60, 90); // Eingang Zone
+
         for (int i = 0; i < agentCount; i++) {
-            Agent agentRandom = new Agent();
-            agentRandom.setEvent(this);    // Event Referenz setzen
-            agents.add(agentRandom);       // Agent in Liste hinzufügen
+            final int delay = i * 2;
+            final int index = i;
 
-            int x, y;
-            Int2D pos;
-            do {
-                x = random.nextInt(grid.getWidth());
-                y = random.nextInt(grid.getHeight());
-                pos = new Int2D(x, y);
-            } while (getZoneByPosition(pos) != null);
-
-            grid.setObjectLocation(agentRandom, x, y);
-            agentRandom.setStopper(schedule.scheduleRepeating(agentRandom));
+            schedule.scheduleOnce(delay, new Steppable() {
+                @Override
+                public void step(SimState state) {
+                    Agent agent = new Agent();
+                    agent.setEvent((Event) state);
+                    ((Event) state).agents.add(agent);
+                    ((Event) state).grid.setObjectLocation(agent, eingang);
+                    Stoppable stopper = state.schedule.scheduleRepeating(agent);
+                    agent.setStopper(stopper);
+                }
+            });
         }
+
 
         // Sanitäter hinzufügen (5 Personen)
         for (int i = 0; i < 5; i++) {
