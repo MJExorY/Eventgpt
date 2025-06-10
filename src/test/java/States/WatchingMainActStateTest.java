@@ -1,8 +1,5 @@
 package States;
 
-import States.IStates;
-import States.RoamingState;
-import States.WatchingMainActState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simulation.Agent;
@@ -43,6 +40,6 @@ public class WatchingMainActStateTest {
 
         assertInstanceOf(RoamingState.class, current);
         assertNull(agent.getCurrentZone());
-        assertFalse(agent.isWatching());
+        assertFalse(agent.isWatchingMain());
     }
 }

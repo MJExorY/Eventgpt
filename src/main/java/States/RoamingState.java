@@ -2,10 +2,7 @@ package States;
 
 import org.simulation.Agent;
 import org.simulation.Event;
-import org.simulation.Zone;
 import sim.util.Int2D;
-
-import java.util.List;
 
 public class RoamingState implements IStates {
 
@@ -35,7 +32,7 @@ public class RoamingState implements IStates {
         }
 
         if (event.random.nextDouble() < 0.015) {
-            agent.setWatching(true);
+            agent.setWatchingMain(true);
             return new WatchingMainActState();
         }
 

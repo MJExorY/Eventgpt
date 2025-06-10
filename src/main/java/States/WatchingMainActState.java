@@ -17,7 +17,7 @@ public class WatchingMainActState implements IStates {
     public IStates act(Agent agent, Event event) {
         if (!initialized) {
             agent.resetFlags();
-            agent.setWatching(true);
+            agent.setWatchingMain(true);
 
             Zone mainAct = event.getZoneByType(Zone.ZoneType.ACT_MAIN);
             if (mainAct != null) {
@@ -57,7 +57,7 @@ public class WatchingMainActState implements IStates {
                     zone.leave(agent);
                     agent.setCurrentZone(null);
                 }
-                agent.setWatching(false);
+                agent.setWatchingMain(false);
                 return new RoamingState();
             }
 

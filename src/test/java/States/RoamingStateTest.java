@@ -59,6 +59,6 @@ public class RoamingStateTest {
         roamingState.act(agent, event);
         assertTrue(agent.isRoaming());
         assertFalse(agent.isHungry());
-        assertFalse(agent.isWatching());
+        assertFalse(agent.isWatchingMain());
     }
 }
