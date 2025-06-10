@@ -44,12 +44,12 @@ public class Event extends SimState {
 
         grid = new SparseGrid2D(100, 100);
 
-        Agent agent = new Agent();
+        /*Agent agent = new Agent();
         agent.setEvent(this);
         agents.add(agent);
         grid.setObjectLocation(agent, 50, 50);
         Stoppable stopper = schedule.scheduleRepeating(agent);
-        agent.setStopper(stopper);
+        agent.setStopper(stopper); */
 
 
         // Zonen hinzufügen
@@ -83,6 +83,7 @@ public class Event extends SimState {
             final int delay = i;
             final int index = i;
 
+
             schedule.scheduleOnce(delay, new Steppable() {
                 @Override
                 public void step(SimState state) {
@@ -94,6 +95,7 @@ public class Event extends SimState {
                     agent.setStopper(stopper);
                 }
             });
+
         }
 
 

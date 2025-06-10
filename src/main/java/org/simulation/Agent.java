@@ -147,7 +147,7 @@ public class Agent implements Steppable {
     public Color getColor() {
         if (isPanicking) return Color.RED;
         if (isHungry) return Color.GREEN;
-        if (isWatching) return Color.BLACK;
+        if (isWatching) return Color.BLUE;
         if (isInQueue) return Color.ORANGE;
         if (isSeeking) return Color.MAGENTA;
         if (isWC) return Color.PINK;
