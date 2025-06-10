@@ -11,6 +11,7 @@ public class RoamingState implements IStates {
 
     @Override
     public IStates act(Agent agent, Event event) {
+        agent.setRoaming(true);
         agent.resetFlags();
         Int2D pos = event.grid.getObjectLocation(agent);
 
@@ -33,10 +34,10 @@ public class RoamingState implements IStates {
             return new WCState();
         }
 
-        /* if (event.random.nextDouble() < 0.01) {
+        if (event.random.nextDouble() < 0.015) {
             agent.setWatching(true);
-            return new WatchingActState();
-        } */
+            return new WatchingMainActState();
+        }
 
         /* if (event.random.nextDouble() < 0.003) {
             agent.setPanicking(true);
@@ -48,16 +49,6 @@ public class RoamingState implements IStates {
             return new QueueingState(agent, event.getZoneByType(Zone.ZoneType.EXIT));
         }
 */
-        List<Zone> filteredZones = event.zones.stream()
-                .filter(z -> z.getType() != agent.getLastVisitedZone())
-                .toList();
-
-        if (!filteredZones.isEmpty()) {
-            Zone nextZone = filteredZones.get(event.random.nextInt(filteredZones.size()));
-            agent.setTargetPosition(nextZone.getPosition());
-            // return new SeekingZoneState();
-        }
-
 
         return this;
     }

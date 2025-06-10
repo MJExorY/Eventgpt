@@ -38,7 +38,7 @@ public class QueueingState implements IStates {
         if (waitingTime <= 0) {
             // Agent ist bereits drin → sofort WatchingActState
             if (!agent.isInQueue()) {
-                return new WatchingActState();
+                return new WatchingMainActState();
             }
 
             if (!originalExitZone.isFull()) {
@@ -46,7 +46,7 @@ public class QueueingState implements IStates {
 
                 if (success) {
                     agent.setInQueue(false);
-                    return new WatchingActState();
+                    return new WatchingMainActState();
                 }
             }
 

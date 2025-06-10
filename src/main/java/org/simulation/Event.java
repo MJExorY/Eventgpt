@@ -80,7 +80,7 @@ public class Event extends SimState {
         Int2D eingang = new Int2D(60, 90); // Eingang Zone
 
         for (int i = 0; i < agentCount; i++) {
-            final int delay = i * 2;
+            final int delay = i;
             final int index = i;
 
             schedule.scheduleOnce(delay, new Steppable() {

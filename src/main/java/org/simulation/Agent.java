@@ -12,6 +12,7 @@ import java.awt.*;
 public class Agent implements Steppable {
     private IStates currentState = new RoamingState(); // Startzustand
     private Int2D targetPosition = null;
+    private boolean isRoaming = false;
     private boolean isHungry = false;
     private boolean isWatching = false;
     private boolean isInQueue = false;
@@ -42,14 +43,16 @@ public class Agent implements Steppable {
     }
 
 
-    public void resetFlags() {
+    public void resetFlags() { // Setzt Zustand zurück - wichtig für State wechsel
         isWatching = false;
         isInQueue = false;
         isPanicking = false;
         isSeeking = false;
         isHungry = false;
+        isWC = false;
         currentZone = null;
     }
+
 
     // Getter & Setter
     public boolean isHungry() {
@@ -62,6 +65,14 @@ public class Agent implements Steppable {
 
     public void setWC(boolean WC) {
         isWC = WC;
+    }
+
+    public boolean isRoaming() {
+        return isRoaming;
+    }
+
+    public void setRoaming(boolean roaming) {
+        isRoaming = roaming;
     }
 
     public void setHungry(boolean hungry) {
@@ -135,22 +146,12 @@ public class Agent implements Steppable {
 
     public Color getColor() {
         if (isPanicking) return Color.RED;
-        if (currentZone != null) {
-            switch (currentZone.getType()) {
-                case FOOD:
-                    return Color.GREEN;
-                case ACT_MAIN:
-                    return Color.BLUE;
-                case ACT_SIDE:
-                    return Color.CYAN;
-                case EXIT:
-                    return Color.GRAY;
-                case WC:
-                    return Color.pink;
-            }
-        }
+        if (isHungry) return Color.GREEN;
+        if (isWatching) return Color.BLACK;
         if (isInQueue) return Color.ORANGE;
         if (isSeeking) return Color.MAGENTA;
+        if (isWC) return Color.PINK;
+        if (isRoaming) return Color.YELLOW;
         return Color.YELLOW; // Roaming
     }
 

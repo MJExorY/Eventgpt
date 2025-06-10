@@ -4,16 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="feature: implemented test for FireDisturbance and PanicState">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="Agent spawn Ort + StatePattern zurückgesetzt">
+      <change afterPath="$PROJECT_DIR$/src/test/java/States/WatchingMainActStateTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/States/HungryThirstyState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/HungryThirstyState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/States/QueueingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/QueueingState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/States/RoamingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/RoamingState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/States/SeekingZoneState.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/States/WatchingActState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/WatchingActState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/States/WCState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/WCState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/States/WatchingActState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/WatchingMainActState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/Agent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/States/HungryThirstyStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/States/HungryThirstyStateTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/States/QueueingStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/States/QueueingStateTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/States/RoamingStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/States/RoamingStateTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,13 +80,16 @@
     "Application.Event.executor": "Run",
     "Application.EventUI.executor": "Run",
     "JUnit.FireDisturbanceTest.executor": "Run",
+    "JUnit.HungryThirstyStateTest.executor": "Run",
     "JUnit.PanicRunStateTest.executor": "Run",
     "JUnit.Simulation in eventsteuerung.executor": "Run",
+    "JUnit.WatchingMainActStateTest.executor": "Run",
     "Maven.Clean Install.executor": "Run",
     "Maven.eventsteuerung [clean,install].executor": "Run",
     "Maven.eventsteuerung [clean].executor": "Run",
     "Maven.eventsteuerung [compile].executor": "Run",
     "Maven.eventsteuerung [install].executor": "Run",
+    "Maven.eventsteuerung [test].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -115,7 +121,7 @@
       <command value="Fire" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.EventUI">
+  <component name="RunManager" selected="JUnit.RoamingStateTest">
     <configuration name="EventUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.simulation.EventUI" />
       <module name="eventsteuerung" />
@@ -129,22 +135,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="FireDisturbanceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="eventsteuerung" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Simulation.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Simulation" />
-      <option name="MAIN_CLASS_NAME" value="Simulation.FireDisturbanceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PanicRunStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="HungryThirstyStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="eventsteuerung" />
       <extension name="coverage">
         <pattern>
@@ -153,7 +144,22 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="States" />
-      <option name="MAIN_CLASS_NAME" value="States.PanicRunStateTest" />
+      <option name="MAIN_CLASS_NAME" value="States.HungryThirstyStateTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RoamingStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="eventsteuerung" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="States.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="States" />
+      <option name="MAIN_CLASS_NAME" value="States.RoamingStateTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -163,6 +169,21 @@
       <module name="eventsteuerung" />
       <option name="TEST_OBJECT" value="directory" />
       <dir value="$PROJECT_DIR$/src/test/java/Simulation" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WatchingMainActStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="eventsteuerung" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="States.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="States" />
+      <option name="MAIN_CLASS_NAME" value="States.WatchingMainActStateTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -200,18 +221,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.EventUI" />
-      <item itemvalue="JUnit.FireDisturbanceTest" />
-      <item itemvalue="JUnit.PanicRunStateTest" />
+      <item itemvalue="JUnit.HungryThirstyStateTest" />
+      <item itemvalue="JUnit.RoamingStateTest" />
+      <item itemvalue="JUnit.WatchingMainActStateTest" />
       <item itemvalue="JUnit.Simulation in eventsteuerung" />
       <item itemvalue="Maven.Clean Install" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RoamingStateTest" />
+        <item itemvalue="JUnit.WatchingMainActStateTest" />
         <item itemvalue="Application.EventUI" />
+        <item itemvalue="JUnit.HungryThirstyStateTest" />
         <item itemvalue="JUnit.Simulation in eventsteuerung" />
-        <item itemvalue="JUnit.PanicRunStateTest" />
-        <item itemvalue="JUnit.FireDisturbanceTest" />
-        <item itemvalue="Application.EventUI" />
       </list>
     </recent_temporary>
   </component>
@@ -244,7 +266,7 @@
       <workItem from="1748896820885" duration="5283000" />
       <workItem from="1749422393157" duration="72000" />
       <workItem from="1749496011761" duration="63000" />
-      <workItem from="1749559460123" duration="3128000" />
+      <workItem from="1749559460123" duration="9267000" />
     </task>
     <task id="LOCAL-00001" summary="wiki documentation versioned">
       <option name="closed" value="true" />
@@ -334,7 +356,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748900038902</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Agent spawn Ort + StatePattern zurückgesetzt">
+      <option name="closed" value="true" />
+      <created>1749562675181</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1749562675181</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -375,7 +405,8 @@
     <MESSAGE value="feature: implemented searching exit and leaving area" />
     <MESSAGE value="feature: implemented Panic Button for showCase" />
     <MESSAGE value="feature: implemented test for FireDisturbance and PanicState" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: implemented test for FireDisturbance and PanicState" />
+    <MESSAGE value="Agent spawn Ort + StatePattern zurückgesetzt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agent spawn Ort + StatePattern zurückgesetzt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
