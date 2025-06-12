@@ -108,7 +108,7 @@ public class Agent implements Steppable {
     }
 
     public void setPanicking(boolean panicking) {
-        this.isPanicking = panicking;
+        isPanicking = panicking;
     }
 
     public IStates getCurrentState() {
@@ -157,68 +157,58 @@ public class Agent implements Steppable {
 
     @Override
     public void step(SimState state) {
-        org.simulation.Event sim = (Event) state;
+        Event sim = (Event) state;
 
-        // 1. Zustandslogik ausführen
+        // Aktuellen Zustand ausführen
         if (currentState != null) {
             currentState = currentState.act(this, sim);
         }
 
-        // Trigger GUI-Update durch "Bewegung zu gleicher Position"
         Int2D pos = sim.grid.getObjectLocation(this);
-        sim.grid.setObjectLocation(this, pos); // erzwingt Repaint
+        sim.grid.setObjectLocation(this, pos);
 
-        // 2. Wenn kein Ziel → zufaellige Bewegung (roaming)
+        // Zufällige Bewegung (falls kein Ziel gesetzt)
         if (targetPosition == null) {
-            pos = sim.grid.getObjectLocation(this);
-            int dx = sim.random.nextInt(3) - 1; // -1, 0, +1
+            int dx = sim.random.nextInt(3) - 1;
             int dy = sim.random.nextInt(3) - 1;
             int newX = Math.max(0, Math.min(sim.grid.getWidth() - 1, pos.x + dx));
             int newY = Math.max(0, Math.min(sim.grid.getHeight() - 1, pos.y + dy));
             sim.grid.setObjectLocation(this, new Int2D(newX, newY));
         }
 
-        // Prüfen, ob der Agent in einer Exit Zone ist
+        // Nur panische Agenten dürfen bei Emergency Exit entfernt werden
         Zone currentZone = sim.getZoneByPosition(pos);
-        if (currentZone != null && currentZone.getType() == Zone.ZoneType.EXIT) {
-            // Agent entfernen
-            System.out.println("Agent hat die Exit Zone erreicht und wird entfernt: " + pos);
+        if (currentZone != null &&
+                (currentZone.getType() == Zone.ZoneType.EXIT ||
+                        (currentZone.getType() == Zone.ZoneType.EMERGENCY_EXIT && isPanicking))) {
 
-            if (stopper != null) {
-                stopper.stop();
-            }
+            System.out.println("Agent hat " + currentZone.getType() + " erreicht und wird entfernt: " + pos);
 
+            if (stopper != null) stopper.stop();
             sim.grid.remove(this);
             sim.agents.remove(this);
-
             return;
         }
 
-
-        System.out.println("Agent @ " + sim.grid.getObjectLocation(this)
+        // Debug
+        System.out.println("Agent @ " + pos
                 + " | State: " + currentState.getClass().getSimpleName()
                 + " | target: " + targetPosition);
     }
 
     public boolean tryEnterZone(Zone targetZone) {
         if (!targetZone.isFull()) {
-            // Agent verlässt alte Zone
             if (currentZone != null) {
                 currentZone.leave(this);
             }
 
-            // Agent betritt neue Zone
             targetZone.enter(this);
             setCurrentZone(targetZone);
             setLastVisitedZone(targetZone.getType());
             clearTarget();
             setInQueue(false);
-
             return true;
         }
         return false;
     }
-
-
 }
-
