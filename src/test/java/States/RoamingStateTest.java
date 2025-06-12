@@ -38,7 +38,8 @@ public class RoamingStateTest {
             assertTrue(result instanceof RoamingState
                     || result instanceof HungryThirstyState
                     || result instanceof WCState
-                    || result instanceof WatchingMainActState);
+                    || result instanceof WatchingMainActState
+                    || result instanceof WatchingSideActState);
         }
     }
 
