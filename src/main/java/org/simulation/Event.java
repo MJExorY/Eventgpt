@@ -101,32 +101,24 @@ public class Event extends SimState {
 
         // Sanitäter hinzufügen (5 Personen)
         for (int i = 0; i < 5; i++) {
-            int x, y;
-            Int2D pos;
-            do {
-                x = random.nextInt(grid.getWidth());
-                y = random.nextInt(grid.getHeight());
-                pos = new Int2D(x, y);
-            } while (getZoneByPosition(pos) != null); // keine Zone überschreiben
-
-            Person medic = new Person(pos, Person.PersonType.MEDIC);
-            grid.setObjectLocation(medic, x, y);
-            schedule.scheduleRepeating(medic);
+            Int2D pos = getRandomFreePosition();
+            Person medic = new Person(Person.PersonType.MEDIC);
+            medic.setEvent(this);
+            agents.add(medic);
+            grid.setObjectLocation(medic, pos.x, pos.y);
+            Stoppable stopper = schedule.scheduleRepeating(medic);
+            medic.setStopper(stopper);
         }
 
         // Security hinzufügen (5 Personen)
         for (int i = 0; i < 5; i++) {
-            int x, y;
-            Int2D pos;
-            do {
-                x = random.nextInt(grid.getWidth());
-                y = random.nextInt(grid.getHeight());
-                pos = new Int2D(x, y);
-            } while (getZoneByPosition(pos) != null);
-
-            Person security = new Person(pos, Person.PersonType.SECURITY);
-            grid.setObjectLocation(security, x, y);
-            schedule.scheduleRepeating(security);
+            Int2D pos = getRandomFreePosition();
+            Person security = new Person(Person.PersonType.SECURITY);
+            security.setEvent(this);
+            agents.add(security);
+            grid.setObjectLocation(security, pos.x, pos.y);
+            Stoppable stopper = schedule.scheduleRepeating(security);
+            security.setStopper(stopper);
         }
 
         System.out.println(agentCount + " Agenten wurden erzeugt.");
@@ -167,5 +159,14 @@ public class Event extends SimState {
                 .orElse(null);
     }
 
+    private Int2D getRandomFreePosition() {
+        Int2D pos;
+        do {
+            int x = random.nextInt(grid.getWidth());
+            int y = random.nextInt(grid.getHeight());
+            pos = new Int2D(x, y);
+        } while (getZoneByPosition(pos) != null);
+        return pos;
+    }
 
 }

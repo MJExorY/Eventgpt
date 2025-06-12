@@ -1,4 +1,4 @@
-package Simulation;
+package org.simulation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,6 +89,7 @@ public class EventTest {
 
     @Test
     public void testAgentenErzeugung() {
+        event.agents.clear();
         for (int i = 0; i < 1; i++) {
             event.schedule.step(event);
         }
