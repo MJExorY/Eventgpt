@@ -1,5 +1,9 @@
 package States;
 
+import States.HungryThirstyState;
+import States.IStates;
+import States.RoamingState;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simulation.Agent;
 import org.simulation.Event;
@@ -10,62 +14,39 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class HungryThirstyStateTest {
 
-    @Test
-    public void testAgentIsHungry_transitionsToSeekingZoneState() {
-        // Arrange
-        Agent agent = new Agent();
-        agent.setHungry(true);
+    private Event event;
+    private Agent agent;
 
-        Int2D foodPos = new Int2D(10, 10);
-        Zone foodZone = new Zone(Zone.ZoneType.FOOD, foodPos, 5);
+    @BeforeEach
+    public void setUp() {
+        event = new Event(System.currentTimeMillis(), 0);
+        event.start();
 
-        DummyEvent event = new DummyEvent(foodZone);
+        agent = new Agent();
+        agent.setEvent(event);
 
-        HungryThirstyState state = new HungryThirstyState();
-
-        // Act
-        IStates nextState = state.act(agent, event);
-
-        // Assert
-        assertInstanceOf(SeekingZoneState.class, nextState);
-        assertEquals(foodPos, agent.getTargetPosition(),
-                "Agent sollte Position der Essenszone anpeilen");
-        assertFalse(agent.isHungry(), "Hungerflag sollte nach Zustandübergang zurückgesetzt sein");
+        Zone foodZone = new Zone(Zone.ZoneType.FOOD, new Int2D(5, 15), 5);
+        event.zones.add(foodZone);
+        event.grid.setObjectLocation(agent, new Int2D(0, 0));
     }
 
     @Test
-    public void testAgentIsNotHungry_remainsInRoamingState() {
-        // Arrange
-        Agent agent = new Agent(); // default: isHungry = false
-        Int2D foodPos = new Int2D(10, 10);
-        Zone foodZone = new Zone(Zone.ZoneType.FOOD, foodPos, 5);
-        DummyEvent event = new DummyEvent(foodZone);
-
+    public void testAgentReachesFoodAndReturnsToRoaming() {
         HungryThirstyState state = new HungryThirstyState();
+        IStates result = state.act(agent, event);
 
-        // Act
-        IStates nextState = state.act(agent, event);
+        assertTrue(agent.isHungry());
+        assertEquals(new Int2D(5, 15), agent.getTargetPosition());
 
-        // Assert
-        assertInstanceOf(RoamingState.class, nextState);
-        assertNull(agent.getTargetPosition(), "Target sollte nicht gesetzt werden");
-    }
+        // Agent erreicht die Zone
+        event.grid.setObjectLocation(agent, new Int2D(5, 15));
 
-    // DummyEvent ohne Simulation, nur override für Zone-Zugriff
-    public static class DummyEvent extends Event {
-        private final Zone foodZone;
-
-        public DummyEvent(Zone foodZone) {
-            super(System.currentTimeMillis());
-            this.foodZone = foodZone;
+        // simulate several ticks to wait inside zone
+        for (int i = 0; i < 30; i++) {
+            result = state.act(agent, event);
+            if (result instanceof RoamingState) break;  // early exit if already returned
         }
 
-        @Override
-        public Zone getZoneByType(Zone.ZoneType type) {
-            if (type == Zone.ZoneType.FOOD) {
-                return foodZone;
-            }
-            return null;
-        }
+        assertInstanceOf(RoamingState.class, result);
     }
 }

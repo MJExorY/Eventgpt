@@ -1,6 +1,7 @@
 package org.simulation;
 
 import sim.engine.SimState;
+import sim.engine.Steppable;
 import sim.engine.Stoppable;
 import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
@@ -43,12 +44,12 @@ public class Event extends SimState {
 
         grid = new SparseGrid2D(100, 100);
 
-        Agent agent = new Agent();
+        /*Agent agent = new Agent();
         agent.setEvent(this);
         agents.add(agent);
         grid.setObjectLocation(agent, 50, 50);
         Stoppable stopper = schedule.scheduleRepeating(agent);
-        agent.setStopper(stopper);
+        agent.setStopper(stopper); */
 
 
         // Zonen hinzufügen
@@ -64,7 +65,7 @@ public class Event extends SimState {
         Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);    // Osten
         Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), Integer.MAX_VALUE);     // Westen
         Zone emergencyNorthEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(85, 15), Integer.MAX_VALUE); // Nordosten
-        Zone emergencySouthWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(15, 85), Integer.MAX_VALUE); // Südwesten
+        Zone emergencySouthWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 95), Integer.MAX_VALUE); // Südost
 
         zones.addAll(List.of(foodZone, wcZone, actMain, actSide, normalExit,
                 emergencyNorth, emergencySouth, emergencyEast, emergencyWest, emergencyNorthEast, emergencySouthWest));
@@ -76,22 +77,27 @@ public class Event extends SimState {
         }
 
 
+        Int2D eingang = new Int2D(60, 90); // Eingang Zone
+
         for (int i = 0; i < agentCount; i++) {
-            Agent agentRandom = new Agent();
-            agentRandom.setEvent(this);    // Event Referenz setzen
-            agents.add(agentRandom);       // Agent in Liste hinzufügen
+            final int delay = i;
+            final int index = i;
 
-            int x, y;
-            Int2D pos;
-            do {
-                x = random.nextInt(grid.getWidth());
-                y = random.nextInt(grid.getHeight());
-                pos = new Int2D(x, y);
-            } while (getZoneByPosition(pos) != null);
 
-            grid.setObjectLocation(agentRandom, x, y);
-            agentRandom.setStopper(schedule.scheduleRepeating(agentRandom));
+            schedule.scheduleOnce(delay, new Steppable() {
+                @Override
+                public void step(SimState state) {
+                    Agent agent = new Agent();
+                    agent.setEvent((Event) state);
+                    ((Event) state).agents.add(agent);
+                    ((Event) state).grid.setObjectLocation(agent, eingang);
+                    Stoppable stopper = state.schedule.scheduleRepeating(agent);
+                    agent.setStopper(stopper);
+                }
+            });
+
         }
+
 
         // Sanitäter hinzufügen (5 Personen)
         for (int i = 0; i < 5; i++) {
