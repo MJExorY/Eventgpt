@@ -20,7 +20,7 @@ public class EventUI extends GUIState {
     public Display2D display;
     public JFrame frame;
     public SparseGridPortrayal2D gridPortrayal = new SparseGridPortrayal2D();
-
+    BufferedImage backgroundImage;
 
     public EventUI(SimState state) {
         super(state);
@@ -220,7 +220,7 @@ public class EventUI extends GUIState {
         display.repaint();
     }
 
-
+    @Override
     public void init(sim.display.Controller c) {
         super.init(c);
 
@@ -230,7 +230,6 @@ public class EventUI extends GUIState {
         display = new Display2D(650, 650, this);
         display.setClipping(false);
 
-// Hintergrundbild als TexturePaint setzen
         URL backgroundURL = getClass().getResource("/Hintergrundbild.png");
         if (backgroundURL != null) {
             try {
@@ -413,4 +412,6 @@ public class EventUI extends GUIState {
         frame = null;
         display = null;
     }
+
+
 }
