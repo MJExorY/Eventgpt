@@ -89,6 +89,7 @@ public class EventTest {
 
     @Test
     public void testAgentenErzeugung() {
+        event.agents.clear();
         for (int i = 0; i < 1; i++) {
             event.schedule.step(event);
         }
