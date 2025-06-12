@@ -18,7 +18,6 @@ public class Agent implements Steppable {
     private boolean isWatchingSide = false;
     private boolean isInQueue = false;
     private boolean isPanicking = false;
-    private boolean isSeeking = false;
     private boolean isWC = false;
     private Zone currentZone = null;
     private Zone.ZoneType lastVisitedZone = null;
@@ -49,7 +48,6 @@ public class Agent implements Steppable {
         isWatchingSide = false;
         isInQueue = false;
         isPanicking = false;
-        isSeeking = false;
         isHungry = false;
         isWC = false;
         currentZone = null;
@@ -113,15 +111,6 @@ public class Agent implements Steppable {
         this.isPanicking = panicking;
     }
 
-    public boolean isSeeking() {
-        return isSeeking;
-    }
-
-    public void setSeeking(boolean seeking) {
-        this.isSeeking = seeking;
-    }
-
-
     public IStates getCurrentState() {
         return currentState;
     }
@@ -159,8 +148,7 @@ public class Agent implements Steppable {
         if (isHungry) return Color.GREEN;
         if (isWatchingMain) return Color.BLUE;
         if (isWatchingSide) return Color.CYAN;
-        if (isInQueue) return Color.ORANGE;
-        if (isSeeking) return Color.MAGENTA;
+        if (isInQueue) return Color.MAGENTA;
         if (isWC) return Color.PINK;
         if (isRoaming) return Color.YELLOW;
         return Color.YELLOW; // Roaming
