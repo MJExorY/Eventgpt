@@ -21,17 +21,20 @@ public class FightDisturbance extends Disturbance {
         for (Agent agent : event.agents) {
             Int2D agentPos = event.grid.getObjectLocation(agent);
             if (agentPos != null && position != null) {
-                double distance = agentPos.distance(position);
 
+                // Alle SECURITY-Agenten reagieren sofort
+                if (agent instanceof Person p && p.getType() == Person.PersonType.SECURITY) {
+                    p.setTargetPosition(this.position);
+                    p.setCurrentState(new EmergencyState());
+                    continue; // SECURITY behandelt → nächster Agent
+                }
+
+                // Andere Agenten reagieren nur bei Nähe
+                double distance = agentPos.distance(position);
                 if (distance <= 10) {
                     agent.setCurrentState(new EmergencyState());
-
-                    if (agent instanceof Person p && p.getType() == Person.PersonType.SECURITY) {
-                        p.setTargetPosition(this.position);
-                    }
                 }
             }
-
         }
     }
 

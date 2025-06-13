@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/States/EmergencyState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/EmergencyState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/Agent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/FightDisturbance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/FightDisturbance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/StormDisturbance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/StormDisturbance.java" afterDir="false" />
-    </list>
+    <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="State Pattern Plus Reaktionen bei Ereignissen" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +20,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="US301.T302.StatePattern_Auswirkungen_Feuer" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -74,8 +67,17 @@
       <updated>1748873678243</updated>
       <workItem from="1748873679596" duration="4480000" />
       <workItem from="1749825755573" duration="501000" />
-      <workItem from="1749826264841" duration="10191000" />
+      <workItem from="1749826264841" duration="10751000" />
     </task>
+    <task id="LOCAL-00001" summary="State Pattern Plus Reaktionen bei Ereignissen">
+      <option name="closed" value="true" />
+      <created>1749836571196</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1749836571196</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,5 +93,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="State Pattern Plus Reaktionen bei Ereignissen" />
+    <option name="LAST_COMMIT_MESSAGE" value="State Pattern Plus Reaktionen bei Ereignissen" />
   </component>
 </project>
