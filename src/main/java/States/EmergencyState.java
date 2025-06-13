@@ -20,13 +20,21 @@ public class EmergencyState implements IStates {
             }
 
             case SECURITY -> {
-                // Beispiel: Security patrouilliert zufällig
-                randomStep(p, event);
-                System.out.println("SECURITY patrouilliert.");
+                Int2D target = p.getTargetPosition();
+
+                if (target != null) {
+                    moveTowards(p, target, event);
+                    System.out.println("SECURITY bewegt sich zur Schlägerei bei " + target);
+                } else {
+                    System.out.println("SECURITY hat kein Ziel");
+                    randomStep(p, event);
+                }
             }
+
         }
 
-        return this; // bleibt im gleichen Zustand
+
+        return this;
     }
 
     private void moveTowards(Agent a, Int2D target, Event event) {
