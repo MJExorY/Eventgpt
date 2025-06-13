@@ -1,5 +1,6 @@
 package org.simulation;
 
+import States.EmergencyState;
 import sim.engine.SimState;
 import sim.util.Int2D;
 
@@ -15,7 +16,23 @@ public class FightDisturbance extends Disturbance {
 
     @Override
     public void step(SimState state) {
-        // TODO: Affect agents nearby with fight-related behavior
+        Event event = (Event) state;
+
+        for (Agent agent : event.agents) {
+            Int2D agentPos = event.grid.getObjectLocation(agent);
+            if (agentPos != null && position != null) {
+                double distance = agentPos.distance(position);
+
+                if (distance <= 10) {
+                    agent.setCurrentState(new EmergencyState());
+
+                    if (agent instanceof Person p && p.getType() == Person.PersonType.SECURITY) {
+                        p.setTargetPosition(this.position);
+                    }
+                }
+            }
+
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.simulation;
 
+import States.PanicRunState;
 import sim.engine.SimState;
 import sim.util.Int2D;
 
@@ -15,7 +16,10 @@ public class StormDisturbance extends Disturbance {
 
     @Override
     public void step(SimState state) {
-        // TODO: Apply global effects, e.g., slow down all agents or increase panic levels
+        Event event = (Event) state;
+        for (Agent agent : event.agents) {
+            agent.setCurrentState(new PanicRunState());
+        }
     }
 
     @Override
