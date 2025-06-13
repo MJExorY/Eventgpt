@@ -4,11 +4,21 @@ import States.EmergencyState;
 import sim.engine.SimState;
 import sim.util.Int2D;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A fight disturbance at a specific position.
  * May cause aggressive reactions or draw security agents.
  */
+
+
 public class FightDisturbance extends Disturbance {
+
+    private final List<Person> assignedSecurity = new ArrayList<>();
+
+    private final int maxSecurity = 2;
+
 
     public FightDisturbance(Int2D position) {
         super(position);
@@ -18,25 +28,33 @@ public class FightDisturbance extends Disturbance {
     public void step(SimState state) {
         Event event = (Event) state;
 
-        for (Agent agent : event.agents) {
-            Int2D agentPos = event.grid.getObjectLocation(agent);
-            if (agentPos != null && position != null) {
+        assignedSecurity.removeIf(p -> !event.agents.contains(p));
 
-                // Alle SECURITY-Agenten reagieren sofort
-                if (agent instanceof Person p && p.getType() == Person.PersonType.SECURITY) {
-                    p.setTargetPosition(this.position);
-                    p.setCurrentState(new EmergencyState());
-                    continue; // SECURITY behandelt → nächster Agent
-                }
+        // Prüfe, ob bereits genug Securitys zugewiesen sind
+        if (assignedSecurity.size() < maxSecurity) {
+            int needed = maxSecurity - assignedSecurity.size();
 
-                // Andere Agenten reagieren nur bei Nähe
-                double distance = agentPos.distance(position);
-                if (distance <= 10) {
-                    agent.setCurrentState(new EmergencyState());
-                }
+            for (Agent agent : event.agents) {
+                if (!(agent instanceof Person p)) continue;
+                if (p.getType() != Person.PersonType.SECURITY) continue;
+
+                // Schon einem Kampf zugewiesen?
+                if (p.getTargetPosition() != null) continue;
+
+                // Zuweisung
+                p.setTargetPosition(this.position);
+                p.setCurrentState(new EmergencyState());
+                assignedSecurity.add(p);
+
+                System.out.println("SECURITY permanently assigned to fight at " + position);
+
+                needed--;
+                if (needed == 0) break;
             }
         }
+
     }
+
 
     @Override
     public String getLabel() {
