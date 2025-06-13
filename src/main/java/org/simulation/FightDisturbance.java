@@ -17,8 +17,6 @@ public class FightDisturbance extends Disturbance {
 
     private final List<Person> assignedSecurity = new ArrayList<>();
 
-    private final int maxSecurity = 2;
-
 
     public FightDisturbance(Int2D position) {
         super(position);
@@ -30,26 +28,21 @@ public class FightDisturbance extends Disturbance {
 
         assignedSecurity.removeIf(p -> !event.agents.contains(p));
 
-        // Prüfe, ob bereits genug Securitys zugewiesen sind
-        if (assignedSecurity.size() < maxSecurity) {
-            int needed = maxSecurity - assignedSecurity.size();
+        if (assignedSecurity.isEmpty()) {
+
 
             for (Agent agent : event.agents) {
                 if (!(agent instanceof Person p)) continue;
                 if (p.getType() != Person.PersonType.SECURITY) continue;
 
-                // Schon einem Kampf zugewiesen?
                 if (p.getTargetPosition() != null) continue;
 
-                // Zuweisung
                 p.setTargetPosition(this.position);
                 p.setCurrentState(new EmergencyState());
                 assignedSecurity.add(p);
 
                 System.out.println("SECURITY permanently assigned to fight at " + position);
-
-                needed--;
-                if (needed == 0) break;
+                break;
             }
         }
 
