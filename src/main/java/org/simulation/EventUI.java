@@ -108,12 +108,12 @@ public class EventUI extends GUIState {
                     foodIcon = null;
                 }
                 // WC-Zone Icon (60x60)
-                URL wcURL = getClass().getResource("/wc.png");
+                URL wcURL = getClass().getResource("/wc2.png");
                 System.out.println("WC Icon URL: " + wcURL);
                 if (wcURL != null) {
                     wcIcon = new ImageIcon(wcURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /wc.png");
+                    System.err.println("❌ Bild nicht gefunden: /wc2.png");
                     wcIcon = null;
                 }
                 // ACT_MAIN-Zone Icon (80x80)
@@ -343,7 +343,7 @@ public class EventUI extends GUIState {
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 20, 20), "Emergency"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/wc.png", 30, 30), "WC"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
 
         // Wrapper Panel für Positionierung links unten
         JPanel legendWrapper = new JPanel(new BorderLayout());
