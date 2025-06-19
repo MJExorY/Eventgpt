@@ -70,38 +70,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Event.executor": "Run",
-    "Application.EventUI.executor": "Run",
-    "JUnit.FireDisturbanceTest.executor": "Run",
-    "JUnit.PanicRunStateTest.executor": "Run",
-    "JUnit.Simulation in eventsteuerung.executor": "Run",
-    "Maven.Clean Install.executor": "Run",
-    "Maven.eventsteuerung [clean,install].executor": "Run",
-    "Maven.eventsteuerung [clean].executor": "Run",
-    "Maven.eventsteuerung [compile].executor": "Run",
-    "Maven.eventsteuerung [install].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "code.cleanup.on.save": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "US258.T271__Implementierung-einer-zielgerichtete-Bewegung-zur-naechsten-Ex…Panik",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.47833622",
-    "settings.editor.selected.configurable": "actions.on.save",
-    "show.migrate.to.gradle.popup": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Event.executor&quot;: &quot;Run&quot;,
+    &quot;Application.EventUI.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.FireDisturbanceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PanicRunStateTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Simulation in eventsteuerung.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Clean Install.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.eventsteuerung [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.eventsteuerung [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.eventsteuerung [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.eventsteuerung [install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;US258.T271__Implementierung-einer-zielgerichtete-Bewegung-zur-naechsten-Ex…Panik&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.47833622&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib" />
@@ -113,7 +113,7 @@
       <command value="Fire" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.Simulation in eventsteuerung">
+  <component name="RunManager" selected="Application.EventUI">
     <configuration name="EventUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.simulation.EventUI" />
       <module name="eventsteuerung" />
@@ -157,10 +157,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Simulation in eventsteuerung" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="eventsteuerung in eventsteuerung" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="eventsteuerung" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test/java/Simulation" />
+      <dir value="$PROJECT_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -200,13 +202,13 @@
       <item itemvalue="Application.EventUI" />
       <item itemvalue="JUnit.FireDisturbanceTest" />
       <item itemvalue="JUnit.PanicRunStateTest" />
-      <item itemvalue="JUnit.Simulation in eventsteuerung" />
+      <item itemvalue="JUnit.eventsteuerung in eventsteuerung" />
       <item itemvalue="Maven.Clean Install" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.Simulation in eventsteuerung" />
         <item itemvalue="Application.EventUI" />
+        <item itemvalue="JUnit.eventsteuerung in eventsteuerung" />
         <item itemvalue="JUnit.PanicRunStateTest" />
         <item itemvalue="JUnit.FireDisturbanceTest" />
         <item itemvalue="Application.EventUI" />
