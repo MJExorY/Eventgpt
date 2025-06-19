@@ -196,6 +196,16 @@ public class Agent implements Steppable {
                 + " | target: " + targetPosition);
     }
 
+    private boolean alarmed = false;
+
+    public boolean isAlarmed() {
+        return alarmed;
+    }
+
+    public void setAlarmed(boolean alarmed) {
+        this.alarmed = alarmed;
+    }
+
     public boolean tryEnterZone(Zone targetZone) {
         if (!targetZone.isFull()) {
             if (currentZone != null) {

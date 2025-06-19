@@ -7,8 +7,11 @@ import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.*;
 import sim.engine.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 
@@ -17,7 +20,7 @@ public class EventUI extends GUIState {
     public Display2D display;
     public JFrame frame;
     public SparseGridPortrayal2D gridPortrayal = new SparseGridPortrayal2D();
-
+    BufferedImage backgroundImage;
 
     public EventUI(SimState state) {
         super(state);
@@ -105,12 +108,12 @@ public class EventUI extends GUIState {
                     foodIcon = null;
                 }
                 // WC-Zone Icon (60x60)
-                URL wcURL = getClass().getResource("/wc.png");
+                URL wcURL = getClass().getResource("/wc2.png");
                 System.out.println("WC Icon URL: " + wcURL);
                 if (wcURL != null) {
                     wcIcon = new ImageIcon(wcURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /wc.png");
+                    System.err.println("❌ Bild nicht gefunden: /wc2.png");
                     wcIcon = null;
                 }
                 // ACT_MAIN-Zone Icon (80x80)
@@ -213,16 +216,36 @@ public class EventUI extends GUIState {
         });
 
         display.reset();
-        display.setBackdrop(new Color(0xE1CAB2));
+        //  display.setBackdrop(new Color(0xE1CAB2));
         display.repaint();
     }
 
-
+    @Override
     public void init(sim.display.Controller c) {
         super.init(c);
 
+
+        //Hintergrund map setzen-
+
         display = new Display2D(650, 650, this);
         display.setClipping(false);
+
+        URL backgroundURL = getClass().getResource("/Hintergrundbild.png");
+        if (backgroundURL != null) {
+            try {
+                BufferedImage bgImage = ImageIO.read(backgroundURL);
+                Rectangle anchor = new Rectangle(0, 0, bgImage.getWidth(), bgImage.getHeight());
+                TexturePaint texturePaint = new TexturePaint(bgImage, anchor);
+                display.setBackdrop(texturePaint);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("❌ Hintergrundbild nicht gefunden: /Hintergrundbild.png");
+        }
+        //---
+
+
         frame = display.createFrame();
         c.registerFrame(frame);
         frame.setVisible(true);
@@ -320,7 +343,7 @@ public class EventUI extends GUIState {
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 20, 20), "Emergency"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/wc.png", 30, 30), "WC"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
 
         // Wrapper Panel für Positionierung links unten
         JPanel legendWrapper = new JPanel(new BorderLayout());
@@ -389,4 +412,6 @@ public class EventUI extends GUIState {
         frame = null;
         display = null;
     }
+
+
 }
