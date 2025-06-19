@@ -19,7 +19,7 @@ public class HungryThirstyStateTest {
 
     @BeforeEach
     public void setUp() {
-        event = new Event(System.currentTimeMillis(), 0);
+        event = new Event(System.currentTimeMillis(), 0, 0, 0);
         event.start();
 
         agent = new Agent();

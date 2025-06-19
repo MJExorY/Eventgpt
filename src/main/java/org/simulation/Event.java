@@ -12,7 +12,10 @@ import java.util.List;
 public class Event extends SimState {
     public SparseGrid2D grid;
 
-    private int agentCount;
+    private int visitorCount;
+    private int medicCount;
+    private int securityCount;
+
     public final List<Zone> zones = new ArrayList<>();
     public final List<Agent> agents = new ArrayList<>();
 
@@ -20,13 +23,16 @@ public class Event extends SimState {
         super(seed);
     }
 
-    public Event(long seed, int agentCount) {
+    public Event(long seed, int visitorCount, int medicCount, int securityCount) {
         super(seed);
-        this.agentCount = agentCount;
+        this.visitorCount = visitorCount;
+        this.medicCount = medicCount;
+        this.securityCount = securityCount;
     }
 
+
     public static void main(String[] args) {
-        Event sim = new Event(System.currentTimeMillis(), 15);
+        Event sim = new Event(System.currentTimeMillis(), 15, 15, 15);
         sim.start();
 
         for (int i = 0; i < 10; i++) {
@@ -79,7 +85,7 @@ public class Event extends SimState {
 
         Int2D eingang = new Int2D(60, 90); // Eingang Zone
 
-        for (int i = 0; i < agentCount; i++) {
+        for (int i = 0; i < visitorCount; i++) {
             final int delay = i;
             final int index = i;
 
@@ -100,7 +106,7 @@ public class Event extends SimState {
 
 
         // Sanitäter hinzufügen (5 Personen)
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < medicCount; i++) {
             Int2D pos = getRandomFreePosition();
             Person medic = new Person(Person.PersonType.MEDIC);
             medic.setEvent(this);
@@ -111,7 +117,7 @@ public class Event extends SimState {
         }
 
         // Security hinzufügen (5 Personen)
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < securityCount; i++) {
             Int2D pos = getRandomFreePosition();
             Person security = new Person(Person.PersonType.SECURITY);
             security.setEvent(this);
@@ -121,9 +127,8 @@ public class Event extends SimState {
             security.setStopper(stopper);
         }
 
-        System.out.println(agentCount + " Agenten wurden erzeugt.");
-        System.out.println("5 Sanitäter und 5 Security-Personen wurden zur Simulation hinzugefügt.");
-        System.out.println("6 Notausgänge wurden gleichmäßig über das Gelände verteilt.");
+        System.out.println(medicCount + " Sanitäter und " + securityCount + " Security-Personen wurden zur Simulation hinzugefügt.");
+
     }
 
     // Getter-Methode, um eine Zone nach Typ zu finden

@@ -27,13 +27,40 @@ public class EventUI extends GUIState {
     }
 
     public static void main(String[] args) {
-        Random rand = new Random();
-        int agentCount = rand.nextInt(1000) + 1;
-        Event sim = new Event(System.currentTimeMillis(), agentCount);
-        EventUI gui = new EventUI(sim);
-        Console console = new Console(gui);
-        console.setVisible(true);
+        // Eingabedialog für Startkonfiguration
+        JTextField visitorField = new JTextField("200");
+        JTextField medicField = new JTextField("5");
+        JTextField securityField = new JTextField("5");
+
+        JPanel panel = new JPanel(new GridLayout(0, 2));
+        panel.add(new JLabel("Anzahl Besucher:"));
+        panel.add(visitorField);
+        panel.add(new JLabel("Anzahl Sanitäter:"));
+        panel.add(medicField);
+        panel.add(new JLabel("Anzahl Sicherheitskräfte:"));
+        panel.add(securityField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Startkonfiguration",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int visitors = Integer.parseInt(visitorField.getText());
+                int medics = Integer.parseInt(medicField.getText());
+                int security = Integer.parseInt(securityField.getText());
+
+                Event sim = new Event(System.currentTimeMillis(), visitors, medics, security);
+                EventUI gui = new EventUI(sim);
+                Console console = new Console(gui);
+                console.setVisible(true);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Bitte gültige Zahlen eingeben.");
+            }
+        } else {
+            System.exit(0);
+        }
     }
+
 
     public void start() {
         super.start();
