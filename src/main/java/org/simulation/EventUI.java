@@ -6,10 +6,7 @@ import sim.portrayal.SimplePortrayal2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.*;
 import sim.engine.*;
-import org.simulation.sound.EventSoundSystem;
-import org.simulation.sound.SoundType;
-import org.simulation.FireTruck;
-import org.simulation.FireStation;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
