@@ -11,6 +11,8 @@ public class EventSoundSystem {
     private final Map<SoundType, Boolean> playingStatus = new ConcurrentHashMap<>();
     private final Map<SoundType, ScheduledFuture<?>> soundTasks = new ConcurrentHashMap<>();
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
+    private final Map<SoundType, Integer> playingCounts = new ConcurrentHashMap<>();
+
 
     private final AudioPlayer audioPlayer;
     private boolean useRealAudio = true;
@@ -41,26 +43,32 @@ public class EventSoundSystem {
         }
     }
 
-    public void playSound(SoundType soundType, int duration) {
+    public synchronized void playSound(SoundType soundType, int duration) {
         if (soundType == null) {
             return;
         }
 
-        stopSound(soundType);
-        playingStatus.put(soundType, true);
+        int count = playingCounts.getOrDefault(soundType, 0);
+        playingCounts.put(soundType, count + 1);
 
-        String durationText = (duration == -1) ? "Endlos" : duration + "s";
-        System.out.println("SOUND: " + soundType.name() + " wird abgespielt (Dauer: " + durationText + ")");
+        if (count == 0) {
+            playingStatus.put(soundType, true);
 
-        if (useRealAudio) {
-            boolean isLooping = soundType.isLooping() && duration == -1;
-            audioPlayer.playSound(soundType, isLooping);
-        }
+            String durationText = (duration == -1) ? "Endlos" : duration + "s";
+            System.out.println("SOUND: " + soundType.name() + " wird abgespielt (Dauer: " + durationText + ")");
 
-        if (soundType.isLooping() && duration == -1) {
-            scheduleLoopingSound(soundType);
+            if (useRealAudio) {
+                boolean isLooping = soundType.isLooping() && duration == -1;
+                audioPlayer.playSound(soundType, isLooping);
+            }
+
+            if (soundType.isLooping() && duration == -1) {
+                scheduleLoopingSound(soundType);
+            } else {
+                scheduleTimedSound(soundType, duration);
+            }
         } else {
-            scheduleTimedSound(soundType, duration);
+            System.out.println("SOUND: " + soundType.name() + " läuft bereits, Zähler erhöht auf " + (count + 1));
         }
     }
 
@@ -88,13 +96,34 @@ public class EventSoundSystem {
         soundTasks.put(soundType, task);
     }
 
-    private void stopSound(SoundType soundType) {
-        playingStatus.put(soundType, false);
+    public synchronized void stopSound(SoundType soundType) {
+        int count = playingCounts.getOrDefault(soundType, 0);
 
-        ScheduledFuture<?> task = soundTasks.remove(soundType);
-        if (task != null && !task.isDone()) {
-            task.cancel(false);
+        if (count <= 1) {
+            playingCounts.remove(soundType);
+            playingStatus.put(soundType, false);
+
+            ScheduledFuture<?> task = soundTasks.remove(soundType);
+            if (task != null && !task.isDone()) {
+                task.cancel(false);
+            }
+
+            if (useRealAudio && audioPlayer != null) {
+                audioPlayer.stopSound(soundType);
+            }
+
+            System.out.println("SOUND: " + soundType.name() + " wurde gestoppt.");
+        } else {
+            playingCounts.put(soundType, count - 1);
+            System.out.println("SOUND: " + soundType.name() + " Zähler verringert auf " + (count - 1));
         }
+    }
+    public void stopFireTruckSiren() {
+        stopSound(SoundType.FIRE_TRUCK_SIREN);
+    }
+
+    public void stopFireAlarm() {
+        stopSound(SoundType.FIRE_ALARM);
     }
 
     public void shutdown() {
