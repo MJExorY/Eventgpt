@@ -3,8 +3,11 @@ package org.simulation;
 import States.PanicRunState;
 import sim.engine.SimState;
 import sim.util.Int2D;
+import org.simulation.sound.SoundType;
 
 public class FireDisturbance extends Disturbance {
+
+    private boolean alarmTriggered = false;
 
     public FireDisturbance(Int2D position) {
         super(position);
@@ -13,6 +16,12 @@ public class FireDisturbance extends Disturbance {
     @Override
     public void step(SimState state) {
         Event event = (Event) state;
+
+        //Feueralarm
+        if (!alarmTriggered) {
+            event.triggerFireAlarm(position);
+            alarmTriggered = true;
+        }
 
         for (Agent agent : event.agents) {
             Int2D agentPos = event.grid.getObjectLocation(agent);
