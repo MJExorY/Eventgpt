@@ -1,11 +1,13 @@
 package org.simulation;
 
+import States.RoamingState;
 import org.simulation.Event;
 import org.simulation.sound.EventSoundSystem;
 import org.simulation.sound.SoundType;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
+import sim.util.Bag;
 import sim.util.Int2D;
 
 import java.awt.Color;
@@ -28,9 +30,8 @@ public class FireTruck implements Steppable {
         this.soundSystem = event.getSoundSystem();
         this.isMoving = true;
 
-        // Feuerwehr-Sirene starten
         if (soundSystem != null) {
-            soundSystem.playSound(SoundType.FIRE_TRUCK_SIREN, -1); // Endlos bis Ankunft
+            soundSystem.playSound(SoundType.FIRE_TRUCK_SIREN, -1);
         }
 
         System.out.println("Feuerwehrauto startet von " + startPosition + " Richtung " + firePosition);
@@ -42,10 +43,8 @@ public class FireTruck implements Steppable {
             return;
         }
 
-        // Bewegung zum Ziel
         moveTowardsTarget();
 
-        // Prüfen ob angekommen
         if (currentPosition.equals(targetPosition)) {
             arriveAtFire();
         }
@@ -54,7 +53,6 @@ public class FireTruck implements Steppable {
     private void moveTowardsTarget() {
         stepCounter++;
 
-        // Nur jeden 2. Step bewegen (halbe Geschwindigkeit)
         if (stepCounter % 6 != 0) {
             return;
         }
@@ -79,18 +77,80 @@ public class FireTruck implements Steppable {
         arrivedAtFire = true;
         isMoving = false;
 
-        // Sirene stoppen
-        if (soundSystem != null) {
-            System.out.println("Feuerwehrauto ist am Feuer angekommen - Sirene läuft weiter für Löscharbeiten");
-        }
-
         System.out.println("Feuerwehrauto ist am Feuer angekommen bei " + currentPosition);
-        System.out.println("Feuerwehrauto ist bereit für Löscharbeiten!");
+        System.out.println("Feuerwehrauto beginnt mit Löscharbeiten!");
 
-        // Löscharbeiten
+        int duration = 10 + event.random.nextInt(6); // 10–15
+        event.schedule.scheduleOnce(event.schedule.getTime() + duration, new Steppable() {
+            @Override
+            public void step(SimState state) {
+                extinguishFire();
+            }
+        });
     }
 
-    // Getter & Setter
+
+    private void resetPanicForAgentsNear(Int2D position, int radius) {
+        int startX = Math.max(0, position.x - radius);
+        int endX = Math.min(event.grid.getWidth() - 1, position.x + radius);
+        int startY = Math.max(0, position.y - radius);
+        int endY = Math.min(event.grid.getHeight() - 1, position.y + radius);
+
+        for (int x = startX; x <= endX; x++) {
+            for (int y = startY; y <= endY; y++) {
+                double distance = position.distance(new Int2D(x, y));
+                if (distance <= radius) {
+                    Bag objects = event.grid.getObjectsAtLocation(x, y);
+                    if (objects != null) {
+                        for (Object obj : objects) {
+                            if (obj instanceof Agent agent) {
+                                if (agent.isPanicking()) {
+                                    agent.setPanicking(false);
+                                    agent.setCurrentState(new RoamingState());
+                                    System.out.println("Panik-Agent bei " + new Int2D(x, y) + " beruhigt.");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+private void extinguishFire() {
+    System.out.println("Feuerwehrauto hat das Feuer gelöscht bei " + currentPosition);
+
+    if (soundSystem != null) {
+        soundSystem.stopFireTruckSiren();
+        soundSystem.stopFireAlarm();
+        System.out.println("Sirene wurde gestoppt.");
+    }
+    FireDisturbance fire = null;
+
+    Object obj = event.grid.getObjectsAtLocation(currentPosition).stream()
+            .filter(o -> o instanceof FireDisturbance)
+            .findFirst()
+            .orElse(null);
+
+    if (obj instanceof FireDisturbance) {
+        fire = (FireDisturbance) obj;;
+        fire.resolve();
+        event.grid.remove(fire);
+        System.out.println("Feuerobjekt wurde entfernt.");
+    }
+    if (fire != null) {
+        resetPanicForAgentsNear(fire.getPosition(), fire.getPanicRadius());
+    }
+
+    event.grid.remove(this);
+    if (stopper != null) {
+        stopper.stop();
+    }
+    System.out.println("Feuerwehrauto fährt zurück zur Wache (verschwindet).");
+
+}
+
+
     public Int2D getCurrentPosition() {
         return currentPosition;
     }
