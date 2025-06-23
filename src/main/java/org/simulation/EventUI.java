@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Random;
 
 
 public class EventUI extends GUIState {
@@ -124,9 +123,9 @@ public class EventUI extends GUIState {
             final Image emergencyExitIcon;
             final Image sideActIcon;
             final Image wcIcon;
-final Image rightEmergencyRootIcon;
-            final Image leftEmergencyRootIcon;
-            final Image StraightEmergencyRootIcon;
+final Image rightEmergencyRouteIcon;
+            final Image leftEmergencyRouteIcon;
+            final Image StraightEmergencyRouteIcon;
 
             {
                 // FOOD-Zone Icon (60x60)
@@ -187,31 +186,31 @@ final Image rightEmergencyRootIcon;
                 }
 
 
-                URL rightExitURL = getClass().getResource("/EmergencyRootRECHTS.png");
+                URL rightExitURL = getClass().getResource("/EmergencyRouteRECHTS.png");
                 System.out.println("RightExit Icon URL: " + rightExitURL);
                 if (rightExitURL != null) {
-                    rightEmergencyRootIcon = new ImageIcon(rightExitURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
+                    rightEmergencyRouteIcon = new ImageIcon(rightExitURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /EmergencyRootRECHTS.png");
-                    rightEmergencyRootIcon = null;
+                    System.err.println("❌ Bild nicht gefunden: /EmergencyRoutRECHTS.png");
+                    rightEmergencyRouteIcon = null;
                 }
 
                 {
-                    URL iconURL = getClass().getResource("/EmergencyRootLINKS.png");
+                    URL iconURL = getClass().getResource("/EmergencyRouteLINKS.png");
                     if (iconURL != null) {
-                        leftEmergencyRootIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
+                        leftEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
                     } else {
-                        System.err.println("Emergency Root Links Icon nicht gefunden: /EmergencyRootLINKS.png");
-                        leftEmergencyRootIcon = null;
+                        System.err.println("Emergency Root Links Icon nicht gefunden: /EmergencyRouteLINKS.png");
+                        leftEmergencyRouteIcon = null;
                     }
                 }
                 {
-                    URL iconURL = getClass().getResource("/EmergencyRootSTRAIGHT.png");
+                    URL iconURL = getClass().getResource("/EmergencyRouteSTRAIGHT.png");
                     if (iconURL != null) {
-                        StraightEmergencyRootIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 90, Image.SCALE_SMOOTH);
+                        StraightEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 90, Image.SCALE_SMOOTH);
                     } else {
-                        System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRootSTRAIGHT.png");
-                        StraightEmergencyRootIcon = null;
+                        System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRouteSTRAIGHT.png");
+                        StraightEmergencyRouteIcon = null;
                     }
                 }}
 
@@ -278,26 +277,26 @@ final Image rightEmergencyRootIcon;
 
 
 
-        // EmergencyRootSTRAIGHT
-        gridPortrayal.setPortrayalForClass(EmergencyRootStraight.class, new SimplePortrayal2D() {
-            final Image straightEmergencyRootIcon;
+        // EmergencyRouteSTRAIGHT
+        gridPortrayal.setPortrayalForClass(EmergencyRouteStraight.class, new SimplePortrayal2D() {
+            final Image straightEmergencyRouteIcon;
 
             {
-                URL iconURL = getClass().getResource("/EmergencyRootSTRAIGHT.png");
+                URL iconURL = getClass().getResource("/EmergencyRouteSTRAIGHT.png");
                 if (iconURL != null) {
-                    straightEmergencyRootIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 90, Image.SCALE_SMOOTH);
+                    straightEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 90, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRootSTRAIGHT.png");
-                    straightEmergencyRootIcon = null;
+                    System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRouteSTRAIGHT.png");
+                    straightEmergencyRouteIcon = null;
                 }
             }
 
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                if (straightEmergencyRootIcon != null) {
+                if (straightEmergencyRouteIcon != null) {
                     int x = (int) (info.draw.x - 20);
                     int y = (int) (info.draw.y - 20);
-                    graphics.drawImage(straightEmergencyRootIcon, x, y, 30, 90, null);
+                    graphics.drawImage(straightEmergencyRouteIcon, x, y, 30, 90, null);
                 } else {
                     // Fallback: Graues Rechteck
                     graphics.setColor(Color.GRAY);
@@ -311,26 +310,26 @@ final Image rightEmergencyRootIcon;
 
 
 
-        // EmergencyRootRECHTS
-        gridPortrayal.setPortrayalForClass(EmergencyRootRechts.class, new SimplePortrayal2D() {
-            final Image rightEmergencyRootIcon;
+        // EmergencyRouteRECHTS
+        gridPortrayal.setPortrayalForClass(EmergencyRouteRechts.class, new SimplePortrayal2D() {
+            final Image rightEmergencyRouteIcon;
 
             {
-                URL iconURL = getClass().getResource("/EmergencyRootRECHTS.png");
+                URL iconURL = getClass().getResource("/EmergencyRoutRECHTS.png");
                 if (iconURL != null) {
-                    rightEmergencyRootIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
+                    rightEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("Emergency Root Rechts Icon nicht gefunden: /EmergencyRootRECHTS.png");
-                    rightEmergencyRootIcon = null;
+                    System.err.println("Emergency Root Rechts Icon nicht gefunden: /EmergencyRoutRECHTS.png");
+                    rightEmergencyRouteIcon = null;
                 }
             }
 
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                if (rightEmergencyRootIcon != null) {
+                if (rightEmergencyRouteIcon != null) {
                     int x = (int) (info.draw.x - 20);
                     int y = (int) (info.draw.y - 20);
-                    graphics.drawImage(rightEmergencyRootIcon, x, y, 90, 30, null);
+                    graphics.drawImage(rightEmergencyRouteIcon, x, y, 90, 30, null);
                 } else {
                     // Fallback: Graues Rechteck
                     graphics.setColor(Color.GRAY);
@@ -342,26 +341,26 @@ final Image rightEmergencyRootIcon;
             }
         });
 
-// EmergencyRootLINKS
-        gridPortrayal.setPortrayalForClass(EmergencyRootLinks.class, new SimplePortrayal2D() {
-            final Image leftEmergencyRootIcon;
+// EmergencyRouteLINKS
+        gridPortrayal.setPortrayalForClass(EmergencyRouteLinks.class, new SimplePortrayal2D() {
+            final Image leftEmergencyRouteIcon;
 
             {
-                URL iconURL = getClass().getResource("/EmergencyRootLINKS.png");
+                URL iconURL = getClass().getResource("/EmergencyRouteLINKS.png");
                 if (iconURL != null) {
-                    leftEmergencyRootIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
+                    leftEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("Emergency Root Links Icon nicht gefunden: /EmergencyRootLINKS.png");
-                    leftEmergencyRootIcon = null;
+                    System.err.println("Emergency Root Links Icon nicht gefunden: /EmergencyRouteLINKS.png");
+                    leftEmergencyRouteIcon = null;
                 }
             }
 
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                if (leftEmergencyRootIcon != null) {
+                if (leftEmergencyRouteIcon != null) {
                     int x = (int) (info.draw.x - 20);
                     int y = (int) (info.draw.y - 20);
-                    graphics.drawImage(leftEmergencyRootIcon, x, y, 90, 30, null);
+                    graphics.drawImage(leftEmergencyRouteIcon, x, y, 90, 30, null);
                 } else {
                     graphics.setColor(Color.GRAY);
                     int size = (int) (info.draw.width * 2);
@@ -574,7 +573,7 @@ final Image rightEmergencyRootIcon;
         legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency"), gbc);
         gbc.gridy++;
 
-        legendPanel.add(createIconLegendEntry(scaledIcon("/EmergencyRootRECHTS.png", 25, 25), "Emergency root"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/EmergencyRoutRECHTS.png", 25, 25), "Emergency root"), gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
         gbc.gridy++;

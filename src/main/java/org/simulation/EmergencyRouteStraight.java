@@ -7,11 +7,11 @@ import sim.util.Int2D;
 /**
  * Repräsentiert einen festen Notausgang auf der rechten Seite des Geländes.
  */
-public class EmergencyRootRechts implements Steppable {
+public class EmergencyRouteStraight implements Steppable {
 
     private final Int2D position;
 
-    public EmergencyRootRechts(Int2D position) {
+    public EmergencyRouteStraight(Int2D position) {
         this.position = position;
     }
 
@@ -26,6 +26,6 @@ public class EmergencyRootRechts implements Steppable {
 
     @Override
     public String toString() {
-        return "EmergencyRootRechts @ " + position;
+        return "EmergencyRootStraight @ " + position;
     }
 }
