@@ -414,10 +414,11 @@ public class EventUI extends GUIState {
         legendPanel.add(createSectionTitle("States"), gbc);
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("●", Color.GREEN, "Eating"), gbc);
+
         gbc.gridy++;
-        legendPanel.add(createCompactLegendEntry("●", Color.MAGENTA, "Seeking"), gbc);
+        legendPanel.add(createCompactLegendEntry("●", Color.CYAN, "Watching Sideact"), gbc);
         gbc.gridy++;
-        legendPanel.add(createCompactLegendEntry("●", Color.BLUE, "Watching"), gbc);
+        legendPanel.add(createCompactLegendEntry("●", Color.BLUE, "Watching Mainact"), gbc);
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("●", Color.RED, "Panic"), gbc);
         gbc.gridy++;
@@ -442,11 +443,12 @@ public class EventUI extends GUIState {
         legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency"), gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
-
+        gbc.gridy++;
+        legendPanel.add(createIconLegendEntry(scaledIcon("/fire-station.png", 30, 30), "Fire station"), gbc);
         // Wrapper Panel für Positionierung links unten
         JPanel legendWrapper = new JPanel(new BorderLayout());
         legendWrapper.setOpaque(false);
-        legendWrapper.add(legendPanel, BorderLayout.WEST);
+        legendWrapper.add(legendPanel, BorderLayout.CENTER);
 
         frame.getContentPane().add(legendWrapper, BorderLayout.SOUTH);
     }

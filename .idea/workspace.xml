@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="Anpassung bei Schlägerei auf 2 Agenten pro Person">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/FireDisturbance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/FireDisturbance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/FireTruck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/FireTruck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/sound/EventSoundSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/sound/EventSoundSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/EventUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/EventUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +28,22 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitLabMergeRequestFiltersHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPENED",
+    "assignee": {
+      "type": "org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue",
+      "username": "project_9_bot_658fc364f26c3a45f830168bd308e500",
+      "fullname": "event-steuerung"
+    }
+  }
+}]]></component>
+  <component name="GitLabMergeRequestsSettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "first": "https://gitlab.fbe-adswen.rwu.de/team3/eventsteuerung.git",
+    "second": "0d5c4de1-5f9d-4383-9e94-ab9913766de0"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -50,7 +64,8 @@
     "Maven.eventsteuerung [clean,install].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "US__380__T__389",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "US363__T383__LegendeAngepasst",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Kevin/IdeaProjects",
     "node.js.detected.package.eslint": "true",
@@ -80,8 +95,18 @@
       <list>
         <item itemvalue="Application.EventUI" />
         <item itemvalue="Application.EventUI" />
+        <item itemvalue="Application.EventUI" />
+        <item itemvalue="Application.EventUI" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -95,6 +120,7 @@
       <workItem from="1749825755573" duration="501000" />
       <workItem from="1749826264841" duration="10751000" />
       <workItem from="1749837399748" duration="7137000" />
+      <workItem from="1750673266353" duration="86000" />
     </task>
     <task id="LOCAL-00001" summary="State Pattern Plus Reaktionen bei Ereignissen">
       <option name="closed" value="true" />
