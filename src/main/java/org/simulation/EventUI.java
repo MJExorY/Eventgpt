@@ -543,7 +543,7 @@ final Image rightEmergencyRouteIcon;
         gbc.gridy = 0;
         legendPanel.add(createSectionTitle("States"), gbc);
         gbc.gridy++;
-        legendPanel.add(createCompactLegendEntry("●", Color.GREEN, "Eating"), gbc);
+        legendPanel.add(createCompactLegendEntry("●", Color.GREEN, "Hungry/Thirsty"), gbc);
 
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("●", Color.CYAN, "Watching Sideact"), gbc);
@@ -552,7 +552,7 @@ final Image rightEmergencyRouteIcon;
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("●", Color.RED, "Panic"), gbc);
         gbc.gridy++;
-        legendPanel.add(createCompactLegendEntry("●", Color.ORANGE, "Queue"), gbc);
+        legendPanel.add(createCompactLegendEntry("●", Color.MAGENTA, "Queue"), gbc);
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("●", Color.PINK, "Using WC"), gbc);
 
@@ -570,10 +570,10 @@ final Image rightEmergencyRouteIcon;
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency Exit"), gbc);
         gbc.gridy++;
 
-        legendPanel.add(createIconLegendEntry(scaledIcon("/EmergencyRoutRECHTS.png", 25, 25), "Emergency root"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/EmergencyRoutRECHTS.png", 25, 25), "Emergency route"), gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
         gbc.gridy++;
