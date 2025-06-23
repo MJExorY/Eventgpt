@@ -38,9 +38,16 @@ public class QueueingState implements IStates {
         }
         ticksInQueue++; // Timer zählt auf
 
+        // Ungeduld implementiert
+        if (ticksInQueue > geduld) {
+            System.out.println("Agent verlässt Queue aufgrund Ungeduld = wechselt zu Roaming");
+            agent.setInQueue(false);
+            return new RoamingState();
+        }
+
         // Hintereinanderreihung
         Int2D base = targetZone.getPosition();
-        int offset = retryAttempts + 1; // pro Versuch einen Schritt weiter hinten
+        int offset = retryAttempts + 1; // Der Nächste stellt sich dahinter
         Int2D queuePos = new Int2D(base.x, base.y + offset);
         event.grid.setObjectLocation(agent, queuePos);
 
