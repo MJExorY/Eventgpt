@@ -15,6 +15,9 @@ public class QueueingState implements IStates {
     private int max_retries = 5;
     private boolean initialized = false;
 
+    private int ticksInQueue = 0; // Timer der raufzählt wie lange Agent in queue ist
+    private int geduld = 10; // Agent verlässt nach 10 Ticks die Queue
+
     public QueueingState(Agent agent, Zone targetZone, IStates followUpState) {
         this.targetZone = targetZone;
         this.followUpState = followUpState;
