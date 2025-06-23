@@ -7,8 +7,6 @@ import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
 import org.simulation.sound.EventSoundSystem;
 import org.simulation.sound.SoundType;
-import org.simulation.FireStation;
-import org.simulation.FireTruck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,24 +73,24 @@ public class Event extends SimState {
 
         Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5), Integer.MAX_VALUE);    // Norden
 
-        EmergencyRootStraight emergencyRootStraight = new EmergencyRootStraight(new Int2D(50, 10));
-        grid.setObjectLocation(emergencyRootStraight, emergencyRootStraight.getPosition());
-        schedule.scheduleRepeating(emergencyRootStraight);
+        EmergencyRouteStraight emergencyRouteStraight = new EmergencyRouteStraight(new Int2D(50, 10));
+        grid.setObjectLocation(emergencyRouteStraight, emergencyRouteStraight.getPosition());
+        schedule.scheduleRepeating(emergencyRouteStraight);
 
 
      //   Zone emergencySouth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(30, 95), Integer.MAX_VALUE);   // Süden (links vom normalen Exit)
         Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);    // Osten
 
-       // Zone emergencyRootRight = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);
-        EmergencyRootRechts emergencyRootRight = new EmergencyRootRechts(new Int2D(83, 50));
-        grid.setObjectLocation(emergencyRootRight, emergencyRootRight.getPosition());
-        schedule.scheduleRepeating(emergencyRootRight);
+
+        EmergencyRouteRechts emergencyRouteRight = new EmergencyRouteRechts(new Int2D(83, 50));
+        grid.setObjectLocation(emergencyRouteRight, emergencyRouteRight.getPosition());
+        schedule.scheduleRepeating(emergencyRouteRight);
 
         Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), Integer.MAX_VALUE);     // Westen
-        // Zone emergencyRootRight = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);
-        EmergencyRootLinks emergencyRootLinks = new EmergencyRootLinks(new Int2D(9, 50));
-        grid.setObjectLocation(emergencyRootLinks, emergencyRootLinks.getPosition());
-        schedule.scheduleRepeating(emergencyRootLinks);
+
+        EmergencyRouteLinks emergencyRouteLinks = new EmergencyRouteLinks(new Int2D(9, 50));
+        grid.setObjectLocation(emergencyRouteLinks, emergencyRouteLinks.getPosition());
+        schedule.scheduleRepeating(emergencyRouteLinks);
 
       //  Zone emergencyNorthEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(85, 15), Integer.MAX_VALUE); // Nordosten
       //  Zone emergencySouthWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 95), Integer.MAX_VALUE); // Südost
