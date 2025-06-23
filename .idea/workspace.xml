@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="Bug Fix State übergang" />
+    <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="Anpassung bei Schlägerei auf 2 Agenten pro Person">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/simulation/EmergencyRootLinks.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/simulation/EmergencyRootRechts.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/simulation/EmergencyRootStraight.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/EventUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/EventUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/Zone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/Zone.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="US364.T365.QueueReihenfolge" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -35,12 +43,12 @@
     }
   }
 }</component>
-  <component name="GitLabMergeRequestsSettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "first": "https://gitlab.fbe-adswen.rwu.de/team3/eventsteuerung.git",
-    "second": "5fe86f17-226c-4514-b0cb-d51c79530dbb"
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;https://gitlab.fbe-adswen.rwu.de/team3/eventsteuerung.git&quot;,
+    &quot;second&quot;: &quot;0d5c4de1-5f9d-4383-9e94-ab9913766de0&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -48,6 +56,7 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2xxJEPG76PSReQpwSscgrvAeCcR" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -61,7 +70,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "US392__T401__EmergencyRoot",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Kevin/IdeaProjects",
     "node.js.detected.package.eslint": "true",
@@ -100,8 +109,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
-        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
@@ -119,7 +128,6 @@
       <workItem from="1749837399748" duration="7137000" />
       <workItem from="1750673266353" duration="86000" />
       <workItem from="1750678146715" duration="4079000" />
-      <workItem from="1750684833315" duration="414000" />
     </task>
     <task id="LOCAL-00001" summary="State Pattern Plus Reaktionen bei Ereignissen">
       <option name="closed" value="true" />
@@ -153,23 +161,7 @@
       <option name="project" value="LOCAL" />
       <updated>1749845326545</updated>
     </task>
-    <task id="LOCAL-00005" summary="Queue hintereinanderreihung impl.">
-      <option name="closed" value="true" />
-      <created>1750685010200</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1750685010200</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Bug Fix State übergang">
-      <option name="closed" value="true" />
-      <created>1750685174261</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1750685174261</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,8 +182,6 @@
     <MESSAGE value="State Pattern Plus Reaktionen bei Ereignissen" />
     <MESSAGE value="Anpassung bei Schlägerei auch weiterweg" />
     <MESSAGE value="Anpassung bei Schlägerei auf 2 Agenten pro Person" />
-    <MESSAGE value="Queue hintereinanderreihung impl." />
-    <MESSAGE value="Bug Fix State übergang" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug Fix State übergang" />
+    <option name="LAST_COMMIT_MESSAGE" value="Anpassung bei Schlägerei auf 2 Agenten pro Person" />
   </component>
 </project>
