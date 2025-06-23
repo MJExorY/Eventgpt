@@ -36,6 +36,7 @@ public class QueueingState implements IStates {
             agent.setInQueue(true);
             initialized = true;
         }
+        ticksInQueue++; // Timer zählt auf
 
         // Hintereinanderreihung
         Int2D base = targetZone.getPosition();
