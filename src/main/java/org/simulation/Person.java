@@ -1,9 +1,6 @@
 package org.simulation;
 
 import States.EmergencyState;
-import sim.engine.SimState;
-import sim.engine.Steppable;
-import sim.util.Int2D;
 
 import java.awt.Color;
 
