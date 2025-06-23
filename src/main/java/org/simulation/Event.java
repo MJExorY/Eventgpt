@@ -74,9 +74,26 @@ public class Event extends SimState {
         Zone normalExit = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE); // Unten Mitte
 
         Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5), Integer.MAX_VALUE);    // Norden
+
+        EmergencyRootStraight emergencyRootStraight = new EmergencyRootStraight(new Int2D(50, 10));
+        grid.setObjectLocation(emergencyRootStraight, emergencyRootStraight.getPosition());
+        schedule.scheduleRepeating(emergencyRootStraight);
+
+
      //   Zone emergencySouth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(30, 95), Integer.MAX_VALUE);   // Süden (links vom normalen Exit)
         Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);    // Osten
+
+       // Zone emergencyRootRight = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);
+        EmergencyRootRechts emergencyRootRight = new EmergencyRootRechts(new Int2D(83, 50));
+        grid.setObjectLocation(emergencyRootRight, emergencyRootRight.getPosition());
+        schedule.scheduleRepeating(emergencyRootRight);
+
         Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), Integer.MAX_VALUE);     // Westen
+        // Zone emergencyRootRight = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);
+        EmergencyRootLinks emergencyRootLinks = new EmergencyRootLinks(new Int2D(9, 50));
+        grid.setObjectLocation(emergencyRootLinks, emergencyRootLinks.getPosition());
+        schedule.scheduleRepeating(emergencyRootLinks);
+
       //  Zone emergencyNorthEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(85, 15), Integer.MAX_VALUE); // Nordosten
       //  Zone emergencySouthWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 95), Integer.MAX_VALUE); // Südost
 
