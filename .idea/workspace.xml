@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="Zeit logik">
+    <list default="true" id="11463243-5ae3-4acd-bcaa-eb2001d381f7" name="Changes" comment="Geduld Logik &amp; State wechsel impl.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/States/QueueingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/States/QueueingState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -131,7 +132,7 @@
       <workItem from="1750678146715" duration="4405000" />
       <workItem from="1750682789179" duration="1597000" />
       <workItem from="1750687017244" duration="1780000" />
-      <workItem from="1750689155896" duration="346000" />
+      <workItem from="1750689155896" duration="1005000" />
     </task>
     <task id="LOCAL-00001" summary="State Pattern Plus Reaktionen bei Ereignissen">
       <option name="closed" value="true" />
@@ -205,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750689429196</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Geduld Logik &amp; State wechsel impl.">
+      <option name="closed" value="true" />
+      <created>1750689690727</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1750689690727</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -231,6 +240,7 @@
     <MESSAGE value="BugFix Medics laufen zum Fight" />
     <MESSAGE value="ticksInQueue &amp; Geduld zur Berechnung hinzugefügt" />
     <MESSAGE value="Zeit logik" />
-    <option name="LAST_COMMIT_MESSAGE" value="Zeit logik" />
+    <MESSAGE value="Geduld Logik &amp; State wechsel impl." />
+    <option name="LAST_COMMIT_MESSAGE" value="Geduld Logik &amp; State wechsel impl." />
   </component>
 </project>
