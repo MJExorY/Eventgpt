@@ -12,7 +12,7 @@ public class QueueingState implements IStates {
     private final IStates followUpState;
     private int waitingTime;
     private int retryAttempts = 0;
-    private final int MAX_RETRIES = 5;
+    private int max_retries = 5;
     private boolean initialized = false;
 
     public QueueingState(Agent agent, Zone targetZone, IStates followUpState) {
@@ -56,7 +56,7 @@ public class QueueingState implements IStates {
 
             retryAttempts++;
 
-            if (retryAttempts >= MAX_RETRIES) {
+            if (retryAttempts >= max_retries) {
                 System.out.println("Max. Versuche erreicht – Agent bricht Queue ab.");
                 agent.setInQueue(false);
                 return new RoamingState();
