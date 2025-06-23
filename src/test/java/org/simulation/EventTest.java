@@ -18,7 +18,7 @@ public class EventTest {
     @BeforeEach
     public void setUp() {
         // Erstelle eine neue Instanz vor jedem Test mit z.B. 5 Agenten
-        event = new Event(System.currentTimeMillis(), 5);
+        event = new Event(System.currentTimeMillis(), 5, 0, 0);
         event.start(); // Initialisiert das Event, Zonen etc.
     }
 
