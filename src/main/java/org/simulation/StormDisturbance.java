@@ -3,12 +3,15 @@ package org.simulation;
 import States.PanicRunState;
 import sim.engine.SimState;
 import sim.util.Int2D;
+import org.simulation.sound.SoundType;
 
 /**
  * A storm disturbance that affects the entire simulation area.
  * No specific position required.
  */
 public class StormDisturbance extends Disturbance {
+
+    private boolean alarmTriggered = false;
 
     public StormDisturbance() {
         super(null); // No position needed
@@ -17,6 +20,12 @@ public class StormDisturbance extends Disturbance {
     @Override
     public void step(SimState state) {
         Event event = (Event) state;
+        //Sturm Wanrung
+        if (!alarmTriggered) {
+            event.triggerStormAlert();
+            alarmTriggered = true;
+        }
+
         for (Agent agent : event.agents) {
             agent.setCurrentState(new PanicRunState());
         }

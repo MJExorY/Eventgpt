@@ -5,19 +5,24 @@ import sim.engine.Steppable;
 import sim.engine.Stoppable;
 import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
+import org.simulation.sound.EventSoundSystem;
+import org.simulation.sound.SoundType;
+import org.simulation.FireStation;
+import org.simulation.FireTruck;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Event extends SimState {
-    public SparseGrid2D grid;
 
     private int visitorCount;
     private int medicCount;
     private int securityCount;
-
+    public SparseGrid2D grid;
     public final List<Zone> zones = new ArrayList<>();
     public final List<Agent> agents = new ArrayList<>();
+    private EventSoundSystem soundSystem;
+    private FireStation fireStation;
 
     public Event(long seed) {
         super(seed);
@@ -28,6 +33,8 @@ public class Event extends SimState {
         this.visitorCount = visitorCount;
         this.medicCount = medicCount;
         this.securityCount = securityCount;
+        this.soundSystem = new EventSoundSystem();
+
     }
 
 
@@ -82,7 +89,10 @@ public class Event extends SimState {
             grid.setObjectLocation(z, z.getPosition().x, z.getPosition().y);
         }
 
-
+        // Feuerwache erstellen
+        fireStation = new FireStation(new Int2D(95, 70), this);
+        grid.setObjectLocation(fireStation, fireStation.getPosition().x, fireStation.getPosition().y);
+        System.out.println("Feuerwache wurde bei " + fireStation.getPosition() + " erstellt");
         Int2D eingang = new Int2D(60, 90); // Eingang Zone
 
         for (int i = 0; i < visitorCount; i++) {
@@ -174,4 +184,41 @@ public class Event extends SimState {
         return pos;
     }
 
+    public EventSoundSystem getSoundSystem() {
+        return soundSystem;
+    }
+
+    public void triggerFireAlarm(sim.util.Int2D fireLocation) {
+        if (soundSystem != null) {
+            soundSystem.playSound(SoundType.FIRE_ALARM, -1); // Endlos-Alarm
+            System.out.println("FEUERALARM ausgelöst bei " + fireLocation);
+            dispatchFireTruckToFire(fireLocation);
+        }
+    }
+
+    public void triggerStormAlert() {
+        if (soundSystem != null) {
+            soundSystem.playSound(SoundType.STORM_WARNING, 30);
+            System.out.println("Sturm-Warnung ausgelöst");
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (soundSystem != null) {
+            soundSystem.shutdown();
+        }
+    }
+
+    public FireStation getFireStation() {
+        return fireStation;
+    }
+
+    public void dispatchFireTruckToFire(Int2D fireLocation) {
+        if (fireStation != null) {
+            FireTruck truck = fireStation.dispatchFireTruck(fireLocation);
+            System.out.println("Feuerwehrauto wurde zu " + fireLocation + " entsandt");
+        }
+    }
 }

@@ -7,6 +7,7 @@ import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.*;
 import sim.engine.*;
 
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -166,7 +167,7 @@ public class EventUI extends GUIState {
                 URL emergencyExitURL = getClass().getResource("/emergency-exit.png");
                 System.out.println("Emergency Exit Icon URL: " + emergencyExitURL);
                 if (emergencyExitURL != null) {
-                    emergencyExitIcon = new ImageIcon(emergencyExitURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    emergencyExitIcon = new ImageIcon(emergencyExitURL).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 } else {
                     System.err.println("❌ Bild nicht gefunden: /emergency-exit.png");
                     emergencyExitIcon = null;
@@ -200,7 +201,7 @@ public class EventUI extends GUIState {
                 } else if (zone.getType() == Zone.ZoneType.EXIT && exitIcon != null) {
                     graphics.drawImage(exitIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.EMERGENCY_EXIT && emergencyExitIcon != null) {
-                    graphics.drawImage(emergencyExitIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
+                    graphics.drawImage(emergencyExitIcon, (int) (x - 25), (int) (y - 25), 50, 50, null);
                 } else if (zone.getType() == Zone.ZoneType.ACT_SIDE && sideActIcon != null) {
                     graphics.drawImage(sideActIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.WC && wcIcon != null) {
@@ -241,6 +242,75 @@ public class EventUI extends GUIState {
                         (float) (info.draw.y + info.draw.height / 3));
             }
         });
+        // FireStation
+        gridPortrayal.setPortrayalForClass(FireStation.class, new SimplePortrayal2D() {
+            final Image fireStationIcon;
+
+            {
+                URL iconURL = getClass().getResource("/fire-station.png");
+                if (iconURL != null) {
+                    fireStationIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("Fire Station Icon nicht gefunden: /fire-station.png");
+                    fireStationIcon = null;
+                }
+            }
+
+            @Override
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+                if (fireStationIcon != null) {
+                    int x = (int) (info.draw.x - 15);
+                    int y = (int) (info.draw.y - 15);
+                    graphics.drawImage(fireStationIcon, x, y, 50, 50, null);
+                } else {
+                    // Fallback: Blaues Rechteck
+                    graphics.setColor(Color.BLUE);
+                    int size = (int) (info.draw.width * 2);
+                    int x = (int) (info.draw.x - size / 2);
+                    int y = (int) (info.draw.y - size / 2);
+                    graphics.fillRect(x, y, size, size);
+                }
+            }
+        });
+        // FireTruck
+        gridPortrayal.setPortrayalForClass(FireTruck.class, new SimplePortrayal2D() {
+            final Image fireTruckIcon;
+
+            {
+                URL iconURL = getClass().getResource("/fire-truck.png");
+                if (iconURL != null) {
+                    fireTruckIcon = new ImageIcon(iconURL).getImage().getScaledInstance(40, 25, Image.SCALE_SMOOTH);
+                } else {
+                    System.err.println("Fire Truck Icon nicht gefunden: /fire-truck.png");
+                    fireTruckIcon = null;
+                }
+            }
+
+            @Override
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+                FireTruck truck = (FireTruck) object;
+
+                if (fireTruckIcon != null) {
+                    int x = (int) (info.draw.x - 20);
+                    int y = (int) (info.draw.y - 13);
+                    graphics.drawImage(fireTruckIcon, x, y, 40, 25, null);
+                } else {
+                    // Fallback: Rotes Rechteck
+                    graphics.setColor(truck.getColor());
+                    int width = (int) (info.draw.width * 3);
+                    int height = (int) (info.draw.height * 2);
+                    int x = (int) (info.draw.x - width / 2);
+                    int y = (int) (info.draw.y - height / 2);
+                    graphics.fillRect(x, y, width, height);
+                }
+
+                // Bewegungsrichtung anzeigen
+                if (truck.isMoving()) {
+                    graphics.setColor(Color.YELLOW);
+                    graphics.drawOval((int) (info.draw.x - 35), (int) (info.draw.y - 25), 70, 50);
+                }
+            }
+        });
 
         display.reset();
         //  display.setBackdrop(new Color(0xE1CAB2));
@@ -253,10 +323,9 @@ public class EventUI extends GUIState {
 
 
         //Hintergrund map setzen-
-
         display = new Display2D(650, 650, this);
         display.setClipping(false);
-
+        display.setBackdrop(Color.WHITE);
         URL backgroundURL = getClass().getResource("/Hintergrundbild.png");
         if (backgroundURL != null) {
             try {
@@ -335,7 +404,9 @@ public class EventUI extends GUIState {
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("■", Color.WHITE, "Medic"), gbc);
         gbc.gridy++;
-        legendPanel.add(createCompactLegendEntry("■", Color.LIGHT_GRAY, "Security"), gbc);
+        legendPanel.add(createCompactLegendEntry("■", Color.DARK_GRAY, "Security"), gbc);
+        gbc.gridy++;
+        legendPanel.add(createCompactLegendEntry("🚒", Color.RED, "Fire Truck"), gbc);
 
         // Spalte 2: Zustände
         gbc.gridx = 1;
@@ -368,7 +439,7 @@ public class EventUI extends GUIState {
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 20, 20), "Emergency"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency"), gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
 
