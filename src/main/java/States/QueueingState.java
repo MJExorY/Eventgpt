@@ -22,11 +22,9 @@ public class QueueingState implements IStates {
         agent.setTargetPosition(targetZone.getPosition());
 
         // Für visuelle Darstellung: übernehme Flags aus dem Zielzustand
-        //Q in WC
         if (followUpState instanceof WCState) {
             agent.setWC(true);
         }
-        //Q in Food
         if (followUpState instanceof HungryThirstyState) {
             agent.setHungry(true);
         }
@@ -42,6 +40,12 @@ public class QueueingState implements IStates {
             agent.setInQueue(true);     // … aber jetzt "Queue" setzen
             initialized = true;
         }
+
+        // Hintereinanderreihung
+        Int2D base = targetZone.getPosition();
+        int offset = retryAttempts + 1; // pro Versuch einen Schritt weiter hinten
+        Int2D queuePos = new Int2D(base.x, base.y + offset);
+        event.grid.setObjectLocation(agent, queuePos);
 
         System.out.println("Agent wartet bei " + targetZone.getType() + " @ " + targetZone.getPosition()
                 + " ... noch " + waitingTime + " Schritte. (Versuch " + retryAttempts + ")");
