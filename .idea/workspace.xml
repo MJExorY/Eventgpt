@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="feature: implemented test for FireDisturbance and PanicState" />
+    <list default="true" id="1627d1d4-9e7a-41b6-8d35-37d67e9b6fe5" name="Changes" comment="Geduld Logik &amp; State wechsel impl.">
+      <change afterPath="$PROJECT_DIR$/src/test/java/metrics/DefaultMetricsCollectorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/simulation/MetricsViewerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/simulation/MetricsViewer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/simulation/MetricsViewer.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,17 +29,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="US380_T384_T386" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "MJExorY"
-  }
-}]]></component>
   <component name="GitLabMergeRequestFiltersHistory">{
   &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPENED&quot;,
@@ -51,16 +50,35 @@
     &quot;second&quot;: &quot;c19dea37-f724-4124-9668-d549887e6d38&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MJExorY/Eventgpt.git",
-    "accountId": "c8b1da77-08b4-4c79-bd8e-ecfa3a1b2936"
-  }
-}]]></component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="US369.T370_T370_Metriken-Uebersicht" />
+                    <option name="lastUsedInstant" value="1750714119" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1750714118" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
   <component name="JavaAutoRunManager">
     <enabled-run-configurations>
-      <run-configuration type="JUnit" name="Simulation in eventsteuerung" />
       <run-configuration type="JUnit" name="PanicRunStateTest" />
+      <run-configuration type="JUnit" name="Simulation in eventsteuerung" />
     </enabled-run-configurations>
   </component>
   <component name="ProblemsViewState">
@@ -71,6 +89,7 @@
 }</component>
   <component name="ProjectId" id="2xNB7N8qWOmSf2tZ7Oo4OLR6Rd5" />
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -78,20 +97,31 @@
   "keyToString": {
     "Application.Event.executor": "Run",
     "Application.EventUI.executor": "Run",
+    "JAR Application.eventsteuerung-1.0-SNAPSHOT.jar.executor": "Run",
+    "JUnit.DefaultMetricsCollectorTest.executor": "Run",
+    "JUnit.EmergencyStateTest.executor": "Run",
     "JUnit.FireDisturbanceTest.executor": "Run",
+    "JUnit.HungryThirstyStateTest.executor": "Run",
+    "JUnit.MetricsViewerTest.executor": "Run",
     "JUnit.PanicRunStateTest.executor": "Run",
+    "JUnit.QueueingStateTest.executor": "Run",
+    "JUnit.RoamingStateTest.executor": "Run",
     "JUnit.Simulation in eventsteuerung.executor": "Run",
+    "JUnit.WatchingMainActStateTest.executor": "Run",
+    "JUnit.WatchingSideActStateTest.executor": "Run",
     "Maven.Clean Install.executor": "Run",
     "Maven.eventsteuerung [clean,install].executor": "Run",
+    "Maven.eventsteuerung [clean,package].executor": "Run",
     "Maven.eventsteuerung [clean].executor": "Run",
     "Maven.eventsteuerung [compile].executor": "Run",
     "Maven.eventsteuerung [install].executor": "Run",
+    "Maven.eventsteuerung [package].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "code.cleanup.on.save": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "US369.T370__T370__Metriken-Uebersicht",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -131,16 +161,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="FireDisturbanceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="DefaultMetricsCollectorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="eventsteuerung" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="Simulation.*" />
+          <option name="PATTERN" value="metrics.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="Simulation" />
-      <option name="MAIN_CLASS_NAME" value="Simulation.FireDisturbanceTest" />
+      <option name="PACKAGE_NAME" value="metrics" />
+      <option name="MAIN_CLASS_NAME" value="metrics.DefaultMetricsCollectorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MetricsViewerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="eventsteuerung" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.simulation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.simulation" />
+      <option name="MAIN_CLASS_NAME" value="org.simulation.MetricsViewerTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -163,8 +208,6 @@
     </configuration>
     <configuration name="Simulation in eventsteuerung" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="eventsteuerung" />
-      <option name="MAIN_CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="directory" />
       <dir value="$PROJECT_DIR$/src/test/java/Simulation" />
       <method v="2">
@@ -204,18 +247,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.EventUI" />
-      <item itemvalue="JUnit.FireDisturbanceTest" />
-      <item itemvalue="JUnit.PanicRunStateTest" />
+      <item itemvalue="JUnit.MetricsViewerTest" />
+      <item itemvalue="JUnit.DefaultMetricsCollectorTest" />
       <item itemvalue="JUnit.Simulation in eventsteuerung" />
+      <item itemvalue="JUnit.PanicRunStateTest" />
       <item itemvalue="Maven.Clean Install" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.EventUI" />
+        <item itemvalue="JUnit.MetricsViewerTest" />
+        <item itemvalue="JUnit.DefaultMetricsCollectorTest" />
         <item itemvalue="JUnit.Simulation in eventsteuerung" />
         <item itemvalue="JUnit.PanicRunStateTest" />
-        <item itemvalue="JUnit.FireDisturbanceTest" />
-        <item itemvalue="Application.EventUI" />
-        <item itemvalue="JUnit.Simulation in eventsteuerung" />
       </list>
     </recent_temporary>
   </component>
@@ -245,7 +289,17 @@
       <workItem from="1747854581899" duration="865000" />
       <workItem from="1747994115080" duration="929000" />
       <workItem from="1748121905719" duration="13046000" />
-      <workItem from="1748896820885" duration="5283000" />
+      <workItem from="1748896820885" duration="5935000" />
+      <workItem from="1749458191759" duration="6433000" />
+      <workItem from="1749664006413" duration="4799000" />
+      <workItem from="1749924966449" duration="65000" />
+      <workItem from="1750006277758" duration="5000" />
+      <workItem from="1750099950683" duration="4000" />
+      <workItem from="1750522176428" duration="56000" />
+      <workItem from="1750542235190" duration="11000" />
+      <workItem from="1750575345222" duration="1532000" />
+      <workItem from="1750577371683" duration="49000" />
+      <workItem from="1750708852772" duration="4880000" />
     </task>
     <task id="LOCAL-00001" summary="wiki documentation versioned">
       <option name="closed" value="true" />
@@ -335,7 +389,47 @@
       <option name="project" value="LOCAL" />
       <updated>1748900038902</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feature: implemented test for FireDisturbance and PanicState">
+      <option name="closed" value="true" />
+      <created>1748902165791</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1748902165791</updated>
+    </task>
+    <task id="LOCAL-00013" summary="feature: added gitlab-ci.yml">
+      <option name="closed" value="true" />
+      <created>1749460537099</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1749460537099</updated>
+    </task>
+    <task id="LOCAL-00014" summary="feature: create gitlab staging">
+      <option name="closed" value="true" />
+      <created>1749665420904</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1749665420904</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fix: fixed all curent tests">
+      <option name="closed" value="true" />
+      <created>1750711126321</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1750711126321</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix: fixed Merge Conflicts">
+      <option name="closed" value="true" />
+      <created>1750713109101</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1750713109101</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -376,7 +470,11 @@
     <MESSAGE value="feature: implemented searching exit and leaving area" />
     <MESSAGE value="feature: implemented Panic Button for showCase" />
     <MESSAGE value="feature: implemented test for FireDisturbance and PanicState" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: implemented test for FireDisturbance and PanicState" />
+    <MESSAGE value="feature: added gitlab-ci.yml" />
+    <MESSAGE value="feature: create gitlab staging" />
+    <MESSAGE value="fix: fixed all curent tests" />
+    <MESSAGE value="fix: fixed Merge Conflicts" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: fixed Merge Conflicts" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -385,20 +483,6 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$PROJECT_DIR$/lib/mason.jar!/sim/engine/SimState.class</url>
-          <line>34</line>
-          <properties class="sim.engine.SimState" method="finish">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/simulation/sound/AudioPlayer.java</url>
-          <line>145</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

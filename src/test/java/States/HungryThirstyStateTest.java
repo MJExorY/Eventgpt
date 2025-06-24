@@ -1,8 +1,6 @@
 package States;
 
-import States.HungryThirstyState;
-import States.IStates;
-import States.RoamingState;
+import metrics.DefaultMetricsCollector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simulation.Agent;
@@ -19,7 +17,15 @@ public class HungryThirstyStateTest {
 
     @BeforeEach
     public void setUp() {
-        event = new Event(System.currentTimeMillis(), 0);
+        DefaultMetricsCollector collector = new DefaultMetricsCollector();
+        for (Zone.ZoneType type : Zone.ZoneType.values()) {
+            collector.registerMetric("ZoneEntry_" + type);
+            collector.registerMetric("ZoneExit_" + type);
+            collector.registerMetric("PanicEscape_" + type);
+        }
+
+        event = new Event(System.currentTimeMillis(), 0, 0, 0, collector);
+
         event.start();
 
         agent = new Agent();

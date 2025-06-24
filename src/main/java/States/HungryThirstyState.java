@@ -61,6 +61,7 @@ public class HungryThirstyState implements IStates {
             if (ticksInZone >= WAIT_TIME) {
                 Zone zone = agent.getCurrentZone();
                 if (zone != null) {
+                    event.getCollector().recordTimeInZone(zone.getType().name(), ticksInZone);
                     zone.leave(agent);
                     agent.setCurrentZone(null);
                 }

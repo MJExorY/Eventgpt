@@ -13,10 +13,15 @@ public class EmergencyState implements IStates {
 
         switch (p.getType()) {
             case MEDIC -> {
-                // Beispiel: Medics laufen zu Position (10,10) = Unfallort
-                Int2D target = new Int2D(10, 10); // später dynamisch wählbar
-                moveTowards(p, target, event);
-                System.out.println("MEDIC bewegt sich zum Unfallort.");
+                Int2D target = p.getTargetPosition();
+
+                if (target != null) {
+                    moveTowards(p, target, event);
+                    System.out.println("MEDIC bewegt sich zum Notfall bei " + target);
+                } else {
+                    System.out.println("MEDIC hat kein Ziel");
+                    randomStep(p, event);
+                }
             }
 
             case SECURITY -> {
@@ -33,7 +38,14 @@ public class EmergencyState implements IStates {
 
         }
 
-
+        Int2D pos = event.grid.getObjectLocation(g);
+        var zone = event.getZoneByPosition(pos);
+        if (zone != null) {
+            boolean success = g.tryEnterZone(zone);
+            if (success) {
+                System.out.println("Agent ist der Zone " + zone.getType() + " beigetreten.");
+            }
+        }
         return this;
     }
 

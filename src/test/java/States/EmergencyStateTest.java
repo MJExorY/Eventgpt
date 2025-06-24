@@ -14,22 +14,31 @@ public class EmergencyStateTest {
 
     @BeforeEach
     void setup() {
-        dummyEvent = new Event(System.currentTimeMillis());
+        dummyEvent = new Event(System.currentTimeMillis(), 15, 15, 15, null);
         dummyEvent.grid = new sim.field.grid.SparseGrid2D(100, 100);
     }
 
     @Test
-    void testMedicMovesTowardTarget() {
+    void testMedicMovesTowardAssignedTarget() {
         Person medic = new Person(Person.PersonType.MEDIC);
         medic.setEvent(dummyEvent);
         dummyEvent.grid.setObjectLocation(medic, new Int2D(5, 5));
+
+        // Zielposition zuweisen (z. B. FightDisturbance bei (10,10))
+        Int2D target = new Int2D(10, 10);
+        medic.setTargetPosition(target);
 
         IStates emergencyState = new EmergencyState();
         IStates nextState = emergencyState.act(medic, dummyEvent);
 
         Int2D newPos = dummyEvent.grid.getObjectLocation(medic);
-        assertNotNull(newPos);
-        assertTrue(newPos.x > 5 || newPos.y > 5, "MEDIC should move towards target (10,10)");
+        assertNotNull(newPos, "MEDIC position should not be null after movement");
+
+        // Überprüfen, ob sich der MEDIC dem Ziel angenähert hat
+        int oldDistance = Math.abs(5 - target.x) + Math.abs(5 - target.y);
+        int newDistance = Math.abs(newPos.x - target.x) + Math.abs(newPos.y - target.y);
+
+        assertTrue(newDistance < oldDistance, "MEDIC should move closer to the target");
         assertEquals(emergencyState, nextState);
     }
 

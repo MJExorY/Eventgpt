@@ -11,7 +11,7 @@ public class FireDisturbanceTest {
 
     @Test
     public void testFireTriggersPanicInNearbyAgents() {
-        Event event = new Event(System.currentTimeMillis(), 0);
+        Event event = new Event(System.currentTimeMillis(), 0, 0, 0, null);
         event.start();
 
         // Agent in der Nähe des Feuers
@@ -31,7 +31,7 @@ public class FireDisturbanceTest {
 
     @Test
     public void testFarAwayAgentDoesNotPanic() {
-        Event event = new Event(System.currentTimeMillis(), 0);
+        Event event = new Event(System.currentTimeMillis(), 0, 0, 0, null);
         event.start();
 
         Agent agent = new Agent();

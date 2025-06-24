@@ -1,5 +1,6 @@
 package States;
 
+import metrics.DefaultMetricsCollector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simulation.Agent;
@@ -13,19 +14,26 @@ public class PanicRunStateTest {
 
     private Event event;
     private Agent agent;
-    private Zone exitZone;
 
     @BeforeEach
     public void setUp() {
-        event = new Event(System.currentTimeMillis());
-        event.start(); // 🔧 Grid & Agentenliste initialisieren
+        DefaultMetricsCollector collector = new DefaultMetricsCollector();
+        for (Zone.ZoneType type : Zone.ZoneType.values()) {
+            collector.registerMetric("ZoneEntry_" + type);
+            collector.registerMetric("ZoneExit_" + type);
+            collector.registerMetric("PanicEscape_" + type);
+        }
+
+        event = new Event(System.currentTimeMillis(), 0, 0, 0, collector);
+
+        event.start();
 
         agent = new Agent();
         agent.setEvent(event);
         event.agents.add(agent); // wichtig: damit Agent entfernt werden kann
 
         // Exit-Zone hinzufügen
-        exitZone = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 5), 10);
+        Zone exitZone = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 5), 10);
         event.zones.add(exitZone);
 
         // Agent in der Grid platzieren

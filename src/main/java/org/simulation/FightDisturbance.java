@@ -1,22 +1,16 @@
 package org.simulation;
 
 import States.EmergencyState;
+import States.PanicRunState;
 import sim.engine.SimState;
 import sim.util.Int2D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A fight disturbance at a specific position.
- * May cause aggressive reactions or draw security agents.
- */
-
-
 public class FightDisturbance extends Disturbance {
 
     private final List<Person> assignedSecurity = new ArrayList<>();
-
 
     public FightDisturbance(Int2D position) {
         super(position);
@@ -26,28 +20,57 @@ public class FightDisturbance extends Disturbance {
     public void step(SimState state) {
         Event event = (Event) state;
 
+        // Entferne Security, die nicht mehr im Spiel sind
         assignedSecurity.removeIf(p -> !event.agents.contains(p));
 
+        // Security hinzuziehen, falls noch keiner da ist
         if (assignedSecurity.isEmpty()) {
-
-
             for (Agent agent : event.agents) {
                 if (!(agent instanceof Person p)) continue;
                 if (p.getType() != Person.PersonType.SECURITY) continue;
-
                 if (p.getTargetPosition() != null) continue;
 
                 p.setTargetPosition(this.position);
                 p.setCurrentState(new EmergencyState());
                 assignedSecurity.add(p);
 
-                System.out.println("SECURITY permanently assigned to fight at " + position);
+                System.out.println("👮 SECURITY permanently assigned to fight at " + position);
                 break;
+            }
+
+            // Assign MEDIC if available
+            // immer Medics zuweisen, wenn sie kein Ziel haben und FightDisturbance aktiv ist
+            for (Agent agent : event.agents) {
+                if (!(agent instanceof Person p)) continue;
+                if (p.getType() != Person.PersonType.MEDIC) continue;
+                if (p.getTargetPosition() != null) continue;
+
+                p.setTargetPosition(this.position);
+                p.setCurrentState(new EmergencyState());
+                System.out.println("MEDIC assigned to support at " + position);
+                break; // oder ggf. mehrere zuweisen, falls sinnvoll
+
             }
         }
 
-    }
+        // NEU: Besucher in der Nähe geraten in Panik
+        for (Agent agent : event.agents) {
+            if (agent instanceof Person) continue; // Sanitäter & Security ignorieren
 
+            Int2D agentPos = event.grid.getObjectLocation(agent);
+            if (agentPos != null && position != null) {
+                int dx = agentPos.x - position.x;
+                int dy = agentPos.y - position.y;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= 2 && !agent.isPanicking()) {
+                    agent.setPanicking(true);
+                    agent.setCurrentState(new PanicRunState());
+                    System.out.println("Agent gerät wegen Fight in Panik bei " + agentPos);
+                }
+            }
+        }
+    }
 
     @Override
     public String getLabel() {
