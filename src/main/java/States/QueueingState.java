@@ -14,10 +14,14 @@ public class QueueingState implements IStates {
     private int retryAttempts = 0;
     private int max_retries = 5;
     private boolean initialized = false;
+    private int ticksInQueue = 0; // Timer der raufzählt wie lange Agent in queue ist
+    private int geduld = 10; // Agent verlässt nach 10 Ticks die Queue
+    private boolean comingFromPanic = false;
 
     public QueueingState(Agent agent, Zone targetZone, IStates followUpState) {
         this.targetZone = targetZone;
         this.followUpState = followUpState;
+        this.comingFromPanic = followUpState instanceof PanicRunState; // Abfang für PanicRunState
         this.waitingTime = 5 + new Random().nextInt(6); // 5–10 Schritte
         agent.setTargetPosition(targetZone.getPosition());
 
@@ -33,10 +37,18 @@ public class QueueingState implements IStates {
             agent.setInQueue(true);
             initialized = true;
         }
+        ticksInQueue++; // Timer zählt auf
+
+        // Ungeduld implementiert
+        if (!comingFromPanic && ticksInQueue > geduld) { // Wenn Ungeduld UND nicht aus Panic
+            System.out.println("Agent verlässt Queue aufgrund Ungeduld = wechselt zu Roaming");
+            agent.setInQueue(false);
+            return new RoamingState();
+        }
 
         // Hintereinanderreihung
         Int2D base = targetZone.getPosition();
-        int offset = retryAttempts + 1; // pro Versuch einen Schritt weiter hinten
+        int offset = retryAttempts + 1; // Der Nächste stellt sich dahinter
         Int2D queuePos = new Int2D(base.x, base.y + offset);
         event.grid.setObjectLocation(agent, queuePos);
 
