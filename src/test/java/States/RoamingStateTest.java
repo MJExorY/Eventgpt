@@ -1,9 +1,11 @@
 package States;
 
+import metrics.DefaultMetricsCollector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simulation.Agent;
 import org.simulation.Event;
+import org.simulation.Zone;
 import sim.util.Int2D;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +18,15 @@ public class RoamingStateTest {
 
     @BeforeEach
     public void setUp() {
-        event = new Event(System.currentTimeMillis(), 0, 0, 0);
+        DefaultMetricsCollector collector = new DefaultMetricsCollector();
+        for (Zone.ZoneType type : Zone.ZoneType.values()) {
+            collector.registerMetric("ZoneEntry_" + type);
+            collector.registerMetric("ZoneExit_" + type);
+            collector.registerMetric("PanicEscape_" + type);
+        }
+
+        event = new Event(System.currentTimeMillis(), 0, 0, 0, collector);
+
         event.start();
 
         agent = new Agent();

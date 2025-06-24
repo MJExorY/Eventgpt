@@ -14,7 +14,7 @@ public class EmergencyStateTest {
 
     @BeforeEach
     void setup() {
-        dummyEvent = new Event(System.currentTimeMillis());
+        dummyEvent = new Event(System.currentTimeMillis(), 15, 15, 15, null);
         dummyEvent.grid = new sim.field.grid.SparseGrid2D(100, 100);
     }
 

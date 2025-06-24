@@ -1,43 +1,61 @@
 package org.simulation;
 
+import metrics.DefaultMetricsCollector;
+import metrics.MetricsCollector;
+import org.simulation.sound.EventSoundSystem;
+import org.simulation.sound.SoundType;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
 import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
-import org.simulation.sound.EventSoundSystem;
-import org.simulation.sound.SoundType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Event extends SimState {
 
-    private int visitorCount;
-    private int medicCount;
-    private int securityCount;
+    private final int visitorCount;
+    private final int medicCount;
+    private final int securityCount;
     public SparseGrid2D grid;
+
     public final List<Zone> zones = new ArrayList<>();
     public final List<Agent> agents = new ArrayList<>();
-    private EventSoundSystem soundSystem;
+    private MetricsCollector metricsCollector;
+
+    private final EventSoundSystem soundSystem;
     private FireStation fireStation;
 
-    public Event(long seed) {
-        super(seed);
-    }
 
-    public Event(long seed, int visitorCount, int medicCount, int securityCount) {
+    public Event(long seed, int visitorCount, int medicCount, int securityCount, MetricsCollector collector) {
         super(seed);
+        this.metricsCollector = collector;
         this.visitorCount = visitorCount;
         this.medicCount = medicCount;
         this.securityCount = securityCount;
         this.soundSystem = new EventSoundSystem();
-
     }
 
-
     public static void main(String[] args) {
-        Event sim = new Event(System.currentTimeMillis(), 15, 15, 15);
+        MetricsCollector collector = new DefaultMetricsCollector();
+
+        // Metriken registrieren, bevor Event erstellt wird
+        for (Zone.ZoneType type : Zone.ZoneType.values()) {
+            collector.registerMetric("ZoneEntry_" + type);
+            collector.registerMetric("ZoneExit_" + type);
+            collector.registerMetric("PanicEscape_" + type);
+            collector.registerMetric("TimeInZone_" + type);
+            collector.registerMetric("QueueWait_" + type);
+            collector.registerMetric("PanicDuration");
+        }
+
+        // Event-Metriken
+        for (String evt : List.of("FIRE", "FIGHT", "STORM")) {
+            collector.registerMetric("EventTriggered_" + evt);
+        }
+
+        Event sim = new Event(System.currentTimeMillis(), 15, 5, 5, collector);
         sim.start();
 
         for (int i = 0; i < 10; i++) {
@@ -46,8 +64,11 @@ public class Event extends SimState {
 
         sim.finish();
         System.out.println("Event-Simulation fertig.");
-    }
 
+        // Metriken anzeigen
+        System.out.println("\n--- Metriken ---");
+        sim.getCollector().getAllMetrics().forEach((key, values) -> System.out.println(key + ": " + values.size()));
+    }
 
     @Override
     public void start() {
@@ -55,67 +76,48 @@ public class Event extends SimState {
 
         grid = new SparseGrid2D(100, 100);
 
-        /*Agent agent = new Agent();
-        agent.setEvent(this);
-        agents.add(agent);
-        grid.setObjectLocation(agent, 50, 50);
-        Stoppable stopper = schedule.scheduleRepeating(agent);
-        agent.setStopper(stopper); */
+        // Zonen
+        Zone foodZone = new Zone(Zone.ZoneType.FOOD, new Int2D(5, 15), 5);
+        Zone wcZone = new Zone(Zone.ZoneType.WC, new Int2D(90, 25), 10);
+        Zone actMain = new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(50, 45), 20);
+        Zone actSide = new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(15, 85), 15);
+        Zone normalExit = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE);
+        Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5), Integer.MAX_VALUE);
+        Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);
+        Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), Integer.MAX_VALUE);
 
+        zones.addAll(List.of(
+                foodZone, wcZone, actMain, actSide, normalExit,
+                emergencyNorth, emergencyEast, emergencyWest
+        ));
 
-        // Zonen hinzufügen
-        Zone foodZone = new Zone(Zone.ZoneType.FOOD, new Int2D(5, 15), 5);          // Links oben
-        Zone wcZone = new Zone(Zone.ZoneType.WC, new Int2D(90, 25), 10);             // Rechts oben
-        Zone actMain = new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(50, 45), 20);     // Zentrum
-        Zone actSide = new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(15, 85), 15);     // Links unten
-
-        Zone normalExit = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE); // Unten Mitte
-
-        Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5), Integer.MAX_VALUE);    // Norden
-
-        EmergencyRouteStraight emergencyRouteStraight = new EmergencyRouteStraight(new Int2D(50, 10));
-        grid.setObjectLocation(emergencyRouteStraight, emergencyRouteStraight.getPosition());
-        schedule.scheduleRepeating(emergencyRouteStraight);
-
-
-     //   Zone emergencySouth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(30, 95), Integer.MAX_VALUE);   // Süden (links vom normalen Exit)
-        Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), Integer.MAX_VALUE);    // Osten
-
-
-        EmergencyRouteRechts emergencyRouteRight = new EmergencyRouteRechts(new Int2D(83, 50));
-        grid.setObjectLocation(emergencyRouteRight, emergencyRouteRight.getPosition());
-        schedule.scheduleRepeating(emergencyRouteRight);
-
-        Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), Integer.MAX_VALUE);     // Westen
-
-        EmergencyRouteLinks emergencyRouteLinks = new EmergencyRouteLinks(new Int2D(9, 50));
-        grid.setObjectLocation(emergencyRouteLinks, emergencyRouteLinks.getPosition());
-        schedule.scheduleRepeating(emergencyRouteLinks);
-
-      //  Zone emergencyNorthEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(85, 15), Integer.MAX_VALUE); // Nordosten
-      //  Zone emergencySouthWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 95), Integer.MAX_VALUE); // Südost
-
-        zones.addAll(List.of(foodZone, wcZone, actMain, actSide, normalExit,
-                emergencyNorth, emergencyEast, emergencyWest));
-
-
-        // Alle Zonen im Grid sichtbar machen
         for (Zone z : zones) {
             grid.setObjectLocation(z, z.getPosition().x, z.getPosition().y);
         }
 
-        // Feuerwache erstellen
+        // Routen
+        EmergencyRouteStraight routeStraight = new EmergencyRouteStraight(new Int2D(50, 10));
+        EmergencyRouteRechts routeRight = new EmergencyRouteRechts(new Int2D(83, 50));
+        EmergencyRouteLinks routeLinks = new EmergencyRouteLinks(new Int2D(9, 50));
+
+        grid.setObjectLocation(routeStraight, routeStraight.getPosition());
+        grid.setObjectLocation(routeRight, routeRight.getPosition());
+        grid.setObjectLocation(routeLinks, routeLinks.getPosition());
+
+        schedule.scheduleRepeating(routeStraight);
+        schedule.scheduleRepeating(routeRight);
+        schedule.scheduleRepeating(routeLinks);
+
+        // Feuerwache
         fireStation = new FireStation(new Int2D(95, 70), this);
         grid.setObjectLocation(fireStation, fireStation.getPosition().x, fireStation.getPosition().y);
         System.out.println("Feuerwache wurde bei " + fireStation.getPosition() + " erstellt");
-        Int2D eingang = new Int2D(60, 90); // Eingang Zone
 
+        Int2D eingang = new Int2D(60, 90);
+
+        // Besucher
         for (int i = 0; i < visitorCount; i++) {
-            final int delay = i;
-            final int index = i;
-
-
-            schedule.scheduleOnce(delay, new Steppable() {
+            schedule.scheduleOnce(i, new Steppable() {
                 @Override
                 public void step(SimState state) {
                     Agent agent = new Agent();
@@ -126,11 +128,9 @@ public class Event extends SimState {
                     agent.setStopper(stopper);
                 }
             });
-
         }
 
-
-        // Sanitäter hinzufügen (5 Personen)
+        // Sanitäter
         for (int i = 0; i < medicCount; i++) {
             Int2D pos = getRandomFreePosition();
             Person medic = new Person(Person.PersonType.MEDIC);
@@ -141,7 +141,7 @@ public class Event extends SimState {
             medic.setStopper(stopper);
         }
 
-        // Security hinzufügen (5 Personen)
+        // Security
         for (int i = 0; i < securityCount; i++) {
             Int2D pos = getRandomFreePosition();
             Person security = new Person(Person.PersonType.SECURITY);
@@ -153,10 +153,8 @@ public class Event extends SimState {
         }
 
         System.out.println(medicCount + " Sanitäter und " + securityCount + " Security-Personen wurden zur Simulation hinzugefügt.");
-
     }
 
-    // Getter-Methode, um eine Zone nach Typ zu finden
     public Zone getZoneByType(Zone.ZoneType type) {
         return zones.stream()
                 .filter(z -> z.getType() == type)
@@ -169,6 +167,14 @@ public class Event extends SimState {
                 .filter(z -> z.getPosition().equals(pos))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public MetricsCollector getCollector() {
+        return metricsCollector;
+    }
+
+    public void setCollector(MetricsCollector collector) {
+        this.metricsCollector = collector;
     }
 
     public void spawn(Disturbance disturbance) {
@@ -203,9 +209,9 @@ public class Event extends SimState {
         return soundSystem;
     }
 
-    public void triggerFireAlarm(sim.util.Int2D fireLocation) {
+    public void triggerFireAlarm(Int2D fireLocation) {
         if (soundSystem != null) {
-            soundSystem.playSound(SoundType.FIRE_ALARM, -1); // Endlos-Alarm
+            soundSystem.playSound(SoundType.FIRE_ALARM, -1);
             System.out.println("FEUERALARM ausgelöst bei " + fireLocation);
             dispatchFireTruckToFire(fireLocation);
         }

@@ -21,7 +21,8 @@ public class EmergencyState implements IStates {
                 } else {
                     System.out.println("MEDIC hat kein Ziel");
                     randomStep(p, event);
-                } }
+                }
+            }
 
             case SECURITY -> {
                 Int2D target = p.getTargetPosition();
@@ -37,7 +38,14 @@ public class EmergencyState implements IStates {
 
         }
 
-
+        Int2D pos = event.grid.getObjectLocation(g);
+        var zone = event.getZoneByPosition(pos);
+        if (zone != null) {
+            boolean success = g.tryEnterZone(zone);
+            if (success) {
+                System.out.println("Agent ist der Zone " + zone.getType() + " beigetreten.");
+            }
+        }
         return this;
     }
 
