@@ -11,7 +11,6 @@ import sim.util.Bag;
 
 public class PanicRunState implements IStates {
 
-    private boolean initialized = false;
     private boolean reachedEmergencyRoute = false;
 
     private Int2D target;
@@ -21,89 +20,50 @@ public class PanicRunState implements IStates {
     public IStates act(Agent agent, Event event) {
         Int2D currentPos = event.grid.getObjectLocation(agent);
 
-        // Initialisierung: Panikmodus aktivieren
-        if (!initialized) {
+        // Initialisierung nur einmal
+        if (!agent.isPanicking()) {
             agent.resetFlags();
             agent.setPanicking(true);
-            initialized = true;
         }
 
-        // PHASE 1: EmergencyRoute finden
+        // PHASE 1 – Ziel: EmergencyRoute
         if (!reachedEmergencyRoute) {
             if (target == null) {
-                Bag allObjects = event.grid.getAllObjects();
-
                 Int2D nearest = null;
-                int minDistance = Integer.MAX_VALUE;
+                int minDist = Integer.MAX_VALUE;
 
-                for (Object o : allObjects) {
+                Bag all = event.grid.getAllObjects();
+                for (Object o : all) {
                     Int2D pos = null;
 
                     if (o instanceof EmergencyRouteRechts) {
                         pos = ((EmergencyRouteRechts) o).getPosition();
-                        if (currentPos.equals(pos)) {
-                            Zone exit = event.getNearestAvailableExit(pos);
-                            if (exit != null) {
-                                exitZone = exit;
-                                target = exit.getPosition();
-                                agent.setTargetPosition(target);
-                                reachedEmergencyRoute = true;
-                                System.out.println("Agent steht bereits auf Route (Rechts) – Exit-Ziel gesetzt!");
-                                break;
-                            }
-                        }
                     } else if (o instanceof EmergencyRouteLinks) {
-                        pos = new Int2D(20, 50);
-                        if (currentPos.equals(pos)) {
-                            Zone exit = event.getNearestAvailableExit(pos);
-                            if (exit != null) {
-                                exitZone = exit;
-                                target = exit.getPosition();
-                                agent.setTargetPosition(target);
-                                reachedEmergencyRoute = true;
-                                System.out.println("Agent steht bereits auf Route (Links) – Exit-Ziel gesetzt!");
-                                break;
-                            }
-                        }
+                        pos = new Int2D(20, 50); // HARDCODED wie im Grid
                     } else if (o instanceof EmergencyRouteStraight) {
-                        pos = new Int2D(50, 20);
-                        if (currentPos.equals(pos)) {
-                            Zone exit = event.getNearestAvailableExit(pos);
-                            if (exit != null) {
-                                exitZone = exit;
-                                target = exit.getPosition();
-                                agent.setTargetPosition(target);
-                                reachedEmergencyRoute = true;
-                                System.out.println("Agent steht bereits auf Route (Straight) – Exit-Ziel gesetzt!");
-                                break;
-                            }
-                        }
+                        pos = new Int2D(50, 20); // HARDCODED wie im Grid
                     }
 
                     if (pos != null) {
                         int dist = Math.abs(pos.x - currentPos.x) + Math.abs(pos.y - currentPos.y);
-                        if (dist < minDistance) {
-                            minDistance = dist;
+                        if (dist < minDist) {
+                            minDist = dist;
                             nearest = pos;
                         }
                     }
                 }
 
-                // Falls Agent NICHT direkt auf Route stand → nächstgelegene Route ansteuern
-                if (!reachedEmergencyRoute && nearest != null) {
+                if (nearest != null) {
                     target = nearest;
                     agent.setTargetPosition(target);
                     System.out.println("Ziel gesetzt: EmergencyRoute bei " + target);
-                }
-
-                // Falls gar nichts gefunden → zurück zu Roaming
-                if (target == null) {
+                } else {
                     System.out.println("Keine Emergency Route gefunden – zurück zu Roaming");
                     return new RoamingState();
                 }
             }
 
-            // Wenn Ziel erreicht wurde
+            // Route erreicht?
             if (currentPos.equals(target)) {
                 reachedEmergencyRoute = true;
                 System.out.println("EmergencyRoute erreicht – wechsle zu Exit");
@@ -113,27 +73,26 @@ public class PanicRunState implements IStates {
                     target = exitZone.getPosition();
                     agent.setTargetPosition(target);
                     System.out.println("Neuer Zielpunkt: Exit bei " + target);
+
+                    moveAgent(agent, currentPos, target, event);
+                    return this; // WICHTIG: danach abbrechen
                 } else {
-                    System.out.println("Kein Exit verfügbar – Agent bleibt stehen.");
+                    System.out.println("⚠ Kein Exit verfügbar – Agent bleibt stehen.");
                 }
             }
+        }
 
-        } else {
-            // PHASE 2: Agent läuft zum Exit
-            if (target == null && exitZone != null) {
-                target = exitZone.getPosition();
-                agent.setTargetPosition(target);
-            }
-
+        // PHASE 2 – Ziel: Exit
+        else {
             if (currentPos.equals(target)) {
                 if (agent.tryEnterZone(exitZone)) {
                     agent.clearTarget();
                     System.out.println("Agent hat Exit betreten");
                     return this;
                 } else {
-                    Zone alternative = event.getNearestAvailableExit(currentPos);
-                    if (alternative != null && !alternative.equals(exitZone)) {
-                        exitZone = alternative;
+                    Zone alt = event.getNearestAvailableExit(currentPos);
+                    if (alt != null && !alt.equals(exitZone)) {
+                        exitZone = alt;
                         target = exitZone.getPosition();
                         agent.setTargetPosition(target);
                         System.out.println("Exit blockiert – neuer Exit bei " + target);
@@ -142,10 +101,7 @@ public class PanicRunState implements IStates {
             }
         }
 
-        if (target != null && !currentPos.equals(target)) {
-            moveAgent(agent, currentPos, target, event);
-        }
-
+        moveAgent(agent, currentPos, target, event);
         return this;
     }
 
@@ -154,7 +110,7 @@ public class PanicRunState implements IStates {
         int dy = Integer.compare(target.y, currentPos.y);
         int newX = Math.max(0, Math.min(event.grid.getWidth() - 1, currentPos.x + dx));
         int newY = Math.max(0, Math.min(event.grid.getHeight() - 1, currentPos.y + dy));
-        event.grid.setObjectLocation(agent, new Int2D(newX, newY));
-        System.out.println("→ Agent bewegt sich zu: (" + newX + ", " + newY + ")");
+        Int2D newPos = new Int2D(newX, newY);
+        event.grid.setObjectLocation(agent, newPos);
     }
 }
