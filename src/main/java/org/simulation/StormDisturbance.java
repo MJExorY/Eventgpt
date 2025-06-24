@@ -27,7 +27,11 @@ public class StormDisturbance extends Disturbance {
         }
 
         for (Agent agent : event.agents) {
-            agent.setCurrentState(new PanicRunState());
+            if (!agent.isPanicking() && !(agent.getCurrentState() instanceof PanicRunState)) {
+                agent.setPanicking(true);
+                agent.setCurrentState(new PanicRunState());
+                System.out.println("🌪 Agent gerät wegen Sturm in Panik");
+            }
         }
     }
 
