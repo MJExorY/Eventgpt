@@ -14,6 +14,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+
+import metrics.DefaultMetricsCollector;
+import metrics.MetricsCollector;
 
 
 public class EventUI extends GUIState {
@@ -27,6 +31,18 @@ public class EventUI extends GUIState {
     }
 
     public static void main(String[] args) {
+        MetricsCollector collector = new DefaultMetricsCollector();
+        for (Zone.ZoneType type : Zone.ZoneType.values()) {
+            collector.registerMetric("ZoneEntry_" + type);
+            collector.registerMetric("ZoneExit_" + type);
+            collector.registerMetric("PanicEscape_" + type);
+            collector.registerMetric("TimeInZone_" + type);
+            collector.registerMetric("QueueWait_" + type);
+            collector.registerMetric("PanicDuration");
+        }
+        for (String evt : List.of("FIRE", "FIGHT", "STORM")) {
+            collector.registerMetric("EventTriggered_" + evt);
+        }
         // Eingabedialog für Startkonfiguration
         JTextField visitorField = new JTextField("200");
         JTextField medicField = new JTextField("5");
@@ -49,7 +65,7 @@ public class EventUI extends GUIState {
                 int medics = Integer.parseInt(medicField.getText());
                 int security = Integer.parseInt(securityField.getText());
 
-                Event sim = new Event(System.currentTimeMillis(), visitors, medics, security);
+                Event sim = new Event(System.currentTimeMillis(), visitors, medics, security, collector);
                 EventUI gui = new EventUI(sim);
                 Console console = new Console(gui);
                 console.setVisible(true);
@@ -123,7 +139,7 @@ public class EventUI extends GUIState {
             final Image emergencyExitIcon;
             final Image sideActIcon;
             final Image wcIcon;
-final Image rightEmergencyRouteIcon;
+            final Image rightEmergencyRouteIcon;
             final Image leftEmergencyRouteIcon;
             final Image StraightEmergencyRouteIcon;
 
@@ -132,7 +148,8 @@ final Image rightEmergencyRouteIcon;
                 URL foodURL = getClass().getResource("/imbiss-stand.png");
                 System.out.println("Food Icon URL: " + foodURL);
                 if (foodURL != null) {
-                    foodIcon = new ImageIcon(foodURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    foodIcon = new ImageIcon(foodURL).getImage()
+                            .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
                     System.err.println("❌ Bild nicht gefunden: /imbiss-stand.png");
                     foodIcon = null;
@@ -141,7 +158,8 @@ final Image rightEmergencyRouteIcon;
                 URL wcURL = getClass().getResource("/wc2.png");
                 System.out.println("WC Icon URL: " + wcURL);
                 if (wcURL != null) {
-                    wcIcon = new ImageIcon(wcURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    wcIcon = new ImageIcon(wcURL).getImage()
+                            .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
                     System.err.println("❌ Bild nicht gefunden: /wc2.png");
                     wcIcon = null;
@@ -150,7 +168,8 @@ final Image rightEmergencyRouteIcon;
                 URL mainActURL = getClass().getResource("/MainAct.png");
                 System.out.println("MainAct Icon URL: " + mainActURL);
                 if (mainActURL != null) {
-                    mainActIcon = new ImageIcon(mainActURL).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                    mainActIcon = new ImageIcon(mainActURL).getImage()
+                            .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 } else {
                     System.err.println("❌ Bild nicht gefunden: /MainAct.png");
                     mainActIcon = null;
@@ -160,7 +179,8 @@ final Image rightEmergencyRouteIcon;
                 URL exitURL = getClass().getResource("/barrier.png");
                 System.out.println("Exit Icon URL: " + exitURL);
                 if (exitURL != null) {
-                    exitIcon = new ImageIcon(exitURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    exitIcon = new ImageIcon(exitURL).getImage()
+                            .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
                     System.err.println("❌ Bild nicht gefunden: /barrier.png");
                     exitIcon = null;
@@ -179,7 +199,8 @@ final Image rightEmergencyRouteIcon;
                 URL sideActURL = getClass().getResource("/SideAct.png");
                 System.out.println("SideAct Icon URL: " + sideActURL);
                 if (sideActURL != null) {
-                    sideActIcon = new ImageIcon(sideActURL).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    sideActIcon = new ImageIcon(sideActURL).getImage()
+                            .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
                     System.err.println("❌ Bild nicht gefunden: /SideAct.png");
                     sideActIcon = null;
@@ -212,7 +233,8 @@ final Image rightEmergencyRouteIcon;
                         System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRouteSTRAIGHT.png");
                         StraightEmergencyRouteIcon = null;
                     }
-                }}
+                }
+            }
 
             @Override
             public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
@@ -236,9 +258,7 @@ final Image rightEmergencyRouteIcon;
                     graphics.drawImage(sideActIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
                 } else if (zone.getType() == Zone.ZoneType.WC && wcIcon != null) {
                     graphics.drawImage(wcIcon, (int) (x - 30), (int) (y - 30), 60, 60, null);
-                }
-
-                else {
+                } else {
                     // Fallback: Farbe falls Icon fehlt
                     graphics.setColor(Color.GRAY);
                     graphics.fillRect((int) x, (int) y, (int) width, (int) height);
@@ -276,7 +296,6 @@ final Image rightEmergencyRouteIcon;
         });
 
 
-
         // EmergencyRouteSTRAIGHT
         gridPortrayal.setPortrayalForClass(EmergencyRouteStraight.class, new SimplePortrayal2D() {
             final Image straightEmergencyRouteIcon;
@@ -307,7 +326,6 @@ final Image rightEmergencyRouteIcon;
                 }
             }
         });
-
 
 
         // EmergencyRouteRECHTS
@@ -453,6 +471,7 @@ final Image rightEmergencyRouteIcon;
 
 
         //Hintergrund map setzen-
+
         display = new Display2D(650, 650, this);
         display.setClipping(false);
         display.setBackdrop(Color.WHITE);
@@ -481,6 +500,7 @@ final Image rightEmergencyRouteIcon;
 
         // Reference to the simulation
         Event event = (Event) state;
+        MetricsCollector collector = event.getCollector();
 
         // Panel for buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -489,18 +509,21 @@ final Image rightEmergencyRouteIcon;
         JButton fireButton = new JButton("🔥 Fire");
         fireButton.addActionListener(e -> {
             event.spawn(FireDisturbance.createRandom(event));
+            collector.recordEventTriggered("FIRE");
         });
 
         // Fight Button
         JButton fightButton = new JButton("🥊 Fight");
         fightButton.addActionListener(e -> {
             event.spawn(FightDisturbance.createRandom(event));
+            collector.recordEventTriggered("FIGHT");
         });
 
         // Storm Button
         JButton stormButton = new JButton("🌩️ Storm");
         stormButton.addActionListener(e -> {
             event.spawn(StormDisturbance.createRandom(event));
+            collector.recordEventTriggered("STORM");
         });
 
         // Add buttons to panel
@@ -562,14 +585,19 @@ final Image rightEmergencyRouteIcon;
         gbc.gridy = 0;
         legendPanel.add(createSectionTitle("Zones"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/imbiss-stand.png", 30, 30), "Food"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/imbiss-stand.png", 30, 30), "Food"),
+                gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/MainAct.png", 30, 30), "Main Stage"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/MainAct.png", 30, 30), "Main Stage"),
+                gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/SideAct.png", 30, 30), "Side Stage"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/SideAct.png", 30, 30), "Side Stage"),
+                gbc);
         gbc.gridy++;
         legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
         gbc.gridy++;
+        legendPanel.add(
+                createIconLegendEntry(scaledIcon("/emergency-exit.png", 20, 20), "Emergency"), gbc);
         legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency Exit"), gbc);
         gbc.gridy++;
 
@@ -630,7 +658,8 @@ final Image rightEmergencyRouteIcon;
     private ImageIcon scaledIcon(String path, int width, int height) {
         URL url = getClass().getResource(path);
         if (url != null) {
-            Image img = new ImageIcon(url).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            Image img = new ImageIcon(url).getImage()
+                    .getScaledInstance(width, height, Image.SCALE_SMOOTH);
             return new ImageIcon(img);
         } else {
             System.err.println("❌ Icon nicht gefunden: " + path);
@@ -638,8 +667,11 @@ final Image rightEmergencyRouteIcon;
         }
     }
 
-
+    @Override
     public void quit() {
+        System.out.println(">>> EventUI.quit() wurde aufgerufen");
+        MetricsViewer.show(((Event) state).getCollector());
+
         super.quit();
         if (frame != null) frame.dispose();
         frame = null;

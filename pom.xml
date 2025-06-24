@@ -35,7 +35,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <plugins>
             <!-- Ermöglicht: mvn exec:java -->
@@ -44,17 +43,49 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>org.simulation.Event</mainClass>
+                    <mainClass>org.simulation.EventUI</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- Java Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
                 <configuration>
                     <source>16</source>
                     <target>16</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.simulation.EventUI</mainClass>
+                                </transformer>
+                            </transformers>
+                            <!-- damit auch mason.jar gemerged wird -->
+                            <artifactSet>
+                                <includes>
+                                    <include>mason:mason</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>

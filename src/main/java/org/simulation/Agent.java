@@ -22,6 +22,16 @@ public class Agent implements Steppable {
     private Zone currentZone = null;
     private Zone.ZoneType lastVisitedZone = null;
 
+    public int getPanicTicks() {
+        return panicTicks;
+    }
+
+    public void setPanicTicks(int panicTicks) {
+        this.panicTicks = panicTicks;
+    }
+
+    private int panicTicks = 0;
+
     private Event event;
 
     public void setEvent(Event event) {
@@ -51,6 +61,7 @@ public class Agent implements Steppable {
         isHungry = false;
         isWC = false;
         currentZone = null;
+        panicTicks = 0;
     }
 
 
@@ -182,7 +193,8 @@ public class Agent implements Steppable {
                 (currentZone.getType() == Zone.ZoneType.EXIT ||
                         (currentZone.getType() == Zone.ZoneType.EMERGENCY_EXIT && isPanicking))) {
 
-            System.out.println("Agent hat " + currentZone.getType() + " erreicht und wird entfernt: " + pos);
+            System.out.println(
+                    "Agent hat " + currentZone.getType() + " erreicht und wird entfernt: " + pos);
 
             if (stopper != null) stopper.stop();
             sim.grid.remove(this);
@@ -209,10 +221,12 @@ public class Agent implements Steppable {
     public boolean tryEnterZone(Zone targetZone) {
         if (!targetZone.isFull()) {
             if (currentZone != null) {
+                event.getCollector().recordZoneExit(this, currentZone);
                 currentZone.leave(this);
             }
 
             targetZone.enter(this);
+            event.getCollector().recordZoneEntry(this, targetZone);
             setCurrentZone(targetZone);
             setLastVisitedZone(targetZone.getType());
             clearTarget();

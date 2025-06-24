@@ -12,9 +12,9 @@ import sim.util.Bag;
 public class PanicRunState implements IStates {
 
     private boolean reachedEmergencyRoute = false;
-
     private Int2D target;
     private Zone exitZone;
+    private int ticksInPanic = 0;
 
     @Override
     public IStates act(Agent agent, Event event) {
@@ -26,6 +26,7 @@ public class PanicRunState implements IStates {
             agent.setPanicking(true);
         }
 
+        ticksInPanic++;
         // PHASE 1 – Ziel: EmergencyRoute
         if (!reachedEmergencyRoute) {
             if (target == null) {
@@ -86,6 +87,8 @@ public class PanicRunState implements IStates {
         else {
             if (currentPos.equals(target)) {
                 if (agent.tryEnterZone(exitZone)) {
+                    agent.setPanicTicks(ticksInPanic);
+                    event.getCollector().recordPanicEscape(agent, exitZone);
                     agent.clearTarget();
                     System.out.println("Agent hat Exit betreten");
                     return this;
