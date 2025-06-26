@@ -475,7 +475,7 @@ public class EventUI extends GUIState {
         display = new Display2D(650, 650, this);
         display.setClipping(false);
         display.setBackdrop(Color.WHITE);
-        URL backgroundURL = getClass().getResource("/Hintergrundbild.png");
+        URL backgroundURL = getClass().getResource("/Hintergrundbild3.png");
         if (backgroundURL != null) {
             try {
                 BufferedImage bgImage = ImageIO.read(backgroundURL);
@@ -597,7 +597,7 @@ public class EventUI extends GUIState {
         legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
         gbc.gridy++;
         legendPanel.add(
-                createIconLegendEntry(scaledIcon("/emergency-exit.png", 20, 20), "Emergency"), gbc);
+                createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency"), gbc);
         legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency Exit"), gbc);
         gbc.gridy++;
 
