@@ -7,14 +7,15 @@
     <groupId>org.example</groupId>
     <artifactId>eventsteuerung</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- SonarQube Properties -->
-        <sonar.projectKey>team3-eventsteuerung</sonar.projectKey>
-        <sonar.projectName>Event Simulation - Team 3</sonar.projectName>
+        <sonar.projectKey>team3-eventsteuerung-v2</sonar.projectKey>
+        <sonar.projectName>Event Simulation - Team 3 (v2)</sonar.projectName>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
         <sonar.host.url>https://sonar.fbe-adswen.rwu.de</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -69,6 +70,7 @@
                     <target>16</target>
                 </configuration>
             </plugin>
+
             <!-- SonarQube Maven Plugin -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
@@ -96,6 +98,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>
