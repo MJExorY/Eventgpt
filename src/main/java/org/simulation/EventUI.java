@@ -1,12 +1,24 @@
 package org.simulation;
 
-import sim.display.*;
+import events.FightDisturbance;
+import events.FireDisturbance;
+import events.StormDisturbance;
+import metrics.DefaultMetricsCollector;
+import metrics.MetricsCollector;
+import metrics.MetricsViewer;
+import sim.display.Console;
+import sim.display.Controller;
+import sim.display.Display2D;
+import sim.display.GUIState;
+import sim.engine.SimState;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.SimplePortrayal2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
-import sim.portrayal.simple.*;
-import sim.engine.*;
-
+import sim.portrayal.simple.OvalPortrayal2D;
+import sim.portrayal.simple.RectanglePortrayal2D;
+import sim.util.Int2D;
+import zones.FireStation;
+import zones.Zone;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,9 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-
-import metrics.DefaultMetricsCollector;
-import metrics.MetricsCollector;
+import java.util.logging.Logger;
 
 
 public class EventUI extends GUIState {
@@ -25,6 +35,13 @@ public class EventUI extends GUIState {
     public JFrame frame;
     public SparseGridPortrayal2D gridPortrayal = new SparseGridPortrayal2D();
     BufferedImage backgroundImage;
+    private static final Logger logger = Logger.getLogger(EventUI.class.getName());
+    private static final String PATH_EMERGENCY_RECHTS = "/images/EmergencyRouteRECHTS.png";
+    // Emergency route anonymous objects and visibility flag
+    private final Object emergencyRouteRight = new Object();
+    private final Object emergencyRouteLeft = new Object();
+    private final Object emergencyRouteStraight = new Object();
+    private boolean emergencyRoutesVisible = false;
 
     public EventUI(SimState state) {
         super(state);
@@ -145,92 +162,92 @@ public class EventUI extends GUIState {
 
             {
                 // FOOD-Zone Icon (60x60)
-                URL foodURL = getClass().getResource("/imbiss-stand.png");
+                URL foodURL = getClass().getResource("/images/imbiss-stand.png");
                 System.out.println("Food Icon URL: " + foodURL);
                 if (foodURL != null) {
                     foodIcon = new ImageIcon(foodURL).getImage()
                             .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /imbiss-stand.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/imbiss-stand.png");
                     foodIcon = null;
                 }
                 // WC-Zone Icon (60x60)
-                URL wcURL = getClass().getResource("/wc2.png");
+                URL wcURL = getClass().getResource("/images/wc2.png");
                 System.out.println("WC Icon URL: " + wcURL);
                 if (wcURL != null) {
                     wcIcon = new ImageIcon(wcURL).getImage()
                             .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /wc2.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/wc2.png");
                     wcIcon = null;
                 }
                 // ACT_MAIN-Zone Icon (80x80)
-                URL mainActURL = getClass().getResource("/MainAct.png");
+                URL mainActURL = getClass().getResource("/images/MainAct.png");
                 System.out.println("MainAct Icon URL: " + mainActURL);
                 if (mainActURL != null) {
                     mainActIcon = new ImageIcon(mainActURL).getImage()
                             .getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /MainAct.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/MainAct.png");
                     mainActIcon = null;
                 }
 
                 // EXIT-Zone Icon (60x60)
-                URL exitURL = getClass().getResource("/barrier.png");
+                URL exitURL = getClass().getResource("/images/barrier.png");
                 System.out.println("Exit Icon URL: " + exitURL);
                 if (exitURL != null) {
                     exitIcon = new ImageIcon(exitURL).getImage()
                             .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /barrier.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/barrier.png");
                     exitIcon = null;
                 }
                 //Emergency Exit Icon
-                URL emergencyExitURL = getClass().getResource("/emergency-exit.png");
+                URL emergencyExitURL = getClass().getResource("/images/emergency-exit.png");
                 System.out.println("Emergency Exit Icon URL: " + emergencyExitURL);
                 if (emergencyExitURL != null) {
                     emergencyExitIcon = new ImageIcon(emergencyExitURL).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /emergency-exit.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/emergency-exit.png");
                     emergencyExitIcon = null;
                 }
 
                 // ACT_SIDE-Zone Icon (60x60)
-                URL sideActURL = getClass().getResource("/SideAct.png");
+                URL sideActURL = getClass().getResource("/images/SideAct.png");
                 System.out.println("SideAct Icon URL: " + sideActURL);
                 if (sideActURL != null) {
                     sideActIcon = new ImageIcon(sideActURL).getImage()
                             .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /SideAct.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/SideAct.png");
                     sideActIcon = null;
                 }
 
 
-                URL rightExitURL = getClass().getResource("/EmergencyRouteRECHTS.png");
+                URL rightExitURL = getClass().getResource(PATH_EMERGENCY_RECHTS);
                 System.out.println("RightExit Icon URL: " + rightExitURL);
                 if (rightExitURL != null) {
                     rightEmergencyRouteIcon = new ImageIcon(rightExitURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("❌ Bild nicht gefunden: /EmergencyRoutRECHTS.png");
+                    logger.warning("❌ Bild nicht gefunden: /images/EmergencyRouteRECHTS.png");
                     rightEmergencyRouteIcon = null;
                 }
 
                 {
-                    URL iconURL = getClass().getResource("/EmergencyRouteLINKS.png");
+                    URL iconURL = getClass().getResource("/images/EmergencyRouteLINKS.png");
                     if (iconURL != null) {
                         leftEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
                     } else {
-                        System.err.println("Emergency Root Links Icon nicht gefunden: /EmergencyRouteLINKS.png");
+                        logger.warning("Emergency Root Links Icon nicht gefunden: /images/EmergencyRouteLINKS.png");
                         leftEmergencyRouteIcon = null;
                     }
                 }
                 {
-                    URL iconURL = getClass().getResource("/EmergencyRouteSTRAIGHT.png");
+                    URL iconURL = getClass().getResource("/images/EmergencyRouteSTRAIGHT.png");
                     if (iconURL != null) {
                         StraightEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 90, Image.SCALE_SMOOTH);
                     } else {
-                        System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRouteSTRAIGHT.png");
+                        System.err.println("Emergency Root Straight Icon nicht gefunden: /images/EmergencyRouteSTRAIGHT.png");
                         StraightEmergencyRouteIcon = null;
                     }
                 }
@@ -295,97 +312,29 @@ public class EventUI extends GUIState {
             }
         });
 
-
-        // EmergencyRouteSTRAIGHT
-        gridPortrayal.setPortrayalForClass(EmergencyRouteStraight.class, new SimplePortrayal2D() {
-            final Image straightEmergencyRouteIcon;
-
-            {
-                URL iconURL = getClass().getResource("/EmergencyRouteSTRAIGHT.png");
-                if (iconURL != null) {
-                    straightEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 90, Image.SCALE_SMOOTH);
-                } else {
-                    System.err.println("Emergency Root Straight Icon nicht gefunden: /EmergencyRouteSTRAIGHT.png");
-                    straightEmergencyRouteIcon = null;
-                }
-            }
+        // EmergencyRoute anonymous objects portrayals
+        gridPortrayal.setPortrayalForObject(emergencyRouteRight, new SimplePortrayal2D() {
+            final Image icon = scaledIcon("/images/EmergencyRouteRECHTS.png", 90, 30).getImage();
 
             @Override
-            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                if (straightEmergencyRouteIcon != null) {
-                    int x = (int) (info.draw.x - 20);
-                    int y = (int) (info.draw.y - 20);
-                    graphics.drawImage(straightEmergencyRouteIcon, x, y, 30, 90, null);
-                } else {
-                    // Fallback: Graues Rechteck
-                    graphics.setColor(Color.GRAY);
-                    int size = (int) (info.draw.width * 2);
-                    int x = (int) (info.draw.x - size / 2);
-                    int y = (int) (info.draw.y - size / 2);
-                    graphics.fillRect(x, y, size, size);
-                }
+            public void draw(Object o, Graphics2D g, DrawInfo2D info) {
+                if (icon != null) g.drawImage(icon, (int) (info.draw.x - 45), (int) (info.draw.y - 15), null);
             }
         });
-
-
-        // EmergencyRouteRECHTS
-        gridPortrayal.setPortrayalForClass(EmergencyRouteRechts.class, new SimplePortrayal2D() {
-            final Image rightEmergencyRouteIcon;
-
-            {
-                URL iconURL = getClass().getResource("/EmergencyRoutRECHTS.png");
-                if (iconURL != null) {
-                    rightEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
-                } else {
-                    System.err.println("Emergency Root Rechts Icon nicht gefunden: /EmergencyRoutRECHTS.png");
-                    rightEmergencyRouteIcon = null;
-                }
-            }
+        gridPortrayal.setPortrayalForObject(emergencyRouteLeft, new SimplePortrayal2D() {
+            final Image icon = scaledIcon("/images/EmergencyRouteLINKS.png", 90, 30).getImage();
 
             @Override
-            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                if (rightEmergencyRouteIcon != null) {
-                    int x = (int) (info.draw.x - 20);
-                    int y = (int) (info.draw.y - 20);
-                    graphics.drawImage(rightEmergencyRouteIcon, x, y, 90, 30, null);
-                } else {
-                    // Fallback: Graues Rechteck
-                    graphics.setColor(Color.GRAY);
-                    int size = (int) (info.draw.width * 2);
-                    int x = (int) (info.draw.x - size / 2);
-                    int y = (int) (info.draw.y - size / 2);
-                    graphics.fillRect(x, y, size, size);
-                }
+            public void draw(Object o, Graphics2D g, DrawInfo2D info) {
+                if (icon != null) g.drawImage(icon, (int) (info.draw.x - 45), (int) (info.draw.y - 15), null);
             }
         });
-
-// EmergencyRouteLINKS
-        gridPortrayal.setPortrayalForClass(EmergencyRouteLinks.class, new SimplePortrayal2D() {
-            final Image leftEmergencyRouteIcon;
-
-            {
-                URL iconURL = getClass().getResource("/EmergencyRouteLINKS.png");
-                if (iconURL != null) {
-                    leftEmergencyRouteIcon = new ImageIcon(iconURL).getImage().getScaledInstance(90, 30, Image.SCALE_SMOOTH);
-                } else {
-                    System.err.println("Emergency Root Links Icon nicht gefunden: /EmergencyRouteLINKS.png");
-                    leftEmergencyRouteIcon = null;
-                }
-            }
+        gridPortrayal.setPortrayalForObject(emergencyRouteStraight, new SimplePortrayal2D() {
+            final Image icon = scaledIcon("/images/EmergencyRouteSTRAIGHT.png", 30, 90).getImage();
 
             @Override
-            public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-                if (leftEmergencyRouteIcon != null) {
-                    int x = (int) (info.draw.x - 20);
-                    int y = (int) (info.draw.y - 20);
-                    graphics.drawImage(leftEmergencyRouteIcon, x, y, 90, 30, null);
-                } else {
-                    graphics.setColor(Color.GRAY);
-                    int size = (int) (info.draw.width * 2);
-                    int x = (int) (info.draw.x - size / 2);
-                    int y = (int) (info.draw.y - size / 2);
-                    graphics.fillRect(x, y, size, size);
-                }
+            public void draw(Object o, Graphics2D g, DrawInfo2D info) {
+                if (icon != null) g.drawImage(icon, (int) (info.draw.x - 15), (int) (info.draw.y - 45), null);
             }
         });
 
@@ -395,11 +344,11 @@ public class EventUI extends GUIState {
             final Image fireStationIcon;
 
             {
-                URL iconURL = getClass().getResource("/fire-station.png");
+                URL iconURL = getClass().getResource("/images/fire-station.png");
                 if (iconURL != null) {
                     fireStationIcon = new ImageIcon(iconURL).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("Fire Station Icon nicht gefunden: /fire-station.png");
+                    System.err.println("Fire Station Icon nicht gefunden: /images/fire-station.png");
                     fireStationIcon = null;
                 }
             }
@@ -425,11 +374,11 @@ public class EventUI extends GUIState {
             final Image fireTruckIcon;
 
             {
-                URL iconURL = getClass().getResource("/fire-truck.png");
+                URL iconURL = getClass().getResource("/images/fire-truck.png");
                 if (iconURL != null) {
                     fireTruckIcon = new ImageIcon(iconURL).getImage().getScaledInstance(40, 25, Image.SCALE_SMOOTH);
                 } else {
-                    System.err.println("Fire Truck Icon nicht gefunden: /fire-truck.png");
+                    System.err.println("Fire Truck Icon nicht gefunden: /images/fire-truck.png");
                     fireTruckIcon = null;
                 }
             }
@@ -460,6 +409,40 @@ public class EventUI extends GUIState {
             }
         });
 
+        gridPortrayal.setPortrayalForObject(RestrictedArea.class, new SimplePortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D g, DrawInfo2D info) {
+                RestrictedArea ra = (RestrictedArea) object;
+
+                int radius = ra.getRadius();
+                double scale = info.draw.width; // Skalierung pro Zelle
+                int drawRadius = (int) (radius * scale);
+                int drawX = (int) (info.draw.x - drawRadius);
+                int drawY = (int) (info.draw.y - drawRadius);
+
+                g.setColor(new Color(255, 0, 0, 80)); // rot-transparent
+                g.fillOval(drawX, drawY, 2 * drawRadius, 2 * drawRadius);
+                g.setColor(Color.RED);
+                g.drawOval(drawX, drawY, 2 * drawRadius, 2 * drawRadius);
+            }
+        });
+        gridPortrayal.setPortrayalForObject(RestrictedArea.class, new SimplePortrayal2D() {
+            @Override
+            public void draw(Object object, Graphics2D g, DrawInfo2D info) {
+                RestrictedArea ra = (RestrictedArea) object;
+
+                int radius = ra.getRadius();
+                double scale = info.draw.width; // Skalierung pro Zelle
+                int drawRadius = (int) (radius * scale);
+                int drawX = (int) (info.draw.x - drawRadius);
+                int drawY = (int) (info.draw.y - drawRadius);
+
+                g.setColor(new Color(255, 0, 0, 80)); // rot-transparent
+                g.fillOval(drawX, drawY, 2 * drawRadius, 2 * drawRadius);
+                g.setColor(Color.RED);
+                g.drawOval(drawX, drawY, 2 * drawRadius, 2 * drawRadius);
+            }
+        });
         display.reset();
         //  display.setBackdrop(new Color(0xE1CAB2));
         display.repaint();
@@ -475,7 +458,7 @@ public class EventUI extends GUIState {
         display = new Display2D(650, 650, this);
         display.setClipping(false);
         display.setBackdrop(Color.WHITE);
-        URL backgroundURL = getClass().getResource("/Hintergrundbild3.png");
+        URL backgroundURL = getClass().getResource("/images/Hintergrundbild3.png");
         if (backgroundURL != null) {
             try {
                 BufferedImage bgImage = ImageIO.read(backgroundURL);
@@ -483,12 +466,11 @@ public class EventUI extends GUIState {
                 TexturePaint texturePaint = new TexturePaint(bgImage, anchor);
                 display.setBackdrop(texturePaint);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.severe("Fehler beim Laden des Hintergrundbilds: " + e.getMessage());
             }
         } else {
             System.err.println("❌ Hintergrundbild nicht gefunden: /Hintergrundbild.png");
         }
-        //---
 
 
         frame = display.createFrame();
@@ -510,6 +492,13 @@ public class EventUI extends GUIState {
         fireButton.addActionListener(e -> {
             event.spawn(FireDisturbance.createRandom(event));
             collector.recordEventTriggered("FIRE");
+            if (!emergencyRoutesVisible) {
+                event.grid.setObjectLocation(emergencyRouteRight, new Int2D(83, 50));
+                event.grid.setObjectLocation(emergencyRouteLeft, new Int2D(14, 50));
+                event.grid.setObjectLocation(emergencyRouteStraight, new Int2D(50, 15));
+                emergencyRoutesVisible = true;
+                display.repaint();
+            }
         });
 
         // Fight Button
@@ -517,6 +506,13 @@ public class EventUI extends GUIState {
         fightButton.addActionListener(e -> {
             event.spawn(FightDisturbance.createRandom(event));
             collector.recordEventTriggered("FIGHT");
+            if (!emergencyRoutesVisible) {
+                event.grid.setObjectLocation(emergencyRouteRight, new Int2D(83, 50));
+                event.grid.setObjectLocation(emergencyRouteLeft, new Int2D(14, 50));
+                event.grid.setObjectLocation(emergencyRouteStraight, new Int2D(50, 15));
+                emergencyRoutesVisible = true;
+                display.repaint();
+            }
         });
 
         // Storm Button
@@ -524,8 +520,14 @@ public class EventUI extends GUIState {
         stormButton.addActionListener(e -> {
             event.spawn(StormDisturbance.createRandom(event));
             collector.recordEventTriggered("STORM");
+            if (!emergencyRoutesVisible) {
+                event.grid.setObjectLocation(emergencyRouteRight, new Int2D(83, 50));
+                event.grid.setObjectLocation(emergencyRouteLeft, new Int2D(14, 50));
+                event.grid.setObjectLocation(emergencyRouteStraight, new Int2D(50, 15));
+                emergencyRoutesVisible = true;
+                display.repaint();
+            }
         });
-
         // Add buttons to panel
         buttonPanel.add(fireButton);
         buttonPanel.add(fightButton);
@@ -564,7 +566,7 @@ public class EventUI extends GUIState {
         // Spalte 2: Zustände
         gbc.gridx = 1;
         gbc.gridy = 0;
-        legendPanel.add(createSectionTitle("States"), gbc);
+        legendPanel.add(createSectionTitle("states"), gbc);
         gbc.gridy++;
         legendPanel.add(createCompactLegendEntry("●", Color.GREEN, "Hungry/Thirsty"), gbc);
 
@@ -585,27 +587,27 @@ public class EventUI extends GUIState {
         gbc.gridy = 0;
         legendPanel.add(createSectionTitle("Zones"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/imbiss-stand.png", 30, 30), "Food"),
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/imbiss-stand.png", 30, 30), "Food"),
                 gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/MainAct.png", 30, 30), "Main Stage"),
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/MainAct.png", 30, 30), "Main Stage"),
                 gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/SideAct.png", 30, 30), "Side Stage"),
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/SideAct.png", 30, 30), "Side Stage"),
                 gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/barrier.png", 30, 30), "Exit"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/barrier.png", 30, 30), "Exit"), gbc);
         gbc.gridy++;
         legendPanel.add(
-                createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency"), gbc);
-        legendPanel.add(createIconLegendEntry(scaledIcon("/emergency-exit.png", 25, 25), "Emergency Exit"), gbc);
+                createIconLegendEntry(scaledIcon("/images/emergency-exit.png", 25, 25), "Emergency"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/emergency-exit.png", 25, 25), "Emergency Exit"), gbc);
         gbc.gridy++;
 
-        legendPanel.add(createIconLegendEntry(scaledIcon("/EmergencyRoutRECHTS.png", 25, 25), "Emergency route"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/EmergencyRoutRECHTS.png", 25, 25), "Emergency route"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/wc2.png", 30, 30), "WC"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/wc2.png", 30, 30), "WC"), gbc);
         gbc.gridy++;
-        legendPanel.add(createIconLegendEntry(scaledIcon("/fire-station.png", 30, 30), "Fire station"), gbc);
+        legendPanel.add(createIconLegendEntry(scaledIcon("/images/fire-station.png", 30, 30), "Fire station"), gbc);
         // Wrapper Panel für Positionierung links unten
         JPanel legendWrapper = new JPanel(new BorderLayout());
         legendWrapper.setOpaque(false);
@@ -669,9 +671,6 @@ public class EventUI extends GUIState {
 
     @Override
     public void quit() {
-        System.out.println(">>> EventUI.quit() wurde aufgerufen");
-        MetricsViewer.show(((Event) state).getCollector());
-
         super.quit();
         if (frame != null) frame.dispose();
         frame = null;

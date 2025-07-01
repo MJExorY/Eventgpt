@@ -1,7 +1,7 @@
 package metrics;
 
 import org.simulation.Agent;
-import org.simulation.Zone;
+import zones.Zone;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
 public interface MetricsCollector {
     void registerMetric(String name);
 
-    void record(String metricName, Object value);
+    void recordMetric(String metricName, Object value);
 
     Map<String, List<Object>> getAllMetrics();
 
@@ -27,5 +27,5 @@ public interface MetricsCollector {
     void recordTimeInZone(String zoneName, long ticks);
 
     void recordQueueWait(String zoneName, long ticks);
-    
+
 }

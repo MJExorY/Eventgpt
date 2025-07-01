@@ -1,9 +1,10 @@
 package org.simulation;
 
-import States.RoamingState;
-import org.simulation.Event;
-import org.simulation.sound.EventSoundSystem;
-import org.simulation.sound.SoundType;
+import events.FireDisturbance;
+import states.IStates;
+import states.RoamingState;
+import sounds.EventSoundSystem;
+import sounds.SoundType;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
@@ -117,38 +118,38 @@ public class FireTruck implements Steppable {
         }
     }
 
-private void extinguishFire() {
-    System.out.println("Feuerwehrauto hat das Feuer gelöscht bei " + currentPosition);
+    private void extinguishFire() {
+        System.out.println("Feuerwehrauto hat das Feuer gelöscht bei " + currentPosition);
 
-    if (soundSystem != null) {
-        soundSystem.stopFireTruckSiren();
-        soundSystem.stopFireAlarm();
-        System.out.println("Sirene wurde gestoppt.");
+        if (soundSystem != null) {
+            soundSystem.stopFireTruckSiren();
+            soundSystem.stopFireAlarm();
+            System.out.println("Sirene wurde gestoppt.");
+        }
+        FireDisturbance fire = null;
+
+        Object obj = event.grid.getObjectsAtLocation(currentPosition).stream()
+                .filter(o -> o instanceof FireDisturbance)
+                .findFirst()
+                .orElse(null);
+
+        if (obj instanceof FireDisturbance) {
+            fire = (FireDisturbance) obj;
+            fire.resolve(event);
+            event.grid.remove(fire);
+            System.out.println("Feuerobjekt wurde entfernt.");
+        }
+        if (fire != null) {
+            resetPanicForAgentsNear(fire.getPosition(), fire.getPanicRadius());
+        }
+
+        event.grid.remove(this);
+        if (stopper != null) {
+            stopper.stop();
+        }
+        System.out.println("Feuerwehrauto fährt zurück zur Wache (verschwindet).");
+
     }
-    FireDisturbance fire = null;
-
-    Object obj = event.grid.getObjectsAtLocation(currentPosition).stream()
-            .filter(o -> o instanceof FireDisturbance)
-            .findFirst()
-            .orElse(null);
-
-    if (obj instanceof FireDisturbance) {
-        fire = (FireDisturbance) obj;;
-        fire.resolve();
-        event.grid.remove(fire);
-        System.out.println("Feuerobjekt wurde entfernt.");
-    }
-    if (fire != null) {
-        resetPanicForAgentsNear(fire.getPosition(), fire.getPanicRadius());
-    }
-
-    event.grid.remove(this);
-    if (stopper != null) {
-        stopper.stop();
-    }
-    System.out.println("Feuerwehrauto fährt zurück zur Wache (verschwindet).");
-
-}
 
 
     public Int2D getCurrentPosition() {

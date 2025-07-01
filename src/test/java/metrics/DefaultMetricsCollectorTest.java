@@ -3,7 +3,7 @@ package metrics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.simulation.Agent;
-import org.simulation.Zone;
+import zones.Zone;
 import sim.util.Int2D;
 
 import java.util.List;
@@ -25,7 +25,7 @@ class DefaultMetricsCollectorTest {
     }
 
     @Test
-    void testRecordZoneEntry() {
+    void testRecordMetricZoneEntry() {
         collector.recordZoneEntry(agent, zone);
         Map<String, List<Object>> metrics = collector.getAllMetrics();
         assertTrue(metrics.containsKey("ZoneEntry_FOOD"));
@@ -33,7 +33,7 @@ class DefaultMetricsCollectorTest {
     }
 
     @Test
-    void testRecordZoneExit() {
+    void testRecordMetricZoneExit() {
         collector.recordZoneExit(agent, zone);
         Map<String, List<Object>> metrics = collector.getAllMetrics();
         assertTrue(metrics.containsKey("ZoneExit_FOOD"));
@@ -41,7 +41,7 @@ class DefaultMetricsCollectorTest {
     }
 
     @Test
-    void testRecordPanicEscape() {
+    void testRecordMetricPanicEscape() {
         agent.setPanicTicks(120); // 2 Minuten
         collector.recordPanicEscape(agent, zone);
         Map<String, List<Object>> metrics = collector.getAllMetrics();
@@ -51,7 +51,7 @@ class DefaultMetricsCollectorTest {
     }
 
     @Test
-    void testRecordEventTriggered() {
+    void testRecordMetricEventTriggered() {
         collector.recordEventTriggered("ALARM");
         Map<String, List<Object>> metrics = collector.getAllMetrics();
         assertTrue(metrics.containsKey("EventTriggered_ALARM"));
@@ -60,7 +60,7 @@ class DefaultMetricsCollectorTest {
     }
 
     @Test
-    void testRecordTimeInZone() {
+    void testRecordMetricTimeInZone() {
         collector.recordTimeInZone("WC", 300);
         Map<String, List<Object>> metrics = collector.getAllMetrics();
         assertTrue(metrics.containsKey("TimeInZone_WC"));
@@ -69,7 +69,7 @@ class DefaultMetricsCollectorTest {
     }
 
     @Test
-    void testRecordQueueWait() {
+    void testRecordMetricQueueWait() {
         collector.recordQueueWait("FOOD", 90);
         Map<String, List<Object>> metrics = collector.getAllMetrics();
         assertTrue(metrics.containsKey("QueueWait_FOOD"));

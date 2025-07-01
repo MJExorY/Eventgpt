@@ -1,11 +1,17 @@
 package org.simulation;
 
-import States.IStates;
-import States.RoamingState;
+import states.IStates;
+import states.RoamingState;
+import org.simulation.utils.MovementUtils;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import sim.util.Int2D;
+import zones.Zone;
 
 import java.awt.*;
 
@@ -21,6 +27,7 @@ public class Agent implements Steppable {
     private boolean isWC = false;
     private Zone currentZone = null;
     private Zone.ZoneType lastVisitedZone = null;
+    private static final Logger logger = Logger.getLogger(Agent.class.getName());
 
     public int getPanicTicks() {
         return panicTicks;
@@ -44,6 +51,10 @@ public class Agent implements Steppable {
         this.stopper = stopper;
     }
 
+    public Stoppable getStopper() {
+        return stopper;
+    }
+
     public Zone getCurrentZone() {
         return currentZone;
     }
@@ -52,6 +63,7 @@ public class Agent implements Steppable {
         this.currentZone = zone;
     }
 
+    private long queueStartTick = -1;
 
     public void resetFlags() { // Setzt Zustand zurück - wichtig für State wechsel
         isWatchingMain = false;
@@ -135,6 +147,26 @@ public class Agent implements Steppable {
     }
 
     public void setTargetPosition(Int2D position) {
+        if (position == null) {
+            this.targetPosition = null;
+            return;
+        }
+
+        if (event != null) {
+            for (RestrictedArea ra : event.getRestrictedAreas()) {
+                if (ra.isActive()
+                        && ra.isInside(position.x, position.y)
+                        && (!(this instanceof Person person) || person.getType() == Person.PersonType.VISITOR)) {
+
+                    if (logger.isLoggable(Level.INFO)) {
+                        logger.info(String.format("Ziel liegt in Sperrzone und wird ignoriert: %s", position));
+                    }
+                    return;
+                }
+
+            }
+        }
+
         this.targetPosition = position;
     }
 
@@ -165,6 +197,18 @@ public class Agent implements Steppable {
         return Color.YELLOW; // Roaming
     }
 
+    public void setQueueStartTick(long tick) {
+        this.queueStartTick = tick;
+    }
+
+    public long getQueueStartTick() {
+        return queueStartTick;
+    }
+
+    public void resetQueueStartTick() {
+        this.queueStartTick = -1;
+    }
+
 
     @Override
     public void step(SimState state) {
@@ -176,37 +220,65 @@ public class Agent implements Steppable {
         }
 
         Int2D pos = sim.grid.getObjectLocation(this);
-        sim.grid.setObjectLocation(this, pos);
+        if (pos == null) return;
 
-        // Zufällige Bewegung (falls kein Ziel gesetzt)
-        if (targetPosition == null) {
-            int dx = sim.random.nextInt(3) - 1;
-            int dy = sim.random.nextInt(3) - 1;
-            int newX = Math.max(0, Math.min(sim.grid.getWidth() - 1, pos.x + dx));
-            int newY = Math.max(0, Math.min(sim.grid.getHeight() - 1, pos.y + dy));
-            sim.grid.setObjectLocation(this, new Int2D(newX, newY));
-        }
-
-        // Nur panische Agenten dürfen bei Emergency Exit entfernt werden
-        Zone currentZone = sim.getZoneByPosition(pos);
-        if (currentZone != null &&
-                (currentZone.getType() == Zone.ZoneType.EXIT ||
-                        (currentZone.getType() == Zone.ZoneType.EMERGENCY_EXIT && isPanicking))) {
-
-            System.out.println(
-                    "Agent hat " + currentZone.getType() + " erreicht und wird entfernt: " + pos);
-
-            if (stopper != null) stopper.stop();
-            sim.grid.remove(this);
-            sim.agents.remove(this);
+        if (!MovementUtils.tryEscapeRestrictedArea(this, sim)) {
             return;
         }
 
-        // Debug
-        System.out.println("Agent @ " + pos
-                + " | State: " + currentState.getClass().getSimpleName()
-                + " | target: " + targetPosition);
+        if (!handlePossibleRemoval(sim, pos)) {
+            handleMovement(sim);
+        }
+
+        logStatus(pos);
     }
+
+    private boolean handlePossibleRemoval(Event sim, Int2D pos) {
+        Zone currentzone = sim.getZoneByPosition(pos);
+        if (currentzone == null) {
+            return false;
+        }
+
+        boolean mustRemove = currentzone.getType() == Zone.ZoneType.EXIT ||
+                (currentzone.getType() == Zone.ZoneType.EMERGENCY_EXIT && isPanicking());
+
+        if (mustRemove) {
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info(String.format(
+                        "Agent hat %s erreicht und wird entfernt: %s",
+                        currentzone.getType(), pos
+                ));
+            }
+            if (stopper != null) stopper.stop();
+            sim.grid.remove(this);
+            sim.agents.remove(this);
+            return true;
+        }
+        return false;
+    }
+
+    private void handleMovement(Event sim) {
+        if (getTargetPosition() != null) {
+            boolean moved = MovementUtils.moveAgentTowards(this, sim, getTargetPosition());
+            if (!moved && logger.isLoggable(Level.INFO)) {
+                logger.info(String.format("🚫 Agent blockiert auf dem Weg zu Ziel: %s", getTargetPosition()));
+            }
+        } else {
+            MovementUtils.randomMove(this, sim);
+        }
+    }
+
+    private void logStatus(Int2D pos) {
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info(String.format(
+                    "Agent @ %s | State: %s | target: %s",
+                    pos,
+                    currentState != null ? currentState.getClass().getSimpleName() : "null",
+                    targetPosition
+            ));
+        }
+    }
+
 
     private boolean alarmed = false;
 

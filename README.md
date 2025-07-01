@@ -1,10 +1,12 @@
 # Event Simulation – Agentenbasierte Simulation mit MASON
 
-Dieses Java-Projekt simuliert das Verhalten von Besuchern auf einem Event mithilfe des agentenbasierten Frameworks [MASON](https://cs.gmu.edu/~eclab/projects/mason/).
+Dieses Java-Projekt simuliert das Verhalten von Besuchern auf einem Event mithilfe des agentenbasierten
+Frameworks [MASON](https://cs.gmu.edu/~eclab/projects/mason/).
 
 ## Ziel
 
-Ziel des Projekts ist es, realistische Besucherdynamiken wie Bewegung, Zonenwahl (z. B. Pommesbude), und später auch Panik- oder Evakuationsverhalten zu modellieren und visuell im Grid darzustellen.
+Ziel des Projekts ist es, realistische Besucherdynamiken wie Bewegung, Zonenwahl (z. B. Pommesbude), und später auch
+Panik- oder Evakuationsverhalten zu modellieren und visuell im Grid darzustellen.
 
 ---
 
@@ -26,7 +28,7 @@ eventsteuerung/
 │   │       │   ├── SideActZone.java          # Nebenunterhaltungszone
 │   │       │   ├── WCZone.java               # Sanitärzone
 │   │       │   └── Zone.java                 # Oberklasse aller Zonentypen
-│   │       └── States/                       # Zustände (State Pattern) für Agenten
+│   │       └── states/                       # Zustände (State Pattern) für Agenten
 │   │           ├── EmergencyState.java       # Verhalten für Nothelfer
 │   │           ├── HungryThirstyState.java   # Zustand bei Hunger oder Durst
 │   │           ├── IStates.java              # Interface für Zustandslogik
@@ -47,7 +49,7 @@ eventsteuerung/
 - Zonenarten erstellt und im Grid positioniert (z. B. FoodZone, ActZone, WCZone)
 - Agenten können Zielzonen ansteuern (zielgerichtetes Verhalten)
 - State Pattern für Agentenlogik eingeführt:
-  - z. B. `RoamingState`, `HungryThirstyState`, `QueueingState`, `PanicRunState`
+    - z. B. `RoamingState`, `HungryThirstyState`, `QueueingState`, `PanicRunState`
 
 ### GUI (MASON Display2D)
 
@@ -58,5 +60,5 @@ eventsteuerung/
 
 - Maven-Projekt mit MASON erfolgreich eingerichtet
 - Modularisierung in:
-  - `Agent`, `Zone`, `Event`, `Person`
-  - Paketstruktur für States und Services
+    - `Agent`, `Zone`, `Event`, `Person`
+    - Paketstruktur für states und Services

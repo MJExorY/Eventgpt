@@ -1,7 +1,7 @@
 package metrics;
 
 import org.simulation.Agent;
-import org.simulation.Zone;
+import zones.Zone;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public class DefaultMetricsCollector implements MetricsCollector {
     }
 
     @Override
-    public void record(String metricName, Object value) {
+    public void recordMetric(String metricName, Object value) {
         // Falls die Metrik noch nicht existiert, legen wir sie jetzt an:
         List<Object> list = data.computeIfAbsent(metricName, k -> new ArrayList<>());
         list.add(value);
@@ -30,34 +30,34 @@ public class DefaultMetricsCollector implements MetricsCollector {
 
     @Override
     public void recordZoneEntry(Agent agent, Zone zone) {
-        record("ZoneEntry_" + zone.getType(), agent.hashCode());
+        recordMetric("ZoneEntry_" + zone.getType(), agent.hashCode());
     }
 
     @Override
     public void recordZoneExit(Agent agent, Zone zone) {
-        record("ZoneExit_" + zone.getType(), agent.hashCode());
+        recordMetric("ZoneExit_" + zone.getType(), agent.hashCode());
     }
 
     @Override
     public void recordPanicEscape(Agent agent, Zone zone) {
         int ticks = agent.getPanicTicks();
         double minutes = ticks / 60.0;
-        record("PanicDuration", minutes);
+        recordMetric("PanicDuration", minutes);
     }
 
     @Override
     public void recordEventTriggered(String eventType) {
-        record("EventTriggered_" + eventType, 1);
+        recordMetric("EventTriggered_" + eventType, 1);
     }
 
     @Override
     public void recordTimeInZone(String zoneName, long ticks) {
-        record("TimeInZone_" + zoneName, ticks);
+        recordMetric("TimeInZone_" + zoneName, ticks);
     }
 
     @Override
     public void recordQueueWait(String zoneName, long ticks) {
-        record("QueueWait_" + zoneName, ticks);
+        recordMetric("QueueWait_" + zoneName, ticks);
     }
 
     public void printZoneEntrySummary() {
