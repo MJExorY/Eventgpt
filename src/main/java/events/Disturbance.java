@@ -5,20 +5,36 @@ import sim.engine.Stoppable;
 import sim.util.Int2D;
 
 /**
- * Abstract base class for all types of disturbances (e.g., fire, fight, storm).
- * Defines a position and a label. Subclasses implement specific behavior.
+ * Abstrakte Basisklasse für alle Arten von Störungen im Event-Szenario (z. B. Feuer, Kampf, Sturm).
+ * Definiert gemeinsame Eigenschaften wie Position und Label, sowie einen Stopp-Mechanismus.
+ *
+ * @author Lukas Kilian
  */
 public abstract class Disturbance implements Steppable {
     protected Int2D position;
+
 
     public Disturbance(Int2D position) {
         this.position = position;
     }
 
+    /**
+     * Gibt die Position der Störung im Simulationsraster zurück.
+     *
+     * @return position
+     * @author Lukas Kilian
+     */
     public Int2D getPosition() {
         return position;
     }
 
+    /**
+     * Gibt eine textuelle Bezeichnung der Störung zurück (z. B. "Feuer", "Kampf").
+     * Muss von Unterklassen implementiert werden.
+     *
+     * @return String
+     * @author Lukas Kilian
+     */
     public abstract String getLabel(); // e.g., "Fire", "Fight", etc.
 
     protected Stoppable stopper;

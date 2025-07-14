@@ -18,6 +18,12 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für FightDisturbance.
+ * Prüft Sicherheitsverhalten, Notfallreaktionen, Panikausbreitung und Grid-Interaktion.
+ *
+ * @author Kevin Jan Seibold
+ */
 class FightDisturbanceTest {
 
     private Event event;

@@ -12,6 +12,12 @@ import zones.Zone;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für das Event-System.
+ * Überprüft die Initialisierung, Positionierung und Platzierung von Zonen sowie die Agentenerzeugung.
+ *
+ * @author Kevin Jan Seibold
+ */
 public class EventTest {
 
     private Event event;

@@ -1,7 +1,6 @@
 package org.simulation;
 
 import events.FireDisturbance;
-import states.IStates;
 import states.RoamingState;
 import sounds.EventSoundSystem;
 import sounds.SoundType;
@@ -13,10 +12,18 @@ import sim.util.Int2D;
 
 import java.awt.Color;
 
+
+/**
+ * Stellt ein Feuerwehrauto in der Simulation dar.
+ * Bewegt sich auf ein Feuer zu, löscht es und beruhigt umstehende panische Agenten.
+ * Spielt Sirenen-Sounds ab und entfernt sich nach getaner Arbeit wieder aus der Simulation.
+ *
+ * @author Betuel
+ */
 public class FireTruck implements Steppable {
     private Int2D currentPosition;
     private final Int2D targetPosition;
-    private boolean isMoving = false;
+    private boolean isMoving;
     private boolean arrivedAtFire = false;
     private final Event event;
     private Stoppable stopper;

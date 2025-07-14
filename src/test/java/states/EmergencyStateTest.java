@@ -10,6 +10,12 @@ import zones.Zone;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für die EmergencyState-Logik von Person-Instanzen
+ * wie MEDIC oder SECURITY im Notfallmodus.
+ *
+ * @author Dorothea Ziegler
+ */
 public class EmergencyStateTest {
 
     private Event dummyEvent;

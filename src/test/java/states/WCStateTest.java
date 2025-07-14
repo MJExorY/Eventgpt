@@ -14,6 +14,12 @@ import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * Testklasse für WCState, die das Verhalten eines Agenten im WCState überprüft.
+ *
+ * @author Dorothea Ziegler
+ */
 class WCStateTest {
 
     private Event event;

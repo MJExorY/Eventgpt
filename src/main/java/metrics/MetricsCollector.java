@@ -8,6 +8,10 @@ import java.util.Map;
 
 /**
  * Interface zur Erfassung beliebiger Metriken während der Simulation.
+ * Dient der einheitlichen Sammlung, Registrierung und Ausgabe simulativer Messwerte
+ * wie Zonenbetretungen, Panikverhalten oder Wartezeiten.
+ *
+ * @author cb-235866
  */
 public interface MetricsCollector {
     void registerMetric(String name);

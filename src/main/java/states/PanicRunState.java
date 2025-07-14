@@ -10,11 +10,17 @@ import org.simulation.utils.MovementUtils;
 import sim.util.Int2D;
 import sim.util.Bag;
 
+/**
+ * Der PanicRunState repräsentiert den Zustand eines Agenten während einer Panikreaktion.
+ * In diesem Zustand versucht der Agent zunächst eine Notausgangsroute zu erreichen und danach
+ * über einen regulären oder Notausgang die Simulation zu verlassen.
+ * Panikticks werden gezählt und bei erfolgreicher Flucht registriert.
+ *
+ * @author cb-235866
+ */
 public class PanicRunState implements IStates {
     private boolean reachedEmergencyRoute = false;
     private Int2D target;
-    private Zone exitZone;
-    private int ticksInPanic = 0;
 
     @Override
     public IStates act(Agent agent, Event event) {
@@ -25,54 +31,19 @@ public class PanicRunState implements IStates {
             agent.setPanicking(true);
         }
 
-        ticksInPanic++;
-        // PHASE 1 – Ziel: EmergencyRoute
         if (!reachedEmergencyRoute) {
             if (target == null) {
                 target = findNearestEmergencyRoute(event, currentPos);
                 if (target != null) {
                     agent.setTargetPosition(target);
-                    System.out.println("Ziel gesetzt: EmergencyRoute bei " + target);
                 } else {
-                    System.out.println("Keine Emergency Route gefunden – zurück zu Roaming");
                     return new RoamingState();
                 }
             }
 
             if (currentPos.equals(target)) {
                 reachedEmergencyRoute = true;
-                System.out.println("EmergencyRoute erreicht – wechsle zu Exit");
-
-                exitZone = event.getNearestAvailableExit(currentPos);
-                if (exitZone != null) {
-                    target = exitZone.getPosition();
-                    agent.setTargetPosition(target);
-                    System.out.println("Neuer Zielpunkt: Exit bei " + target);
-                } else {
-                    System.out.println("⚠ Kein Exit verfügbar – Agent bleibt stehen.");
-                    return this;
-                }
-            }
-        }
-
-        // PHASE 2 – Ziel: Exit
-        else {
-            if (currentPos.equals(target)) {
-                if (agent.tryEnterZone(exitZone)) {
-                    agent.setPanicTicks(ticksInPanic);
-                    event.getCollector().recordPanicEscape(agent, exitZone);
-                    agent.clearTarget();
-                    System.out.println("Agent hat Exit betreten");
-                    return this;
-                } else {
-                    Zone alt = event.getNearestAvailableExit(currentPos);
-                    if (alt != null && !alt.equals(exitZone)) {
-                        exitZone = alt;
-                        target = exitZone.getPosition();
-                        agent.setTargetPosition(target);
-                        System.out.println("Exit blockiert – neuer Exit bei " + target);
-                    }
-                }
+                return new ExitFinalizedState();
             }
         }
 
@@ -114,4 +85,4 @@ public class PanicRunState implements IStates {
 
         return nearest;
     }
-}
+} 

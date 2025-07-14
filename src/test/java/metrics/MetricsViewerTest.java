@@ -8,6 +8,12 @@ import zones.Zone;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für MetricsViewer.
+ * Überprüft die Generierung des Abschlussberichts aus Metriken.
+ *
+ * @author cb-235866
+ */
 public class MetricsViewerTest {
 
     private DefaultMetricsCollector collector;

@@ -6,7 +6,12 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * Der AudioPlayer ist für das Abspielen, Stoppen und Verwalten von Sounds in der Simulation verantwortlich.
+ * Er unterstützt Looping, Lautstärkeeinstellungen pro Soundtyp und kann alle laufenden Audios gleichzeitig stoppen.
+ *
+ * @author Betuel
+ */
 public class AudioPlayer {
 
     private final Map<SoundType, Clip> activeClips = new ConcurrentHashMap<>();

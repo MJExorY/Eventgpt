@@ -4,6 +4,13 @@ import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Zeigt eine zusammenfassende Auswertung der gesammelten Metriken nach Beendigung der Simulation.
+ * Die Auswertung umfasst Zonen-Besuche, Wartezeiten, Aufenthaltsdauer und ausgelöste Events.
+ * Darstellung erfolgt über ein Swing-Dialogfenster.
+ *
+ * @author cb-235866
+ */
 public class MetricsViewer {
     private static final double TICKS_PER_MINUTE = 60.0;
 

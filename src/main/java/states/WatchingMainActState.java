@@ -9,6 +9,13 @@ import sim.util.Int2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Zustand, in dem ein Agent die Hauptbühne (Main Act) beobachtet.
+ * Agent bewegt sich dorthin, bleibt für eine gewisse Zeit und kehrt dann ins Roaming zurück.
+ *
+ * @author Burak Tamer
+ */
+
 public class WatchingMainActState implements IStates {
 
     private boolean initialized = false;

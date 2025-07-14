@@ -8,7 +8,12 @@ import org.junit.jupiter.api.AfterEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+ * Testklasse für das EventSoundSystem.
+ * Testet grundlegende Funktionalitäten wie Initialisierung, Soundabspielung und Shutdown-Verhalten.
+ *
+ * @author Betuel
+ */
 public class EventSoundSystemTest {
     private EventSoundSystem soundSystem;
 

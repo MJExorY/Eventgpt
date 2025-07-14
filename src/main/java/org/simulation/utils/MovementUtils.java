@@ -5,17 +5,20 @@ import org.simulation.Event;
 import org.simulation.Person;
 import sim.util.Int2D;
 
+/**
+ * Utility-Klasse zur zentralen Handhabung von Bewegungslogik innerhalb der Simulation.
+ * Beinhaltet Funktionen für gezielte Bewegung, Flucht aus gesperrten Bereichen, Zufallsbewegung
+ * sowie das Platzieren von Agenten in Warteschlangenpositionen.
+ * <p>
+ * Diese Klasse ist nicht instanziierbar.
+ *
+ * @author Dorothea Ziegler
+ */
 public class MovementUtils {
 
     private MovementUtils() {
         throw new UnsupportedOperationException("Utility class - do not instantiate.");
     }
-
-
-    /**
-     * Bewegt den Agent gezielt in Richtung eines Zieles.
-     * Return true, wenn Bewegung erfolgreich war.
-     */
 
     public static boolean moveAgentTowards(Agent agent, Event event, Int2D target) {
         if (target == null) {

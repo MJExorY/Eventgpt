@@ -10,6 +10,11 @@ import sim.util.Int2D;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für RoamingState, die das Verhalten eines Agenten im Roaming überprüft.
+ *
+ * @author cb-235866
+ */
 public class RoamingStateTest {
 
     private Event event;

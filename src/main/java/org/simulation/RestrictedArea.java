@@ -1,5 +1,12 @@
 package org.simulation;
 
+/**
+ * Repräsentiert eine eingeschränkte Zone (Restricted Area) im Eventgelände.
+ * Diese kann aktiviert oder deaktiviert werden und besitzt einen Mittelpunkt sowie einen Radius.
+ * Wird z. B. genutzt, um Sperrzonen bei Gefahren (Feuer, Kampf etc.) zu simulieren.
+ *
+ * @author Dorothea Ziegler
+ */
 public class RestrictedArea {
     private boolean active = true;
     private final int centerX;

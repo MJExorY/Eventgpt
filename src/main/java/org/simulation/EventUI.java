@@ -29,7 +29,22 @@ import java.net.URL;
 import java.util.List;
 import java.util.logging.Logger;
 
-
+/**
+ * Die grafische Benutzeroberfläche (GUI) der Event-Simulation.
+ * Stellt die visuelle Repräsentation aller Simulationsobjekte dar, inklusive Agenten, Zonen,
+ * Störungen (wie Feuer oder Kampf), Routen und Sonderobjekte wie der Feuerwache.
+ * Unterstützt visuelle Icons, Emojis für Ereignisse, Interaktion über Buttons und eine
+ * Legende zur Erklärung der Bedeutung.
+ * Eingebunden in das MASON-Framework zur agentenbasierten Simulation.
+ * Funktionen:
+ * - Visualisierung über Display2D
+ * - Steuerung von Ereignissen über Buttons (Feuer, Kampf, Sturm)
+ * - Darstellung von Zonen mit Icons
+ * - Dynamisches Nachladen von Icons und Emojis
+ * - Legende mit Rollenerklärung, Zuständen und Zonen
+ *
+ * @author Lukas Kilian
+ */
 public class EventUI extends GUIState {
     public Display2D display;
     public JFrame frame;

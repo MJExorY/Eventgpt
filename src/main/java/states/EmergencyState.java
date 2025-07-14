@@ -6,6 +6,16 @@ import org.simulation.Person;
 import org.simulation.utils.MovementUtils;
 import sim.util.Int2D;
 
+/**
+ * EmergencyState beschreibt das Verhalten von Person-Objekten,
+ * die eine Notfallsituation behandeln (z. B. Medics oder Security).
+ * Medics und Sicherheitskräfte bewegen sich auf ihre Zielpositionen zu,
+ * um dort bei Vorfällen (z. B. Feuer oder Schlägereien) zu helfen.
+ * Besucher sollten diesen Zustand nicht aktiv nutzen.
+ * Dieser Zustand kann mehrmals aufgerufen werden, da er seine eigene Logik zur Zielverfolgung enthält.
+ *
+ * @author Burak Tamer
+ */
 public class EmergencyState implements IStates {
 
     @Override

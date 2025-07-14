@@ -11,6 +11,12 @@ import sim.util.Int2D;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit-Tests für die MovementUtils Klasse.
+ * Überprüft korrektes Bewegungsverhalten, insbesondere unter Berücksichtigung von RestrictedAreas.
+ *
+ * @author Dorothea Ziegler
+ */
 class MovementUtilsTest {
 
     private Event event;

@@ -9,7 +9,15 @@ import sim.util.Int2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * State Pattern Zustand für Agenten, die hungrig oder durstig sind und versuchen,
+ * eine FOOD-Zone zu erreichen, dort Zeit zu verbringen und danach wieder zu roam-en.
+ * Bei überfüllter Zone wechselt der Agent in den QueueingState.
+ * Die Verweildauer in der Zone wird zufällig (zwischen 90–180 Ticks) bestimmt.
+ * Dieser Zustand ist nur temporär.
+ *
+ * @author Burak Tamer
+ */
 public class HungryThirstyState implements IStates {
 
     private boolean initialized = false;

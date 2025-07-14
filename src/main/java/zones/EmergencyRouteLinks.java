@@ -5,7 +5,10 @@ import sim.engine.Steppable;
 import sim.util.Int2D;
 
 /**
- * Repräsentiert einen festen Notausgang auf der rechten Seite des Geländes.
+ * Repräsentiert einen festen Notausgang auf der linken Seite des Geländes.
+ * Diese Klasse dient als Marker-Objekt zur Anzeige eines statischen Evakuierungspunkts.
+ *
+ * @author Mustafa Karakilic
  */
 public class EmergencyRouteLinks implements Steppable {
 

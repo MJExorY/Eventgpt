@@ -6,7 +6,11 @@ import zones.Zone;
 import java.util.*;
 
 /**
- * Standard-Implementierung zur Sammlung von Metriken.
+ * Implementiert das MetricsCollector-Interface zur Erfassung von Simulationsmetriken.
+ * Speichert Ereignisse wie Zonen-Betretungen, Wartezeiten, Panikfluchten etc.
+ * Die gesammelten Daten können z. B. zur Auswertung oder Visualisierung verwendet werden.
+ *
+ * @author cb-235866
  */
 public class DefaultMetricsCollector implements MetricsCollector {
     private final Map<String, List<Object>> data = new HashMap<>();

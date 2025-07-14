@@ -15,6 +15,13 @@ import zones.Zone;
 
 import java.awt.*;
 
+/**
+ * Repräsentiert einen einzelnen Agenten innerhalb der Simulation.
+ * Der Agent hat einen Zustand, eine Zielposition und Zustandsflags (z. B. hungrig, in Panik, in Warteschlange).
+ * Er bewegt sich über das Grid und wechselt seinen Zustand anhand des StatePatterns basierend auf Zonen, Ereignissen oder Regeln.
+ *
+ * @author Lukas Kilian
+ */
 public class Agent implements Steppable {
     private IStates currentState = new RoamingState(); // Startzustand
     private Int2D targetPosition = null;
@@ -27,8 +34,17 @@ public class Agent implements Steppable {
     private boolean isWC = false;
     private Zone currentZone = null;
     private Zone.ZoneType lastVisitedZone = null;
+    private int panicTicks = 0;
+    private Event event;
+    private Stoppable stopper;
+    private boolean alarmed = false;
+    private Zone assignedEmergencyExit;
     private static final Logger logger = Logger.getLogger(Agent.class.getName());
 
+    //Aufenthaltsdauer in Exit-Zone (in Ticks)
+    private static final int EXIT_DURATION_TICKS = 3;
+
+    // Getter & Setter
     public int getPanicTicks() {
         return panicTicks;
     }
@@ -37,15 +53,9 @@ public class Agent implements Steppable {
         this.panicTicks = panicTicks;
     }
 
-    private int panicTicks = 0;
-
-    private Event event;
-
     public void setEvent(Event event) {
         this.event = event;
     }
-
-    private Stoppable stopper;
 
     public void setStopper(Stoppable stopper) {
         this.stopper = stopper;
@@ -74,12 +84,17 @@ public class Agent implements Steppable {
         isWC = false;
         currentZone = null;
         panicTicks = 0;
+        alarmed = false;
     }
 
 
     // Getter & Setter
     public boolean isHungry() {
         return isHungry;
+    }
+
+    public void setHungry(boolean hungry) {
+        this.isHungry = hungry;
     }
 
     public boolean isWC() {
@@ -96,10 +111,6 @@ public class Agent implements Steppable {
 
     public void setRoaming(boolean roaming) {
         isRoaming = roaming;
-    }
-
-    public void setHungry(boolean hungry) {
-        this.isHungry = hungry;
     }
 
     public boolean isWatchingMain() {
@@ -163,15 +174,10 @@ public class Agent implements Steppable {
                     }
                     return;
                 }
-
             }
         }
 
         this.targetPosition = position;
-    }
-
-    public boolean hasTarget() {
-        return targetPosition != null;
     }
 
     public void clearTarget() {
@@ -186,15 +192,12 @@ public class Agent implements Steppable {
         this.lastVisitedZone = type;
     }
 
-    public Color getColor() {
-        if (isPanicking) return Color.RED;
-        if (isHungry) return Color.GREEN;
-        if (isWatchingMain) return Color.BLUE;
-        if (isWatchingSide) return Color.CYAN;
-        if (isInQueue) return Color.MAGENTA;
-        if (isWC) return Color.PINK;
-        if (isRoaming) return Color.YELLOW;
-        return Color.YELLOW; // Roaming
+    public Zone getAssignedEmergencyExit() {
+        return assignedEmergencyExit;
+    }
+
+    public void setAssignedEmergencyExit(Zone exit) {
+        this.assignedEmergencyExit = exit;
     }
 
     public void setQueueStartTick(long tick) {
@@ -209,85 +212,45 @@ public class Agent implements Steppable {
         this.queueStartTick = -1;
     }
 
+    public Color getColor() {
+        if (isPanicking) return Color.RED;
+        if (isHungry) return Color.GREEN;
+        if (isWatchingMain) return Color.BLUE;
+        if (isWatchingSide) return Color.CYAN;
+        if (isInQueue) return Color.MAGENTA;
+        if (isWC) return Color.PINK;
+        if (isRoaming) return Color.YELLOW;
+        return Color.YELLOW; // Roaming
+    }
 
     @Override
     public void step(SimState state) {
         Event sim = (Event) state;
-
-        // Aktuellen Zustand ausführen
-        if (currentState != null) {
-            currentState = currentState.act(this, sim);
-        }
+        currentState = currentState.act(this, sim);
+        if (!sim.agents.contains(this)) return;
 
         Int2D pos = sim.grid.getObjectLocation(this);
         if (pos == null) return;
 
-        if (!MovementUtils.tryEscapeRestrictedArea(this, sim)) {
-            return;
+        sim.grid.setObjectLocation(this, pos);
+
+        if (targetPosition == null) {
+            int dx = sim.random.nextInt(3) - 1;
+            int dy = sim.random.nextInt(3) - 1;
+            sim.grid.setObjectLocation(this, new Int2D(
+                    Math.max(0, Math.min(sim.grid.getWidth() - 1, pos.x + dx)),
+                    Math.max(0, Math.min(sim.grid.getHeight() - 1, pos.y + dy))
+            ));
         }
 
-        if (!handlePossibleRemoval(sim, pos)) {
-            handleMovement(sim);
-        }
-
-        logStatus(pos);
-    }
-
-    private boolean handlePossibleRemoval(Event sim, Int2D pos) {
-        Zone currentzone = sim.getZoneByPosition(pos);
-        if (currentzone == null) {
-            return false;
-        }
-
-        boolean mustRemove = currentzone.getType() == Zone.ZoneType.EXIT ||
-                (currentzone.getType() == Zone.ZoneType.EMERGENCY_EXIT && isPanicking());
-
-        if (mustRemove) {
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info(String.format(
-                        "Agent hat %s erreicht und wird entfernt: %s",
-                        currentzone.getType(), pos
-                ));
-            }
+        Zone zone = sim.getZoneByPosition(pos);
+        if (currentState == null) {
+            // Agent entfernt sich aus der Simulation (wurde von ExitFinalizedState oder QueueingState entschieden)
             if (stopper != null) stopper.stop();
             sim.grid.remove(this);
             sim.agents.remove(this);
-            return true;
+            System.out.println("Agent verlässt Simulation aus " + (zone != null ? zone.getType() : "unbekannt"));
         }
-        return false;
-    }
-
-    private void handleMovement(Event sim) {
-        if (getTargetPosition() != null) {
-            boolean moved = MovementUtils.moveAgentTowards(this, sim, getTargetPosition());
-            if (!moved && logger.isLoggable(Level.INFO)) {
-                logger.info(String.format("🚫 Agent blockiert auf dem Weg zu Ziel: %s", getTargetPosition()));
-            }
-        } else {
-            MovementUtils.randomMove(this, sim);
-        }
-    }
-
-    private void logStatus(Int2D pos) {
-        if (logger.isLoggable(Level.INFO)) {
-            logger.info(String.format(
-                    "Agent @ %s | State: %s | target: %s",
-                    pos,
-                    currentState != null ? currentState.getClass().getSimpleName() : "null",
-                    targetPosition
-            ));
-        }
-    }
-
-
-    private boolean alarmed = false;
-
-    public boolean isAlarmed() {
-        return alarmed;
-    }
-
-    public void setAlarmed(boolean alarmed) {
-        this.alarmed = alarmed;
     }
 
     public boolean tryEnterZone(Zone targetZone) {
@@ -296,15 +259,37 @@ public class Agent implements Steppable {
                 event.getCollector().recordZoneExit(this, currentZone);
                 currentZone.leave(this);
             }
-
             targetZone.enter(this);
             event.getCollector().recordZoneEntry(this, targetZone);
-            setCurrentZone(targetZone);
-            setLastVisitedZone(targetZone.getType());
+            currentZone = targetZone;
             clearTarget();
-            setInQueue(false);
+            isInQueue = false;
+
+            if (targetZone.getType() == Zone.ZoneType.EMERGENCY_EXIT || targetZone.getType() == Zone.ZoneType.EXIT) {
+                event.schedule.scheduleOnce(
+                        event.schedule.getTime() + EXIT_DURATION_TICKS,
+                        new Steppable() {
+                            @Override
+                            public void step(SimState sim) {
+                                leaveCurrentZone();
+                                if (stopper != null) stopper.stop();
+                                event.grid.remove(Agent.this);
+                                event.agents.remove(Agent.this);
+                                System.out.println("Agent hat die Zone " + targetZone.getType() + " verlassen und wurde entfernt.");
+                            }
+                        }
+                );
+            }
+
             return true;
         }
         return false;
+    }
+
+    public void leaveCurrentZone() {
+        if (currentZone != null) {
+            currentZone.leave(this);
+            currentZone = null;
+        }
     }
 }

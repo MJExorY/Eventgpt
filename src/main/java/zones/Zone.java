@@ -6,6 +6,13 @@ import sim.util.Int2D;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Repräsentiert eine generische Zone innerhalb des Simulationsgeländes.
+ * Zonen haben einen bestimmten Typ (z.B. WC, FOOD), eine feste Position und eine Kapazitätsgrenze.
+ * Agenten können diese Zonen betreten und verlassen.
+ *
+ * @author cb-235866
+ */
 public class Zone {
 
 

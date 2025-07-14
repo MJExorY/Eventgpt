@@ -4,6 +4,14 @@ import org.simulation.Agent;
 import org.simulation.Event;
 import org.simulation.utils.MovementUtils;
 
+/**
+ * Der {@code RoamingState} beschreibt den Zustand eines Agenten,
+ * in dem er zufällig über das Gelände wandert (herumstreift).
+ * Dabei kann er zufällig in andere Zustände übergehen (z. B. Hunger, WC, Acts).
+ *
+ * @author Burak Tamer
+ */
+
 public class RoamingState implements IStates {
 
     @Override

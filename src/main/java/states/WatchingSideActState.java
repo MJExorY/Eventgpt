@@ -9,6 +9,11 @@ import sim.util.Int2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Zustand, in dem ein Agent die Nebenbühne (Side Act) besucht und dort verweilt.
+ *
+ * @author Gerardo Carnevale
+ */
 public class WatchingSideActState implements IStates {
 
     private boolean initialized = false;
@@ -105,7 +110,7 @@ public class WatchingSideActState implements IStates {
 
         return this;
     }
-    
+
     private void leaveZone(Agent agent) {
         Zone zone = agent.getCurrentZone();
         if (zone != null) {

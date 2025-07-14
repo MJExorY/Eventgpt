@@ -8,7 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Dummy MetricsCollector for testing only.
+ * Eine einfache, nicht-funktionale Implementierung des MetricsCollector Interface.
+ * Wird ausschließlich für Tests verwendet, bei denen keine echte Metrikaufzeichnung notwendig ist.
+ * <p>
+ * Alle Methoden sind sogenannte "No-ops" (no operation) und haben keine Wirkung.
+ *
+ * @author Dorothea Ziegler
  */
 public class SimpleMetricsCollector implements MetricsCollector {
     @Override

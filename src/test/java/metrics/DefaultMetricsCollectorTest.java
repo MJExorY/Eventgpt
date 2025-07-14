@@ -11,6 +11,13 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für DefaultMetricsCollector.
+ * Stellt sicher, dass Metriken korrekt gesammelt, gespeichert und ausgegeben werden.
+ *
+ * @author cb-235866
+ */
+
 class DefaultMetricsCollectorTest {
 
     private DefaultMetricsCollector collector;

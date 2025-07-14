@@ -4,6 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit-Tests für die Klasse RestrictedArea.
+ * Testet Radius-Logik, Aktivierungszustand und Getter-Methoden.
+ *
+ * @author Dorothea Ziegler
+ */
 public class RestrictedAreaTest {
 
     @Test

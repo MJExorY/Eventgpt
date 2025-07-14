@@ -12,6 +12,11 @@ import zones.Zone;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für WatchingMainActState, die das Verhalten eines Agenten im WatchingMainActState überprüft.
+ *
+ * @author Burak Tamer
+ */
 public class WatchingMainActStateTest {
 
     private Event event;

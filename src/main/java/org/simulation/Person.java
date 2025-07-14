@@ -12,6 +12,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.Color;
 
+/**
+ * Repräsentiert eine Person in der Simulation – kann ein Besucher, Sanitäter oder Sicherheitskraft sein.
+ * Das Verhalten wird durch unterschiedliche Zustände gesteuert.
+ *
+ * @author Betuel
+ */
+
 public class Person extends Agent {
     private static final Logger logger = Logger.getLogger(Person.class.getName());
 

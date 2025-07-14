@@ -7,8 +7,11 @@ import sim.engine.SimState;
 import sim.util.Int2D;
 
 /**
- * A storm disturbance that affects the entire simulation area.
- * No specific position required.
+ * Repräsentiert eine Sturm-Störung (StormDisturbance), die global auf alle Agenten wirkt.
+ * Es wird kein konkreter Ort benötigt – alle Agenten geraten in Panik.
+ * Bei Auslösung wird einmalig ein Sturmwarnungs-Alarm getriggert.
+ *
+ * @author Lukas Kilian
  */
 public class StormDisturbance extends Disturbance {
 

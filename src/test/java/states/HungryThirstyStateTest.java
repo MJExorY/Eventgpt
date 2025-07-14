@@ -10,6 +10,12 @@ import sim.util.Int2D;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für das Verhalten von HungryThirstyState.
+ * Simuliert Agenten, die hungrig oder durstig sind und ein Ziel (z. B. FoodZone) ansteuern.
+ *
+ * @author cb-235866
+ */
 public class HungryThirstyStateTest {
 
     private Event event;

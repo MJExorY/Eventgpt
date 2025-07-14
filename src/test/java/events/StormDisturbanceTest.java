@@ -14,6 +14,12 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für StormDisturbance.
+ * Prüft Sicherheitsverhalten, Notfallreaktionen, Panikausbreitung und Grid-Interaktion.
+ *
+ * @author Kevin Jan Seibold
+ */
 class StormDisturbanceTest {
 
     private Event event;

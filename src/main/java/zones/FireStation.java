@@ -4,6 +4,12 @@ import org.simulation.Event;
 import org.simulation.FireTruck;
 import sim.util.Int2D;
 
+/**
+ * Repräsentiert eine Feuerwache, die auf Feueralarme reagieren und Feuerwehrautos entsenden kann.
+ * Sie speichert ihre Position und zählt die bereits entsendeten Einsatzfahrzeuge.
+ *
+ * @author Betuel
+ */
 public class FireStation {
 
     private final Int2D position;

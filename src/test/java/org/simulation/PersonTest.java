@@ -13,6 +13,13 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit-Tests für die Person-Klasse.
+ * Testet Verhalten, Farben, Zustände und Bewegungslogik abhängig vom Personentyp.
+ *
+ * @author Dorothea Ziegler
+ */
+
 public class PersonTest {
     private Event event;
 

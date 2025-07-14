@@ -6,6 +6,12 @@ import org.simulation.Event;
 import sim.util.Int2D;
 import zones.Zone;
 
+/**
+ * Zustand für den Besuch der WC-Zone.
+ *
+ * @author Burak Tamer
+ */
+
 public class WCState implements IStates {
 
     protected boolean initialized = false;

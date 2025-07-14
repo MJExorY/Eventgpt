@@ -19,6 +19,20 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Die zentrale Simulationsumgebung für ein Großevent mit Besuchern, Security, Sanitätern und möglichen Störungen.
+ * Verwaltet das Grid, alle Agenten, Zonen, Störungen und die Zeitsteuerung der Simulation.
+ * Unterstützt das Auslösen von Alarmen, Spawnen von Störungen, das Sammeln von Metriken sowie Notfallreaktionen.
+ * Kernkomponenten:
+ * - Besucher-, Security- und Sanitäter-Agenten
+ * - Unterschiedliche Zonen (z. B. FOOD, WC, Ausgänge)
+ * - Grid (SparseGrid2D) zur räumlichen Positionierung
+ * - EventSoundSystem für akustisches Feedback
+ * - MetricsCollector zur Analyse nach Simulationsende
+ *
+ * @author Lukas Kilian
+ */
 public class Event extends SimState {
 
     private final int visitorCount;
@@ -88,12 +102,9 @@ public class Event extends SimState {
         Zone actMain = new Zone(Zone.ZoneType.ACT_MAIN, new Int2D(50, 45), 20);
         Zone actSide = new Zone(Zone.ZoneType.ACT_SIDE, new Int2D(15, 85), 15);
         Zone normalExit = new Zone(Zone.ZoneType.EXIT, new Int2D(60, 90), Integer.MAX_VALUE);
-        Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5),
-                Integer.MAX_VALUE);
-        Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50),
-                Integer.MAX_VALUE);
-        Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50),
-                Integer.MAX_VALUE);
+        Zone emergencyNorth = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(50, 5), 5);
+        Zone emergencyEast = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(95, 50), 5);
+        Zone emergencyWest = new Zone(Zone.ZoneType.EMERGENCY_EXIT, new Int2D(5, 50), 5);
 
         zones.addAll(List.of(
                 foodZone, wcZone, actMain, actSide, normalExit,
@@ -240,21 +251,26 @@ public class Event extends SimState {
                 .orElse(null);
     }
 
-    public Int2D getRandomFreePosition() {
-        int width = grid.getWidth();
-        int height = grid.getHeight();
+    public Zone getNearestAvailableEmergencyExit(Int2D fromPosition) {
+        return zones.stream()
+                .filter(z -> z.getType() == Zone.ZoneType.EMERGENCY_EXIT)
+                .min((z1, z2) -> {
+                    int d1 = Math.abs(z1.getPosition().x - fromPosition.x) + Math.abs(z1.getPosition().y - fromPosition.y);
+                    int d2 = Math.abs(z2.getPosition().x - fromPosition.x) + Math.abs(z2.getPosition().y - fromPosition.y);
+                    return Integer.compare(d1, d2);
+                })
+                .orElse(null);
+    }
 
-        for (int i = 0; i < 100; i++) { // max. 100 Versuche
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
-            Bag objects = grid.getObjectsAtLocation(x, y);
-            if (objects == null || objects.isEmpty()) {
-                return new Int2D(x, y);
-            }
-        }
 
-        // Falls keine freie Stelle gefunden: fallback auf Mitte
-        return new Int2D(width / 2, height / 2);
+    private Int2D getRandomFreePosition() {
+        Int2D pos;
+        do {
+            int x = random.nextInt(grid.getWidth());
+            int y = random.nextInt(grid.getHeight());
+            pos = new Int2D(x, y);
+        } while (getZoneByPosition(pos) != null);
+        return pos;
     }
 
     public EventSoundSystem getSoundSystem() {

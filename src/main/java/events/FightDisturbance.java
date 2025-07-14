@@ -15,6 +15,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Modelliert eine Kampf-Störung auf dem Eventgelände.
+ * Verantwortlich für das Einrichten eines RestrictedArea, Zuweisung von Security und Sanitätern,
+ * Auslösen von Panik bei umliegenden Agenten und Auflösen der Störung.
+ *
+ * @author Lukas Kilian
+ */
+
 public class FightDisturbance extends Disturbance {
 
 
@@ -29,6 +38,12 @@ public class FightDisturbance extends Disturbance {
         super(position);
     }
 
+    /**
+     * Haupt-Logik zur Verarbeitung der Störung in jedem Zeitschritt.
+     *
+     * @param state
+     * @author Dorothea Ziegler
+     */
     @Override
     public void step(SimState state) {
         Event event = (Event) state;

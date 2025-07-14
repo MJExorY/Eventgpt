@@ -10,6 +10,11 @@ import sim.util.Int2D;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für QueueingState, die das Verhalten eines Agenten in Queue überprüft.
+ *
+ * @author cb-235866
+ */
 public class QueueingStateTest {
 
     private Event event;

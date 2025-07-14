@@ -10,6 +10,11 @@ import sim.util.Int2D;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für PanicRunState, die das Verhalten eines Agenten in Panik überprüft.
+ *
+ * @author cb-235866
+ */
 public class PanicRunStateTest {
 
     private Event event;

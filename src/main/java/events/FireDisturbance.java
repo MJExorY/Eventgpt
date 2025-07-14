@@ -15,6 +15,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Repräsentiert eine Feuer-Störung (FireDisturbance) auf dem Eventgelände.
+ * Die Störung kann eine Sperrzone (RestrictedArea) erzeugen, Security-Agenten positionieren
+ * und Panik bei Besuchern auslösen. Sie kann durch externe Aufrufe aufgelöst werden.
+ *
+ * @author Lukas Kilian
+ */
+
 public class FireDisturbance extends Disturbance {
 
     private boolean alarmTriggered = false;

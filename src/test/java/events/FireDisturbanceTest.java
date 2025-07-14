@@ -12,6 +12,12 @@ import states.IStates;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testklasse für FireDisturbance.
+ * Prüft Sicherheitsverhalten, Notfallreaktionen, Panikausbreitung und Grid-Interaktion.
+ *
+ * @author cb-235866
+ */
 public class FireDisturbanceTest {
 
     @Test
@@ -102,7 +108,7 @@ public class FireDisturbanceTest {
 
         // Security-Agent anlegen (damit resolve Security freigibt)
         Person sec = new Person(Person.PersonType.SECURITY);
-        sec.setCurrentState((IStates) new EmergencyState());
+        sec.setCurrentState(new EmergencyState());
         sec.setEvent(event);
         event.agents.add(sec);
 

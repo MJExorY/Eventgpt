@@ -7,6 +7,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Die EventSoundSystem-Klasse verwaltet das Abspielen, Loopen und Stoppen von Sounds während der Simulation.
+ * Sie unterstützt sowohl echte Audioausgabe als auch einen Fallback-Modus ohne Soundausgabe.
+ * <p>
+ * Diese Klasse hält Sound-Zähler und verhindert mehrfaches Starten gleicher Sounds.
+ *
+ * @author Betuel
+ */
 public class EventSoundSystem {
     private final Map<SoundType, Boolean> playingStatus = new ConcurrentHashMap<>();
     private final Map<SoundType, ScheduledFuture<?>> soundTasks = new ConcurrentHashMap<>();
